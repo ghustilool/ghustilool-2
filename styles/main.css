@@ -151,6 +151,7 @@ h2 {
   font-size: 1.5rem;
   margin-bottom: 20px;
   color: #00ffff;
+  text-align: center;
   text-shadow: 0 0 6px rgba(0, 255, 255, 0.4);
 }
 
@@ -159,8 +160,21 @@ h2 {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 20px;
+  justify-content: center;
 }
 
+/* 🎯 Compactar destacados */
+.destacados.compact .grid {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* 📚 Publicaciones de autores */
+.publicaciones-todas .grid {
+  margin-top: 20px;
+}
+
+/* 🧩 Tarjetas */
 .card {
   background-color: #1a1a2e;
   border: 1px solid #333;
@@ -208,17 +222,6 @@ h2 {
 
 .card a:hover {
   background-color: #ff33dd;
-}
-
-/* 🎛️ Select autores estilo holográfico */
-select {
-  background-color: #1f1f2f;
-  color: #e0e0e0;
-  padding: 10px;
-  border: 1px solid #00ffff;
-  border-radius: 4px;
-  margin-bottom: 20px;
-  font-family: 'Roboto Mono', monospace;
 }
 
 /* 🧾 Footer estilo terminal */
