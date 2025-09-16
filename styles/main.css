@@ -54,26 +54,21 @@ body {
   animation: fragmentShift 3s infinite ease-in-out;
   color: #ffef00;
   text-shadow:
-    0 0 6px rgba(255, 239, 0, 0.6),
-    0 0 12px rgba(255, 239, 0, 0.4),
-    0 0 20px rgba(255, 239, 0, 0.2),
+    0 0 4px #ffef00,
+    0 0 8px #ffef00,
+    0 0 12px #ffef00,
     1px 1px 2px #000;
   margin: 0 1px;
   transition: opacity 0.2s ease-in-out;
 }
 
+/* Eliminamos pseudo-elementos que apagaban el texto */
 .glitch-fragmented span::before,
 .glitch-fragmented span::after {
-  content: attr(data-char);
-  position: absolute;
-  left: 0;
-  top: 0;
-  color: #ffef00;
-  mix-blend-mode: difference;
-  opacity: 0.6;
-  pointer-events: none;
+  display: none;
 }
 
+/* Fallos de iluminación */
 .glitch-fragmented span:nth-child(3n) {
   animation: flickerNeon 2.5s infinite;
 }
@@ -94,16 +89,16 @@ body {
   0%, 18%, 22%, 25%, 60%, 100% {
     opacity: 1;
     text-shadow:
-      0 0 6px rgba(255, 239, 0, 0.6),
-      0 0 12px rgba(255, 239, 0, 0.4),
-      0 0 20px rgba(255, 239, 0, 0.2),
+      0 0 4px #ffef00,
+      0 0 8px #ffef00,
+      0 0 12px #ffef00,
       1px 1px 2px #000;
   }
   20%, 24%, 58% {
-    opacity: 0.4;
+    opacity: 0.6;
     text-shadow:
-      0 0 2px rgba(255, 239, 0, 0.3),
-      0 0 4px rgba(255, 239, 0, 0.2);
+      0 0 2px #ffef00,
+      0 0 4px #ffef00;
   }
 }
 
