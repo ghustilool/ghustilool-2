@@ -23,14 +23,16 @@
       <h1 class="glitch-fragmented">GhustiLoOL</h1>
       <span class="skull-corrupt">☠️</span>
     </div>
-    <nav>
-      <ul>
-        <li><a href="#">Inicio</a></li>
-        <li><a href="#">Autores</a></li>
-        <li><a href="#">Contacto</a></li>
-      </ul>
-    </nav>
   </header>
+
+  <!-- 🎮 Filtros por etiqueta -->
+  <div class="tag-filter-container" id="tag-filters">
+    <button class="tag-button tag-button-all active" onclick="filtrarPorEtiqueta(null)">🎮 TODOS</button>
+    <button class="tag-button tag-button-offline" onclick="filtrarPorEtiqueta('Offline')">🎮 OFFLINE</button>
+    <button class="tag-button tag-button-lan" onclick="filtrarPorEtiqueta('LAN')">🔌 LAN</button>
+    <button class="tag-button tag-button-online" onclick="filtrarPorEtiqueta('Online')">🌐 ONLINE</button>
+    <button class="tag-button tag-button-adult" onclick="filtrarPorEtiqueta('Adult')">🔞 +18</button>
+  </div>
 
   <!-- 📦 Contenido principal -->
   <main>
@@ -57,5 +59,6 @@
   <!-- 🧠 Scripts -->
   <script src="scripts/cargarPublicaciones.js"></script>
   <script src="scripts/neonRain.js"></script>
+  <script src="scripts/filtrarEtiquetas.js"></script>
 </body>
 </html>
