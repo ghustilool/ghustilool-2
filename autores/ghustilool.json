@@ -1,0 +1,16 @@
+[
+  {
+    "nombre": "CyberRunner",
+    "descripcion": "Juego de plataformas con estética glitch.",
+    "imagen": "img/cyberrunner.jpg",
+    "instalador": "setup/cyberrunner.rar",
+    "tags": ["Offline", "LAN"]
+  },
+  {
+    "nombre": "Neon Arena",
+    "descripcion": "Shooter multijugador con neón y partículas.",
+    "imagen": "img/neonarena.jpg",
+    "instalador": "setup/neonarena.rar",
+    "tags": ["Online"]
+  }
+]
