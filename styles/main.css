@@ -101,16 +101,41 @@ body {
   font-family: 'Roboto Mono', monospace;
 }
 
-.tag-button:hover {
-  background-color: #ff00cc;
-  color: #000;
-  box-shadow: 0 0 10px #ff00cc;
+.tag-button:hover,
+.tag-button.active {
+  transform: scale(1.05);
+  filter: brightness(1.2);
 }
 
-.tag-button.active {
-  background-color: #ff00cc;
+/* 🎨 Colores únicos por botón */
+.tag-button-all {
+  background-color: #ffef00;
   color: #000;
-  box-shadow: 0 0 12px #ff00cc;
+  box-shadow: 0 0 8px #ffef00;
+}
+
+.tag-button-offline {
+  background-color: #3399ff;
+  color: #000;
+  box-shadow: 0 0 8px #3399ff;
+}
+
+.tag-button-lan {
+  background-color: #00ff99;
+  color: #000;
+  box-shadow: 0 0 8px #00ff99;
+}
+
+.tag-button-online {
+  background-color: #00ffff;
+  color: #000;
+  box-shadow: 0 0 8px #00ffff;
+}
+
+.tag-button-adult {
+  background-color: #ff0033;
+  color: #000;
+  box-shadow: 0 0 8px #ff0033;
 }
 
 /* 📦 Secciones */
