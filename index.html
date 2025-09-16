@@ -13,9 +13,11 @@
   <!-- Fondo animado de partículas -->
   <div id="neon-background"></div>
 
-  <!-- Encabezado con glitch profesional -->
+  <!-- Encabezado con glitch fragmentado -->
   <header class="glitch-header">
-    <h1 class="glitch-doctor" data-text="GhustiLoOL">GhustiLoOL</h1>
+    <h1 class="glitch-fragmented">
+      <span>G</span><span>h</span><span>u</span><span>s</span><span>t</span><span>i</span><span>L</span><span>o</span><span>O</span><span>L</span>
+    </h1>
     <nav>
       <ul>
         <li><a href="#">Inicio</a></li>
@@ -49,7 +51,12 @@
   <script src="scripts/cargarPublicaciones.js"></script>
   <script src="scripts/neonRain.js"></script>
   <script>
-    window.onload = () => cargarPublicaciones('ghusti');
+    window.onload = () => {
+      cargarPublicaciones('ghusti');
+      document.querySelectorAll('.glitch-fragmented span').forEach(span => {
+        span.setAttribute('data-char', span.textContent);
+      });
+    };
   </script>
 </body>
 </html>
