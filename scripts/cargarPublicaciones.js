@@ -1,4 +1,4 @@
-const autores = ['ghustilool', 'lissuwu']; // Podés agregar más sin tocar el HTML
+const autores = ['ghustilool', 'lissuwu']; // Agregá más nombres sin extensión
 
 const todasLasPublicaciones = [];
 
@@ -12,9 +12,11 @@ function cargarPublicacionesIniciales() {
     fetch(`autores/${autor}.json`)
       .then(res => res.json())
       .then(data => {
-        todasLasPublicaciones.push(...data);
+        data.forEach(juego => {
+          const juegoFinal = procesarJuego(juego);
+          todasLasPublicaciones.push(juegoFinal);
+        });
         cargados++;
-
         if (cargados === autores.length) {
           mostrarPublicacionesOrdenadas();
         }
@@ -27,6 +29,27 @@ function cargarPublicacionesIniciales() {
         }
       });
   });
+}
+
+function procesarJuego(juego) {
+  const steamID = juego.steamID;
+  const usarSteam = !!steamID;
+
+  const nombre = juego.nombre || (usarSteam ? `Juego Steam #${steamID}` : 'Sin nombre');
+  const imagen = juego.imagen || (usarSteam
+    ? `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${steamID}/header.jpg`
+    : '');
+  const descripcion = juego.descripcion || (usarSteam ? 'Descripción automática desde Steam.' : '');
+  const comprar = juego.comprar || (usarSteam ? `https://store.steampowered.com/app/${steamID}` : '');
+
+  return {
+    nombre,
+    imagen,
+    descripcion,
+    comprar,
+    descargar: juego.descargar,
+    tags: juego.tags || []
+  };
 }
 
 function mostrarPublicacionesOrdenadas() {
@@ -46,7 +69,8 @@ function mostrarPublicacionesOrdenadas() {
       <img src="${juego.imagen}" alt="${juego.nombre}">
       <h3>${juego.nombre}</h3>
       <p>${juego.descripcion}</p>
-      <a href="${juego.instalador}">Instalar</a>
+      <a href="${juego.descargar}">Descargar</a>
+      ${juego.comprar ? `<br><a href="${juego.comprar}" target="_blank">Comprar en Steam</a>` : ''}
     `;
 
     contenedor.appendChild(card);
