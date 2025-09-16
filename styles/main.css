@@ -210,28 +210,6 @@ h2 {
   margin-bottom: 8px;
 }
 
-.card p {
-  font-size: 0.85rem;
-  color: #ccc;
-  margin-bottom: 8px;
-}
-
-.card a {
-  display: inline-block;
-  padding: 6px 10px;
-  background-color: #ff00cc;
-  color: #000;
-  text-decoration: none;
-  border-radius: 4px;
-  font-weight: bold;
-  font-size: 0.85rem;
-  transition: background-color 0.2s ease;
-}
-
-.card a:hover {
-  background-color: #ff33dd;
-}
-
 /* 🪟 Modal */
 .modal {
   display: none;
@@ -283,6 +261,38 @@ h2 {
   width: 100%;
   border-radius: 4px;
   margin-bottom: 10px;
+}
+
+.modal-body-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.modal-body-buttons a {
+  flex: 1;
+  min-width: 120px;
+  text-align: center;
+  padding: 10px;
+  background-color: #ff00cc;
+  color: #000;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 0.85rem;
+  transition: background-color 0.2s ease;
+}
+
+.modal-body-buttons a:hover {
+  background-color: #ff33dd;
+}
+
+.modal-version {
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: #aaa;
+  text-align: center;
 }
 
 /* 🧾 Footer estilo terminal */
