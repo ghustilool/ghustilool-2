@@ -43,12 +43,13 @@ async function procesarJuego(juego) {
     try {
       const res = await fetch(`https://store.steampowered.com/api/appdetails?appids=${steamID}&l=spanish`);
       const data = await res.json();
-      const info = data[steamID]?.data;
+      const info = data[steamID];
 
-      if (info) {
-        if (!nombre) nombre = info.name;
-        if (!descripcion) descripcion = info.short_description;
-        if (!imagen) imagen = info.header_image;
+      if (info?.success && info.data) {
+        const steamData = info.data;
+        if (!nombre) nombre = steamData.name;
+        if (!descripcion) descripcion = steamData.short_description;
+        if (!imagen) imagen = steamData.header_image;
         if (!comprar) comprar = `https://store.steampowered.com/app/${steamID}`;
       }
     } catch (err) {
@@ -79,12 +80,24 @@ function mostrarPublicacionesOrdenadas() {
     card.className = 'card';
     card.setAttribute('data-tags', juego.tags.join(','));
 
+    const imagenHTML = juego.imagen
+      ? `<img src="${juego.imagen}" alt="${juego.nombre}">`
+      : `<div style="width:100%;height:120px;background:#222;color:#888;display:flex;align-items:center;justify-content:center;border-radius:4px;">Sin imagen</div>`;
+
+    const descripcionHTML = juego.descripcion
+      ? `<p>${juego.descripcion}</p>`
+      : '';
+
+    const comprarHTML = juego.comprar
+      ? `<br><a href="${juego.comprar}" target="_blank">Comprar en Steam</a>`
+      : '';
+
     card.innerHTML = `
-      <img src="${juego.imagen}" alt="${juego.nombre}">
+      ${imagenHTML}
       <h3>${juego.nombre}</h3>
-      <p>${juego.descripcion}</p>
+      ${descripcionHTML}
       <a href="${juego.descargar}" target="_blank">Descargar</a>
-      ${juego.comprar ? `<br><a href="${juego.comprar}" target="_blank">Comprar en Steam</a>` : ''}
+      ${comprarHTML}
     `;
 
     contenedor.appendChild(card);
