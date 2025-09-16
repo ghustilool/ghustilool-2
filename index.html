@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GhustiLoOL Games</title>
+  <link rel="icon" href="Ghusti-Ico.ico" type="image/x-icon">
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+  <!-- Fondo animado de neón -->
+  <div id="neon-background"></div>
+
+  <header>
+    <h1>GhustiLoOL</h1>
+    <nav>
+      <ul>
+        <li><a href="#">Inicio</a></li>
+        <li><a href="#">Autores</a></li>
+        <li><a href="#">Contacto</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="destacados">
+      <h2>Juegos Destacados</h2>
+      <div class="grid" id="destacados"></div>
+    </section>
+
+    <section class="autores">
+      <h2>Publicaciones por autor</h2>
+      <select onchange="cargarPublicaciones(this.value)">
+        <option value="ghusti" selected>Ghusti</option>
+        <option value="liss">Liss</option>
+      </select>
+      <div id="publicaciones"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 GhustiLoOL. Todos los derechos reservados.</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="scripts/cargarPublicaciones.js"></script>
+  <script src="scripts/neonRain.js"></script>
+  <script>
+    window.onload = () => cargarPublicaciones('ghusti');
+  </script>
+</body>
+</html>
