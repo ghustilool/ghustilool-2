@@ -1,61 +1,47 @@
-// Cargar particles.js desde CDN
-const script = document.createElement('script');
-script.src = "https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js";
-script.onload = () => {
-  particlesJS("neon-background", {
-    "particles": {
-      "number": {
-        "value": 120,
-        "density": {
-          "enable": true,
-          "value_area": 800
-        }
-      },
-      "color": {
-        "value": "#00ffcc"
-      },
-      "shape": {
-        "type": "circle"
-      },
-      "opacity": {
-        "value": 0.6,
-        "random": true,
-        "anim": {
-          "enable": false
-        }
-      },
-      "size": {
-        "value": 2,
-        "random": true,
-        "anim": {
-          "enable": false
-        }
-      },
-      "line_linked": {
-        "enable": false
-      },
-      "move": {
-        "enable": true,
-        "speed": 3,
-        "direction": "bottom",
-        "straight": false,
-        "out_mode": "out",
-        "bounce": false
-      }
-    },
-    "interactivity": {
-      "detect_on": "canvas",
-      "events": {
-        "onhover": {
-          "enable": false
-        },
-        "onclick": {
-          "enable": false
-        },
-        "resize": true
-      }
-    },
-    "retina_detect": true
-  });
-};
-document.body.appendChild(script);
+const canvas = document.createElement('canvas');
+const ctx = canvas.getContext('2d');
+document.getElementById('neon-background').appendChild(canvas);
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+window.addEventListener('resize', () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+
+const columns = Math.floor(canvas.width / 20);
+const drops = Array(columns).fill(0);
+
+const colors = [
+  'rgba(0,255,255,0.8)',   // cian eléctrico
+  'rgba(255,0,204,0.8)',   // magenta
+  'rgba(0,153,255,0.8)',   // azul eléctrico
+  'rgba(255,0,255,0.6)',   // violeta neón
+];
+
+function drawRain() {
+  ctx.fillStyle = 'rgba(10,10,15,0.2)'; // fondo oscuro con transparencia
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.font = '16px monospace';
+
+  for (let i = 0; i < drops.length; i++) {
+    const char = String.fromCharCode(0x30A0 + Math.random() * 96); // caracteres estilo katakana
+    const x = i * 20;
+    const y = drops[i] * 20;
+
+    ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
+    ctx.fillText(char, x, y);
+
+    if (y > canvas.height && Math.random() > 0.975) {
+      drops[i] = 0;
+    }
+
+    drops[i]++;
+  }
+
+  requestAnimationFrame(drawRain);
+}
+
+drawRain();
