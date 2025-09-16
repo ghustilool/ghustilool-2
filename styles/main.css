@@ -35,7 +35,7 @@ body {
   z-index: 2;
 }
 
-/* Glitch neón fragmentado */
+/* Glitch neón fragmentado con bordes */
 .glitch-fragmented {
   display: flex;
   justify-content: center;
@@ -54,11 +54,15 @@ body {
   animation: fragmentShift 3s infinite ease-in-out;
   color: #00ffcc;
   text-shadow:
-    0 0 5px #00ffcc,
-    0 0 10px #00ffcc,
-    0 0 20px #00ffcc,
-    0 0 40px #00ffcc,
-    0 0 80px #00ffcc;
+    0 0 2px #00ffcc,
+    0 0 4px #00ffcc,
+    0 0 6px #00ffcc,
+    1px 1px 2px #000,
+    -1px -1px 2px #000;
+  border: 1px solid rgba(0, 255, 204, 0.2);
+  padding: 0 4px;
+  margin: 0 1px;
+  border-radius: 4px;
   transition: opacity 0.2s ease-in-out;
 }
 
