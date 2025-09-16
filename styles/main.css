@@ -35,6 +35,31 @@ body {
   z-index: 2;
 }
 
+/* 🦴 Calaveras corruptas */
+.skull-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 10px;
+}
+
+.skull-corrupt {
+  font-size: 2.5rem;
+  color: #ff00cc;
+  animation: corruptSkull 1.8s infinite;
+  filter: contrast(150%) saturate(180%) blur(0.5px);
+  transform: rotate(-5deg);
+}
+
+@keyframes corruptSkull {
+  0% { transform: rotate(-5deg) scale(1); filter: blur(0.5px); }
+  25% { transform: rotate(5deg) scale(1.05); filter: blur(1px); }
+  50% { transform: rotate(-3deg) scale(0.98); filter: blur(0.3px); }
+  75% { transform: rotate(4deg) scale(1.02); filter: blur(0.8px); }
+  100% { transform: rotate(-5deg) scale(1); filter: blur(0.5px); }
+}
+
 /* ✨ Título con resplandor suave */
 .glitch-fragmented {
   font-family: 'Rovelink', sans-serif;
