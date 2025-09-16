@@ -158,9 +158,10 @@ h2 {
 /* 🧱 Grid de tarjetas */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
   justify-content: center;
+  align-items: start;
 }
 
 /* 🎯 Compactar destacados */
@@ -179,7 +180,7 @@ h2 {
   background-color: #1a1a2e;
   border: 1px solid #333;
   border-radius: 8px;
-  padding: 15px;
+  padding: 12px;
   text-align: center;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   position: relative;
@@ -191,32 +192,38 @@ h2 {
   box-shadow: 0 0 12px #ff00cc;
 }
 
+/* 🖼️ Imagen estilo Steam */
 .card img {
-  max-width: 100%;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 460 / 215;
+  object-fit: cover;
   border-radius: 4px;
   margin-bottom: 10px;
 }
 
+/* 🧠 Contenido de la tarjeta */
 .card h3 {
   color: #ffffff;
-  font-size: 1.2rem;
-  margin-bottom: 10px;
+  font-size: 1rem;
+  margin-bottom: 8px;
 }
 
 .card p {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: #ccc;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .card a {
   display: inline-block;
-  padding: 8px 12px;
+  padding: 6px 10px;
   background-color: #ff00cc;
   color: #000;
   text-decoration: none;
   border-radius: 4px;
   font-weight: bold;
+  font-size: 0.85rem;
   transition: background-color 0.2s ease;
 }
 
