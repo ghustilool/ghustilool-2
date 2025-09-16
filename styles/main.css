@@ -35,34 +35,39 @@ body {
   z-index: 2;
 }
 
-.glitch-text {
-  font-size: 3rem;
+.glitch {
+  position: relative;
+  font-size: 3.5rem;
   font-weight: bold;
   color: #00ffcc;
-  position: relative;
-  text-transform: uppercase;
   font-family: 'Orbitron', sans-serif;
+  text-transform: uppercase;
+  animation: flicker 2s infinite;
 }
 
-.glitch-text::before,
-.glitch-text::after {
+.glitch::before,
+.glitch::after {
   content: attr(data-text);
   position: absolute;
   left: 0;
   width: 100%;
-  overflow: hidden;
   color: #00ffcc;
   background: transparent;
+  overflow: hidden;
 }
 
-.glitch-text::before {
-  animation: glitchTop 1s infinite linear alternate-reverse;
+.glitch::before {
   top: -2px;
+  left: 2px;
+  text-shadow: -2px 0 red;
+  animation: glitchTop 1.5s infinite linear alternate-reverse;
 }
 
-.glitch-text::after {
-  animation: glitchBottom 1s infinite linear alternate-reverse;
+.glitch::after {
   top: 2px;
+  left: -2px;
+  text-shadow: -2px 0 blue;
+  animation: glitchBottom 1.5s infinite linear alternate-reverse;
 }
 
 @keyframes glitchTop {
@@ -75,6 +80,15 @@ body {
   0% { clip-path: inset(90% 0 0 0); transform: translateX(2px); }
   50% { clip-path: inset(85% 0 0 0); transform: translateX(-2px); }
   100% { clip-path: inset(90% 0 0 0); transform: translateX(1px); }
+}
+
+@keyframes flicker {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+    opacity: 1;
+  }
+  20%, 22%, 24%, 55% {
+    opacity: 0.3;
+  }
 }
 
 /* Navegación */
