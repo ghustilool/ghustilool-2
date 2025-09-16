@@ -35,7 +35,7 @@ body {
   z-index: 2;
 }
 
-/* Glitch neón fragmentado con bordes */
+/* Glitch fragmentado refinado */
 .glitch-fragmented {
   display: flex;
   justify-content: center;
@@ -56,13 +56,8 @@ body {
   text-shadow:
     0 0 2px #00ffcc,
     0 0 4px #00ffcc,
-    0 0 6px #00ffcc,
-    1px 1px 2px #000,
-    -1px -1px 2px #000;
-  border: 1px solid rgba(0, 255, 204, 0.2);
-  padding: 0 4px;
+    1px 1px 2px #000;
   margin: 0 1px;
-  border-radius: 4px;
   transition: opacity 0.2s ease-in-out;
 }
 
@@ -101,16 +96,13 @@ body {
     text-shadow:
       0 0 5px #00ffcc,
       0 0 10px #00ffcc,
-      0 0 20px #00ffcc,
-      0 0 40px #00ffcc,
-      0 0 80px #00ffcc;
+      0 0 20px #00ffcc;
   }
   20%, 24%, 58% {
     opacity: 0.4;
     text-shadow:
       0 0 2px #00ffcc,
-      0 0 4px #00ffcc,
-      0 0 8px #00ffcc;
+      0 0 4px #00ffcc;
   }
 }
 
