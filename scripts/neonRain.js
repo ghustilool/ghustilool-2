@@ -5,43 +5,39 @@ document.getElementById('neon-background').appendChild(canvas);
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-window.addEventListener('resize', () => {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-});
+const katakana = 'アカサタナハマヤラワガザダバパイキシチニヒミリギジヂビピウクスツヌフムユルグズヅブプエケセテネヘメレゲゼデベペオコソトノホモヨロゴゾドボポ';
+const fontSize = 16;
+const columns = Math.floor(canvas.width / fontSize);
+const drops = Array(columns).fill(1);
 
-const columns = Math.floor(canvas.width / 20);
-const drops = Array(columns).fill(0);
-
-const colors = [
-  'rgba(0,255,255,0.8)',   // cian eléctrico
-  'rgba(255,0,204,0.8)',   // magenta
-  'rgba(0,153,255,0.8)',   // azul eléctrico
-  'rgba(255,0,255,0.6)',   // violeta neón
-];
-
-function drawRain() {
-  ctx.fillStyle = 'rgba(10,10,15,0.2)'; // fondo oscuro con transparencia
+function draw() {
+  ctx.fillStyle = 'rgba(10, 10, 15, 0.2)';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  ctx.font = '16px monospace';
-
+  ctx.font = `${fontSize}px monospace`;
   for (let i = 0; i < drops.length; i++) {
-    const char = String.fromCharCode(0x30A0 + Math.random() * 96); // caracteres estilo katakana
-    const x = i * 20;
-    const y = drops[i] * 20;
+    const text = katakana.charAt(Math.floor(Math.random() * katakana.length));
+    const x = i * fontSize;
+    const y = drops[i] * fontSize;
 
-    ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
-    ctx.fillText(char, x, y);
+    ctx.fillStyle = getColor(i);
+    ctx.fillText(text, x, y);
 
     if (y > canvas.height && Math.random() > 0.975) {
       drops[i] = 0;
     }
-
     drops[i]++;
   }
-
-  requestAnimationFrame(drawRain);
 }
 
-drawRain();
+function getColor(i) {
+  const palette = ['#ff00cc', '#00ffff', '#9933ff', '#66ccff'];
+  return palette[i % palette.length];
+}
+
+setInterval(draw, 50);
+
+window.addEventListener('resize', () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
