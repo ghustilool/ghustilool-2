@@ -56,24 +56,9 @@ function mostrarPublicacionesOrdenadas() {
       ? `<h3>${juego.nombre}</h3>`
       : `<h3>Sin nombre</h3>`;
 
-    const descripcionHTML = juego.descripcion
-      ? `<p>${juego.descripcion}</p>`
-      : '';
-
-    const descargarHTML = juego.descargar
-      ? `<a href="${juego.descargar}" target="_blank">Descargar</a>`
-      : `<a style="background:#555;cursor:default;">Sin descarga</a>`;
-
-    const comprarHTML = juego.comprar
-      ? `<br><a href="${juego.comprar}" target="_blank">Comprar</a>`
-      : '';
-
     card.innerHTML = `
       ${imagenHTML}
       ${nombreHTML}
-      ${descripcionHTML}
-      ${descargarHTML}
-      ${comprarHTML}
     `;
 
     card.onclick = () => abrirModal(juego);
