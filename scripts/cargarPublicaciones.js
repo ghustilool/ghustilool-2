@@ -1,4 +1,4 @@
-const autores = ['ghustilool', 'lissuwu']; // Agregá más nombres sin extensión
+const autores = ['ghustilool']; // Agregá más nombres si tenés otros JSON
 const todasLasPublicaciones = [];
 
 function cargarPublicacionesIniciales() {
@@ -9,7 +9,10 @@ function cargarPublicacionesIniciales() {
 
   autores.forEach(autor => {
     fetch(`autores/${autor}.json`)
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error(`No se pudo cargar ${autor}.json`);
+        return res.json();
+      })
       .then(data => {
         todasLasPublicaciones.push(...data);
         cargados++;
@@ -18,7 +21,7 @@ function cargarPublicacionesIniciales() {
         }
       })
       .catch(err => {
-        console.error(`Error al cargar ${autor}.json`, err);
+        console.error(`Error al cargar ${autor}.json:`, err);
         cargados++;
         if (cargados === autores.length) {
           mostrarPublicacionesOrdenadas();
@@ -30,6 +33,11 @@ function cargarPublicacionesIniciales() {
 function mostrarPublicacionesOrdenadas() {
   const contenedor = document.getElementById('publicaciones-todas');
   contenedor.innerHTML = '';
+
+  if (todasLasPublicaciones.length === 0) {
+    contenedor.innerHTML = '<p style="color:#ff0033;text-align:center;">No se encontraron publicaciones.</p>';
+    return;
+  }
 
   const ordenadas = todasLasPublicaciones.sort((a, b) =>
     (a.nombre || '').localeCompare(b.nombre || '')
@@ -108,7 +116,7 @@ function abrirModal(juego) {
   modal.style.display = 'block';
 }
 
-// Cerrar modal con X
+// Cierre del modal
 document.addEventListener('DOMContentLoaded', () => {
   const closeBtn = document.querySelector('.modal-close');
   if (closeBtn) {
@@ -117,11 +125,12 @@ document.addEventListener('DOMContentLoaded', () => {
     };
   }
 
-  // Cerrar modal al hacer clic fuera
   window.onclick = (event) => {
     const modal = document.getElementById('modal-juego');
     if (event.target === modal) {
       modal.style.display = 'none';
     }
   };
+
+  cargarPublicacionesIniciales();
 });
