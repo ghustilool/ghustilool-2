@@ -16,11 +16,13 @@
   <!-- 🌌 Fondo animado -->
   <div id="neon-background"></div>
 
-  <!-- ⚡ Encabezado con glitch -->
+  <!-- ⚡ Encabezado con calaveras corruptas -->
   <header class="glitch-header">
-    <h1 class="glitch-fragmented">
-      <span>G</span><span>h</span><span>u</span><span>s</span><span>t</span><span>i</span><span>L</span><span>o</span><span>O</span><span>L</span>
-    </h1>
+    <div class="skull-wrapper">
+      <span class="skull-corrupt">☠️</span>
+      <h1 class="glitch-fragmented">GhustiLoOL</h1>
+      <span class="skull-corrupt">☠️</span>
+    </div>
     <nav>
       <ul>
         <li><a href="#">Inicio</a></li>
@@ -55,13 +57,5 @@
   <!-- 🧠 Scripts -->
   <script src="scripts/cargarPublicaciones.js"></script>
   <script src="scripts/neonRain.js"></script>
-  <script>
-    window.onload = () => {
-      cargarPublicaciones('ghusti');
-      document.querySelectorAll('.glitch-fragmented span').forEach(span => {
-        span.setAttribute('data-char', span.textContent);
-      });
-    };
-  </script>
 </body>
 </html>
