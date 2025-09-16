@@ -68,9 +68,60 @@ function mostrarPublicacionesOrdenadas() {
       ${comprarHTML}
     `;
 
+    card.onclick = () => abrirModal(juego);
     contenedor.appendChild(card);
   });
 }
 
-// Ejecutar al cargar la página
-document.addEventListener('DOMContentLoaded', cargarPublicacionesIniciales);
+function abrirModal(juego) {
+  const modal = document.getElementById('modal-juego');
+  const modalBody = document.getElementById('modal-body');
+
+  const imagenHTML = juego.imagen
+    ? `<img src="${juego.imagen}" alt="${juego.nombre}">`
+    : `<div style="width:100%;height:200px;background:#222;color:#888;display:flex;align-items:center;justify-content:center;border-radius:4px;">Sin imagen</div>`;
+
+  const nombreHTML = juego.nombre
+    ? `<h2>${juego.nombre}</h2>`
+    : `<h2>Sin nombre</h2>`;
+
+  const descripcionHTML = juego.descripcion
+    ? `<p>${juego.descripcion}</p>`
+    : '';
+
+  const descargarHTML = juego.descargar
+    ? `<a href="${juego.descargar}" target="_blank">Descargar</a>`
+    : `<a style="background:#555;cursor:default;">Sin descarga</a>`;
+
+  const comprarHTML = juego.comprar
+    ? `<br><a href="${juego.comprar}" target="_blank">Comprar</a>`
+    : '';
+
+  modalBody.innerHTML = `
+    ${imagenHTML}
+    ${nombreHTML}
+    ${descripcionHTML}
+    ${descargarHTML}
+    ${comprarHTML}
+  `;
+
+  modal.style.display = 'block';
+}
+
+// Cerrar modal con X
+document.addEventListener('DOMContentLoaded', () => {
+  const closeBtn = document.querySelector('.modal-close');
+  if (closeBtn) {
+    closeBtn.onclick = () => {
+      document.getElementById('modal-juego').style.display = 'none';
+    };
+  }
+
+  // Cerrar modal al hacer clic fuera
+  window.onclick = (event) => {
+    const modal = document.getElementById('modal-juego');
+    if (event.target === modal) {
+      modal.style.display = 'none';
+    }
+  };
+});
