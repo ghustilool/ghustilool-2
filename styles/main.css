@@ -15,7 +15,7 @@ body {
   z-index: 1;
 }
 
-/* Fondo animado de neón */
+/* Fondo animado de partículas */
 #neon-background {
   position: fixed;
   top: 0;
@@ -26,21 +26,58 @@ body {
   background-color: #121212;
 }
 
-/* Header */
-header {
-  background-color: #1f1f1f;
-  padding: 20px;
+/* Encabezado glitch ciberpunk */
+.glitch-header {
+  background: transparent;
   text-align: center;
-  border-bottom: 1px solid #333;
+  padding: 40px 20px 20px;
   position: relative;
   z-index: 2;
 }
 
-header h1 {
-  font-size: 2rem;
+.glitch-text {
+  font-size: 3rem;
+  font-weight: bold;
   color: #00ffcc;
+  position: relative;
+  text-transform: uppercase;
+  font-family: 'Orbitron', sans-serif;
 }
 
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  color: #00ffcc;
+  background: transparent;
+}
+
+.glitch-text::before {
+  animation: glitchTop 1s infinite linear alternate-reverse;
+  top: -2px;
+}
+
+.glitch-text::after {
+  animation: glitchBottom 1s infinite linear alternate-reverse;
+  top: 2px;
+}
+
+@keyframes glitchTop {
+  0% { clip-path: inset(0 0 90% 0); transform: translateX(-2px); }
+  50% { clip-path: inset(0 0 85% 0); transform: translateX(2px); }
+  100% { clip-path: inset(0 0 90% 0); transform: translateX(-1px); }
+}
+
+@keyframes glitchBottom {
+  0% { clip-path: inset(90% 0 0 0); transform: translateX(2px); }
+  50% { clip-path: inset(85% 0 0 0); transform: translateX(-2px); }
+  100% { clip-path: inset(90% 0 0 0); transform: translateX(1px); }
+}
+
+/* Navegación */
 nav ul {
   list-style: none;
   display: flex;
