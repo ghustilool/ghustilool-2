@@ -34,20 +34,17 @@
     <button class="tag-button tag-button-adult" onclick="filtrarPorEtiqueta('Adult')">🔞 +18</button>
   </div>
 
-  <!-- 📦 Contenido principal -->
+  <!-- 📦 Juegos destacados (centrado y más chico) -->
   <main>
-    <section class="destacados">
+    <section class="destacados compact">
       <h2>Juegos Destacados</h2>
       <div class="grid" id="destacados"></div>
     </section>
 
-    <section class="autores">
-      <h2>Publicaciones por autor</h2>
-      <select onchange="cargarPublicaciones(this.value)">
-        <option value="ghusti" selected>Ghusti</option>
-        <option value="liss">Liss</option>
-      </select>
-      <div id="publicaciones"></div>
+    <!-- 📚 Publicaciones de autores ordenadas -->
+    <section class="publicaciones-todas">
+      <h2>Todos los juegos publicados</h2>
+      <div class="grid" id="publicaciones-todas"></div>
     </section>
   </main>
 
