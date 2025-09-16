@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GhustiLoOL Games</title>
+  <link rel="icon" href="Ghusti-Ico.ico" type="image/x-icon">
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+  <header>
+    <h1>🎮 GhustiLoOL Games</h1>
+    <nav>
+      <ul>
+        <li><a href="#">Inicio</a></li>
+        <li><a href="#">Autores</a></li>
+        <li><a href="#">Contacto</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="destacados">
+      <h2>Juegos Destacados</h2>
+      <div class="grid">
+        <div class="card">
+          <img src="https://files.gamesfull.app/uploads/image/2025/09/the-crew-1758048891361-193x288.jpg" alt="The Crew">
+          <h3>The Crew</h3>
+          <p>Conduce por EE.UU. en este juego de carreras en mundo abierto.</p>
+          <a href="#">Ver juego</a>
+        </div>
+        <div class="card">
+          <img src="https://files.gamesfull.app/uploads/image/2025/09/lego-voyagers-1757964519767-193x288.jpg" alt="LEGO Voyagers">
+          <h3>LEGO Voyagers</h3>
+          <p>Aventura espacial con bloques y creatividad sin límites.</p>
+          <a href="#">Ver juego</a>
+        </div>
+        <div class="card">
+          <img src="https://files.gamesfull.app/uploads/image/2025/09/hollow-knight-silksong-1757012715967-193x288.jpg" alt="Hollow Knight Silksong">
+          <h3>Hollow Knight Silksong</h3>
+          <p>Explora un mundo subterráneo lleno de misterio y acción.</p>
+          <a href="#">Ver juego</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="autores">
+      <h2>Publicaciones por autor</h2>
+      <select onchange="cargarPublicaciones(this.value)">
+        <option value="ghusti">Ghusti</option>
+        <option value="liss">Liss</option>
+      </select>
+      <div id="publicaciones"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 GhustiLoOL. Todos los derechos reservados.</p>
+  </footer>
+
+  <script src="scripts/cargarPublicaciones.js"></script>
+</body>
+</html>
