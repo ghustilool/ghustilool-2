@@ -15,7 +15,7 @@ body {
   z-index: 1;
 }
 
-/* 🌌 Fondo animado de partículas */
+/* 🌌 Fondo animado */
 #neon-background {
   position: fixed;
   top: 0;
@@ -35,71 +35,20 @@ body {
   z-index: 2;
 }
 
-/* ⚡ Título glitch con Rovelink y amarillo neón */
+/* ✨ Título con resplandor suave */
 .glitch-fragmented {
-  display: flex;
-  justify-content: center;
-  flex-wrap: nowrap;
   font-family: 'Rovelink', sans-serif;
   font-size: 4rem;
   text-transform: uppercase;
   letter-spacing: 2px;
+  color: #ffef00;
+  text-align: center;
+  text-shadow:
+    0 0 4px rgba(255, 239, 0, 0.4),
+    0 0 8px rgba(255, 239, 0, 0.3),
+    1px 1px 2px #000;
   position: relative;
   z-index: 2;
-}
-
-.glitch-fragmented span {
-  position: relative;
-  display: inline-block;
-  animation: fragmentShift 3s infinite ease-in-out;
-  color: #ffef00;
-  text-shadow:
-    0 0 4px #ffef00,
-    0 0 8px #ffef00,
-    0 0 12px #ffef00,
-    1px 1px 2px #000;
-  margin: 0 1px;
-  transition: opacity 0.2s ease-in-out;
-}
-
-/* Eliminamos pseudo-elementos que apagaban el texto */
-.glitch-fragmented span::before,
-.glitch-fragmented span::after {
-  display: none;
-}
-
-/* Fallos de iluminación */
-.glitch-fragmented span:nth-child(3n) {
-  animation: flickerNeon 2.5s infinite;
-}
-
-.glitch-fragmented span:nth-child(4n) {
-  animation: flickerNeon 3s infinite;
-}
-
-@keyframes fragmentShift {
-  0% { transform: translate(0, 0); }
-  25% { transform: translate(-1px, 1px); }
-  50% { transform: translate(1px, -1px); }
-  75% { transform: translate(-0.5px, 0.5px); }
-  100% { transform: translate(0, 0); }
-}
-
-@keyframes flickerNeon {
-  0%, 18%, 22%, 25%, 60%, 100% {
-    opacity: 1;
-    text-shadow:
-      0 0 4px #ffef00,
-      0 0 8px #ffef00,
-      0 0 12px #ffef00,
-      1px 1px 2px #000;
-  }
-  20%, 24%, 58% {
-    opacity: 0.6;
-    text-shadow:
-      0 0 2px #ffef00,
-      0 0 4px #ffef00;
-  }
 }
 
 /* 🧭 Navegación tipo HUD */
