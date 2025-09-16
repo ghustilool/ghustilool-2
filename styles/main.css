@@ -35,58 +35,52 @@ body {
   z-index: 2;
 }
 
-/* Glitch profesional con Doctor Glitch font */
-.glitch-doctor {
+/* Glitch fragmentado: letras rotas y movimiento independiente */
+.glitch-fragmented {
+  display: flex;
+  justify-content: center;
+  flex-wrap: nowrap;
   font-family: 'Doctor Glitch', sans-serif;
   font-size: 4rem;
   color: #00ffcc;
-  position: relative;
   text-transform: uppercase;
   letter-spacing: 2px;
-  animation: glitchShift 2s infinite;
+  position: relative;
+  z-index: 2;
 }
 
-.glitch-doctor::before,
-.glitch-doctor::after {
-  content: attr(data-text);
+.glitch-fragmented span {
+  position: relative;
+  display: inline-block;
+  animation: fragmentShift 3s infinite ease-in-out;
+}
+
+.glitch-fragmented span::before,
+.glitch-fragmented span::after {
+  content: attr(data-char);
   position: absolute;
   left: 0;
-  width: 100%;
-  overflow: hidden;
+  top: 0;
   color: #00ffcc;
-  background: transparent;
   mix-blend-mode: difference;
+  opacity: 0.6;
+  pointer-events: none;
 }
 
-.glitch-doctor::before {
-  top: -2px;
-  left: 1px;
-  text-shadow: 2px 0 red;
-  animation: glitchSlice 1.5s infinite linear alternate-reverse;
+.glitch-fragmented span:nth-child(odd) {
+  animation-delay: 0.2s;
 }
 
-.glitch-doctor::after {
-  top: 2px;
-  left: -1px;
-  text-shadow: -2px 0 blue;
-  animation: glitchSlice 1.5s infinite linear alternate;
+.glitch-fragmented span:nth-child(even) {
+  animation-delay: 0.4s;
 }
 
-@keyframes glitchSlice {
-  0% { clip-path: inset(10% 0 85% 0); transform: translateX(-1px); }
-  25% { clip-path: inset(20% 0 70% 0); transform: translateX(2px); }
-  50% { clip-path: inset(30% 0 60% 0); transform: translateX(-2px); }
-  75% { clip-path: inset(40% 0 50% 0); transform: translateX(1px); }
-  100% { clip-path: inset(10% 0 85% 0); transform: translateX(-1px); }
-}
-
-@keyframes glitchShift {
-  0% { transform: translate(0); }
-  20% { transform: translate(-2px, 2px); }
-  40% { transform: translate(2px, -2px); }
-  60% { transform: translate(-1px, 1px); }
-  80% { transform: translate(1px, -1px); }
-  100% { transform: translate(0); }
+@keyframes fragmentShift {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-1px, 1px); }
+  50% { transform: translate(1px, -1px); }
+  75% { transform: translate(-0.5px, 0.5px); }
+  100% { transform: translate(0, 0); }
 }
 
 /* Navegación */
