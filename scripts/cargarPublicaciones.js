@@ -82,23 +82,35 @@ function abrirModal(juego) {
     ? `<p>${juego.descripcion}</p>`
     : '';
 
-  const descargarHTML = juego.descargar
-    ? `<a href="${juego.descargar}" target="_blank">Descargar</a>`
-    : `<a style="background:#555;cursor:default;">Sin descarga</a>`;
+  const botonesHTML = `
+    <div class="modal-body-buttons">
+      ${juego.descargar ? `<a href="${juego.descargar}" target="_blank">DESCARGAR</a>` : ''}
+      ${juego.contraseña ? `<a href="#" onclick="copiarContraseña('${juego.contraseña}');return false;">CONTRASEÑA</a>` : ''}
+      ${juego.comprar ? `<a href="${juego.comprar}" target="_blank">COMPRAR</a>` : ''}
+    </div>
+  `;
 
-  const comprarHTML = juego.comprar
-    ? `<br><a href="${juego.comprar}" target="_blank">Comprar</a>`
+  const versionHTML = juego.version
+    ? `<div class="modal-version">VERSIÓN: ${juego.version}</div>`
     : '';
 
   modalBody.innerHTML = `
     ${imagenHTML}
     ${nombreHTML}
     ${descripcionHTML}
-    ${descargarHTML}
-    ${comprarHTML}
+    ${botonesHTML}
+    ${versionHTML}
   `;
 
   modal.style.display = 'block';
+}
+
+function copiarContraseña(texto) {
+  navigator.clipboard.writeText(texto).then(() => {
+    alert('Contraseña copiada al portapapeles');
+  }).catch(err => {
+    console.error('Error al copiar contraseña:', err);
+  });
 }
 
 // Cierre del modal
