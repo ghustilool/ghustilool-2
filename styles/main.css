@@ -31,110 +31,109 @@ body {
 /* ✨ Título con resplandor suave */
 .glitch-fragmented {
   font-family: 'Rovelink', sans-serif;
-  font-size: 4rem;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: #ffef00;
-  text-align: center;
-  text-shadow: 0 0 4px rgba(255,239,0,0.4), 0 0 8px rgba(255,239,0,0.3), 1px 1px 2px #000;
+  font-size: 4rem; text-transform: uppercase; letter-spacing: 2px;
+  color: #ffef00; text-align: center;
+  text-shadow: 0 0 4px rgba(255,239,0,.4), 0 0 8px rgba(255,239,0,.3), 1px 1px 2px #000;
   position: relative; z-index: 2;
 }
 
-/* 🎮 Filtros por etiqueta */
+/* 🎮 Botones de filtro por etiqueta */
 .tag-filter-container { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin: 28px 0; z-index: 2; position: relative; }
 .tag-button {
-  display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px;
-  font-size: 0.95rem; font-weight: 700; font-family: 'Orbitron', sans-serif;
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 14px; font-size: 0.95rem; font-weight: 700; font-family: 'Orbitron', sans-serif;
   background: rgba(0,0,0,0.4); border: 1px solid; border-radius: 6px; color: #fff; text-shadow: 0 0 2px #000;
   cursor: pointer; transition: all .2s ease;
 }
-.tag-button:hover { background: rgba(0,0,0,0.6); box-shadow: 0 0 10px currentColor; transform: scale(1.05); }
+.tag-button:hover { background: rgba(0,0,0,0.6); box-shadow: 0 0 10px currentColor; transform: translateY(-2px); }
 .tag-button.active { background: rgba(0,0,0,0.6); box-shadow: 0 0 12px currentColor; }
-.tag-button-all{border-color:#ffef00;color:#ffef00;} .tag-button-offline{border-color:#3399ff;color:#3399ff;}
-.tag-button-lan{border-color:#00ff99;color:#00ff99;} .tag-button-online{border-color:#00ffff;color:#00ffff;}
-.tag-button-adult{border-color:#ff0033;color:#ff0033;}
+.tag-button-all { border-color:#ffef00;color:#ffef00; }
+.tag-button-offline { border-color:#3399ff;color:#3399ff; }
+.tag-button-lan { border-color:#00ff99;color:#00ff99; }
+.tag-button-online { border-color:#00ffff;color:#00ffff; }
+.tag-button-adult { border-color:#ff0033;color:#ff0033; }
 
 /* ====== Layout general ====== */
 main { padding-bottom: 60px; }
 
-/* 🧱 Grid de tarjetas */
+/* 🧱 Grid tipo "ghustilool.netlify.app" */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* como en la referencia */
+  gap: 20px;
   justify-content: center;
   align-items: stretch;
-  margin-top: 28px;
+  max-width: 1200px;            /* ancho contenido */
+  margin: 28px auto 0;
 }
 
-/* 🧩 Tarjetas (alto consistente y compacto) */
+/* 🧩 Tarjetas (forma replicada: sombra + hover scale) */
 .card {
-  background-color: #1a1a2e;
+  background-color: #1a1a2e;    /* mantenemos tu base */
+  border-radius: 10px;
   border: 1px solid #333;
-  border-radius: 8px;
-  padding: 8px 10px;
-  text-align: center;
-  transition: transform .2s ease, box-shadow .2s ease;
-  position: relative; z-index: 2; cursor: pointer;
-
-  display: flex; flex-direction: column;
-  height: 260px;                    /* 🔽 más chico */
   overflow: hidden;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+
+  display: flex;
+  flex-direction: column;
+  height: 260px;                /* altura consistente para filas prolijas */
+  padding: 10px;
+
+  box-shadow: 0 0 15px rgba(255, 0, 204, 0.25); /* glow en tu color */
+  transition: transform .25s ease, box-shadow .25s ease;
 }
-.card:hover { transform: translateY(-2px); }
+.card:hover { transform: scale(1.02); }
 
 /* foco accesible */
 .card:focus-visible { outline: 2px solid #00ffff; outline-offset: 3px; box-shadow: 0 0 14px rgba(0,255,255,.35); }
 
 /* 🎨 Hover dinámico por etiqueta */
-.card-offline:hover { box-shadow: 0 0 12px #3399ff; }
-.card-lan:hover     { box-shadow: 0 0 12px #00ff99; }
-.card-online:hover  { box-shadow: 0 0 12px #00ffff; }
-.card-adult:hover   { box-shadow: 0 0 12px #ff0033; }
-.card-default:hover { box-shadow: 0 0 12px #ff00cc; }
+.card-offline:hover { box-shadow: 0 0 15px rgba(51,153,255,.45); }
+.card-lan:hover     { box-shadow: 0 0 15px rgba(0,255,153,.45); }
+.card-online:hover  { box-shadow: 0 0 15px rgba(0,255,255,.45); }
+.card-adult:hover   { box-shadow: 0 0 15px rgba(255,0,51,.45); }
+.card-default:hover { box-shadow: 0 0 15px rgba(255,0,204,.55); }
 
 /* 🖼️ Imagen */
 .card img {
-  width: 100%; aspect-ratio: 16 / 9; object-fit: cover;
-  border-radius: 4px; margin-bottom: 6px;
+  width: 100%;
+  aspect-ratio: 616 / 353;      /* referencia */
+  object-fit: cover;
+  border-radius: 6px;
+  margin-bottom: 6px;
 }
 
-/* 🧠 Título */
+/* 🧠 Título (1 línea con "…", como la referencia) */
 .card h3 {
-  color: #fff;
-  font-size: clamp(0.9rem, 1vw + 0.5rem, 1rem);
+  color: #ffffff;
+  font-size: 1.05rem;
   line-height: 1.15;
-  margin: 0 4px 2px;   /* 🔽 menos separación */
-  word-break: break-word; hyphens: auto;
+  margin: 0 4px 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* 🦶 Footer de la card (versión + badge) */
-.card-footer {
-  margin-top: auto;                 /* baja todo el bloque al fondo */
-  display: flex; flex-direction: column; align-items: center; gap: 6px;
-}
-
-/* 🧾 Versión pequeña */
-.card-meta {
-  font-family: 'Roboto Mono', monospace;
-  font-size: 0.72rem;
-  color: #aeb3c0;
-  opacity: .9;
-}
+/* 🦶 Footer de la card: versión + badge centrados */
+.card-footer { margin-top: auto; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.card-meta { font-family: 'Roboto Mono', monospace; font-size: .72rem; color: #aeb3c0; opacity: .9; }
 
 /* 🏷️ Etiqueta */
 .card-etiqueta {
-  font-size: 0.72rem; font-weight: 800;
-  padding: 3px 10px; border-radius: 6px;
+  font-size: 0.75rem; font-weight: 800;
+  padding: 4px 10px; border-radius: 20px;
   display: inline-block; text-transform: uppercase;
   font-family: 'Roboto Mono', monospace; border: 1px solid;
 }
 
 /* 🎨 Colores dinámicos */
 .card-offline .card-etiqueta{color:#3399ff;border-color:#3399ff;background:rgba(51,153,255,.1);}
-.card-lan .card-etiqueta{color:#00ff99;border-color:#00ff99;background:rgba(0,255,153,.1);}
-.card-online .card-etiqueta{color:#00ffff;border-color:#00ffff;background:rgba(0,255,255,.1);}
-.card-adult .card-etiqueta{color:#ff0033;border-color:#ff0033;background:rgba(255,0,51,.1);}
+.card-lan .card-etiqueta    {color:#00ff99;border-color:#00ff99;background:rgba(0,255,153,.1);}
+.card-online .card-etiqueta {color:#00ffff;border-color:#00ffff;background:rgba(0,255,255,.1);}
+.card-adult .card-etiqueta  {color:#ff0033;border-color:#ff0033;background:rgba(255,0,51,.1);}
 .card-default .card-etiqueta{color:#ff00cc;border-color:#ff00cc;background:rgba(255,0,204,.1);}
 
 /* 🧾 Footer global */
