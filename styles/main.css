@@ -203,7 +203,22 @@ body {
 .card h3 {
   color: #ffffff;
   font-size: 1rem;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
+}
+
+/* 🏷️ Etiqueta visible en la tarjeta */
+.card-etiqueta {
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: #ff00cc;
+  background-color: rgba(255, 0, 204, 0.1);
+  border: 1px solid #ff00cc;
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-top: 4px;
+  text-transform: uppercase;
+  font-family: 'Roboto Mono', monospace;
 }
 
 /* 🧾 Footer estilo terminal */
