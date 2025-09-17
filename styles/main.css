@@ -28,7 +28,7 @@ body {
   100% { transform: rotate(-5deg) scale(1); filter: blur(0.5px); }
 }
 
-/* ✨ Título con resplandor suave */
+/* ✨ Título principal */
 .glitch-fragmented {
   font-family: 'Rovelink', sans-serif;
   font-size: 4rem; text-transform: uppercase; letter-spacing: 2px;
@@ -37,7 +37,7 @@ body {
   position: relative; z-index: 2;
 }
 
-/* 🎮 Filtros por etiqueta */
+/* 🎮 Filtros */
 .tag-filter-container { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin: 28px 0; z-index: 2; position: relative; }
 .tag-button {
   display: inline-flex; align-items: center; gap: 8px;
@@ -74,7 +74,7 @@ main { padding-bottom: 60px; }
   border: 1px solid #333;
   overflow: hidden;
   cursor: pointer;
-  position: relative;
+  position: relative;           /* necesario para overlay link */
   z-index: 2;
 
   display: flex; flex-direction: column;
@@ -92,6 +92,12 @@ main { padding-bottom: 60px; }
   border-radius: 6px; margin-bottom: 6px;
 }
 
+/* Overlay link que hace click a #id */
+.card-link{
+  position:absolute; inset:0; z-index:5; 
+  text-indent:-9999px; overflow:hidden;
+}
+
 /* Título centrado */
 .card h3 {
   color: #fff;
@@ -99,7 +105,7 @@ main { padding-bottom: 60px; }
   line-height: 1.15;
   margin: 0 4px 4px;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  text-align: center; /* ⬅️ centrado */
+  text-align: center;
 }
 
 /* Footer de la card */

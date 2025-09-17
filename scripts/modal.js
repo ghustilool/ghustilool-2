@@ -1,5 +1,5 @@
 // scripts/modal.js
-// Modal con fade/scale, sin import circular, y soporte de deep-link (#id).
+// Modal con fade/scale y apertura por #hash (hashchange) + utilidades sin imports.
 
 const EMOTES = { offline: '🎮', lan: '🔌', online: '🌐', adult: '🔞', default: '🏠' };
 
@@ -13,7 +13,6 @@ function normalizarEtiqueta(tags) {
   return 'default';
 }
 
-/* -------- abrir/cerrar con fade-in/fade-out -------- */
 function showModal(modalEl) {
   modalEl.style.display = 'flex';
   modalEl.classList.remove('fade-out');
@@ -31,14 +30,13 @@ function hideModal(modalEl) {
   modalEl.addEventListener('transitionend', onEnd);
 }
 
-/* -------- API pública -------- */
+/* ---------- API ---------- */
 export function abrirModal(juego, origenElemento = null) {
   const modal = document.getElementById('modal-juego');
   const modalBody = document.getElementById('modal-body');
   const modalContent = modal?.querySelector('.modal-content');
   if (!modal || !modalBody || !modalContent) return;
 
-  // prepara clases por etiqueta
   const etiqueta = normalizarEtiqueta(juego.tags);
   modalBody.className = 'modal-body';
   modalContent.className = 'modal-content';
@@ -71,7 +69,7 @@ export function abrirModal(juego, origenElemento = null) {
 
   modalBody.innerHTML = `${imagenHTML}${etiquetaHTML}${nombreHTML}${descripcionHTML}${botonesHTML}${versionHTML}`;
 
-  // origen de animación
+  // origen estético
   modalContent.style.transformOrigin = '50% 50%';
   if (origenElemento?.getBoundingClientRect) {
     const r = origenElemento.getBoundingClientRect();
@@ -79,7 +77,6 @@ export function abrirModal(juego, origenElemento = null) {
   }
 
   showModal(modal);
-
   if (juego.id) { try { history.replaceState(null, '', `#${juego.id}`); } catch {} }
 }
 
@@ -90,26 +87,25 @@ function cerrarModal() {
   try { history.replaceState(null, '', location.pathname + location.search); } catch {}
 }
 
-/* Deep-link con #id usando la lista global cargada por cargarPublicaciones.js */
+/* Abre por hash siempre que cambie (overlay link u otras fuentes) */
 export function verificarFragmentoURL() {
   const id = location.hash.replace('#', '');
   const lista = Array.isArray(window.__PUBLICACIONES__) ? window.__PUBLICACIONES__ : [];
   if (!id || !lista.length) return;
-  const juego = lista.find(j => j.id === id);
+  const juego = lista.find(j => (j.id || '') === id);
   if (juego) abrirModal(juego);
 }
 
-/* util copiar pass */
-window.copiarContraseña = (texto) => {
-  if (!texto) return;
-  navigator.clipboard.writeText(texto).catch(() => {});
-};
+window.copiarContraseña = (texto) => { if (texto) navigator.clipboard.writeText(texto).catch(() => {}); };
 
-/* listeners básicos */
+/* Listeners básicos */
 document.addEventListener('DOMContentLoaded', () => {
   const modal = document.getElementById('modal-juego');
   const closeBtn = modal?.querySelector('.modal-close');
   closeBtn?.addEventListener('click', cerrarModal);
   window.addEventListener('click', (e) => { if (e.target === modal) cerrarModal(); });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') cerrarModal(); });
+
+  // importantísimo: abrir si cambia el hash
+  window.addEventListener('hashchange', verificarFragmentoURL);
 });

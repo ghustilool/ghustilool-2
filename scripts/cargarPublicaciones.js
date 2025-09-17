@@ -15,7 +15,7 @@ function normalizarEtiqueta(tags) {
   return 'default';
 }
 
-/* Ajusta títulos a 3 líneas */
+/* Ajusta títulos a 3 líneas si hiciera falta (backup) */
 function fitTitles() {
   const TITLES = document.querySelectorAll('.card-title');
   TITLES.forEach((el) => {
@@ -49,10 +49,9 @@ function cargarPublicacionesIniciales() {
         if (Array.isArray(data)) todasLasPublicaciones.push(...data);
         cargados++;
         if (cargados === autores.length) {
-          // lista global para modal.js (evita import circular)
-          window.__PUBLICACIONES__ = todasLasPublicaciones;
+          window.__PUBLICACIONES__ = todasLasPublicaciones; // global para modal.js
           mostrarPublicacionesOrdenadas();
-          verificarFragmentoURL();
+          verificarFragmentoURL(); // por si ya hay #id
         }
       })
       .catch((e) => {
@@ -82,14 +81,15 @@ function mostrarPublicacionesOrdenadas() {
 
   ordenadas.forEach((juego) => {
     const etiqueta = normalizarEtiqueta(juego.tags);
+    const id = juego.id || '';
+
     const card = document.createElement('div');
     card.className = `card card-${etiqueta}`;
     card.tabIndex = 0;
 
-    // atributos para filtro
     const tagsNorm = (juego.tags || []).map(t => t.toString().toLowerCase().trim()).join(',') || '';
     card.setAttribute('data-tags', tagsNorm);
-    card.setAttribute('data-id', juego.id || '');
+    card.setAttribute('data-id', id);
 
     const imagenHTML = juego.imagen
       ? `<img src="${juego.imagen}" alt="${juego.nombre || 'Juego'}" loading="lazy">`
@@ -100,9 +100,16 @@ function mostrarPublicacionesOrdenadas() {
     const badgeHTML  = `<div class="card-etiqueta">${etiqueta.toUpperCase()}</div>`;
     const footerHTML = `<div class="card-footer">${metaHTML}${badgeHTML}</div>`;
 
-    card.innerHTML = `${imagenHTML}${nombreHTML}${footerHTML}`;
-    card.onclick = () => abrirModal(juego, card);
-    card.addEventListener('keydown', (e) => { if (e.key === 'Enter') abrirModal(juego, card); });
+    // 🔗 overlay: si hay id, el click cambia el hash y modal.js lo abre
+    const overlay = id ? `<a class="card-link" href="#${id}" aria-label="Abrir ${juego.nombre || 'publicación'}"></a>` : '';
+
+    card.innerHTML = overlay + imagenHTML + nombreHTML + footerHTML;
+
+    // respaldo: si no hay id, abrimos directo
+    if (!id) {
+      card.onclick = () => abrirModal(juego, card);
+      card.addEventListener('keydown', (e) => { if (e.key === 'Enter') abrirModal(juego, card); });
+    }
 
     contenedor.appendChild(card);
   });
@@ -113,6 +120,10 @@ function mostrarPublicacionesOrdenadas() {
 /* ---------- init ---------- */
 document.addEventListener('DOMContentLoaded', () => {
   cargarPublicacionesIniciales();
+
+  // si cambian el hash manualmente o por el overlay, abrimos/cerramos
+  window.addEventListener('hashchange', verificarFragmentoURL);
+
   let to;
   window.addEventListener('resize', () => { clearTimeout(to); to = setTimeout(fitTitles, 120); });
 });
