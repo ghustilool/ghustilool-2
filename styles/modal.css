@@ -1,4 +1,4 @@
-/* 🪟 Modal general */
+/* 🪟 Overlay del modal */
 .modal {
   position: fixed;
   inset: 0;
@@ -14,25 +14,29 @@
   pointer-events: none;
   transition: opacity .25s ease;
 }
+
+/* Estados abiertos */
 .modal.is-open,
 .modal[aria-hidden="false"] {
   opacity: 1;
   pointer-events: auto;
 }
 
-/* 📦 Contenido */
+/* 📦 Contenedor del modal */
 .modal-content {
   background-color: #1a1a2e;
   color: #e0e0e0;
   font-family: 'Roboto Mono', monospace;
-  width: min(600px, 92vw);
+
+  width: min(680px, 92vw);
   border-radius: 12px;
 
-  /* ✅ borde dinámico */
+  /* ✅ Borde dinámico (no hardcodear #ff00cc) */
   --modal-borde: transparent;
   border: 1px solid var(--modal-borde) !important;
 
   box-shadow: 0 20px 60px rgba(0,0,0,.6);
+
   transform: translateY(6px) scale(.96);
   opacity: 0;
   animation: zoomInModal .28s ease-out forwards;
@@ -41,9 +45,13 @@
   overflow: auto;
   padding: 18px;
 }
+
+/* 🎞️ Animación de aparición */
 @keyframes zoomInModal {
   to { transform: translateY(0) scale(1); opacity: 1; }
 }
+
+/* ⚠️ Preferencia del usuario: menos movimiento */
 @media (prefers-reduced-motion: reduce) {
   .modal, .modal-content {
     transition: none !important;
@@ -53,17 +61,21 @@
   }
 }
 
-/* ❌ Cerrar */
+/* ❌ Botón cerrar */
 .modal-close {
-  position: absolute;
-  top: 10px;
-  right: 12px;
-  font-size: 1.6rem;
+  position: sticky;       /* siempre visible arriba mientras scrolleás */
+  top: 0;
+  float: right;
+  margin: -4px -4px 8px 0;
+  width: 32px;
+  height: 32px;
+  line-height: 28px;
+  text-align: center;
+  font-size: 1.4rem;
   color: #ff00cc;
   cursor: pointer;
   background: transparent;
   border: 0;
-  padding: 4px;
   border-radius: 8px;
 }
 .modal-close:hover { opacity: .9; }
@@ -73,11 +85,11 @@
 .modal-content img {
   width: 100%;
   border-radius: 6px;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   display: block;
 }
 
-/* 🏷️ Etiqueta */
+/* 🏷️ Etiqueta dentro del modal */
 .modal-etiqueta {
   font-size: 0.8rem;
   font-weight: 700;
@@ -91,13 +103,14 @@
   background-color: rgba(255, 255, 255, 0.06);
 }
 
-/* 🎮 Botones */
+/* 🎮 Botones de acción */
 .modal-body-buttons {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   margin-top: 15px;
 }
+
 .modal-body-buttons a {
   flex: 1;
   min-width: 140px;
@@ -114,27 +127,43 @@
 .modal-body-buttons a:hover { background-color: #ff33dd; transform: translateY(-1px); }
 .modal-body-buttons a:active { transform: translateY(0); }
 
-/* 🧾 Versión */
+/* 🧾 Versión del juego */
 .modal-version {
-  margin-top: 10px;
+  margin-top: 12px;
   font-size: 0.8rem;
   color: #aaa;
   text-align: center;
 }
 
-/* 🎨 Borde dinámico */
+/* 🎨 Color del borde por etiqueta */
 .modal-content-offline { --modal-borde: #3399ff; }
 .modal-content-lan     { --modal-borde: #00ff99; }
 .modal-content-online  { --modal-borde: #00ffff; }
 .modal-content-adult   { --modal-borde: #ff0033; }
 .modal-content-default { --modal-borde: #ff00cc; }
 
-/* 🎨 Color etiqueta */
+/* 🎨 Color de la etiqueta por etiqueta */
 .modal-content-offline .modal-etiqueta { color:#3399ff; border-color:#3399ff; }
 .modal-content-lan .modal-etiqueta     { color:#00ff99; border-color:#00ff99; }
 .modal-content-online .modal-etiqueta  { color:#00ffff; border-color:#00ffff; }
 .modal-content-adult .modal-etiqueta   { color:#ff0033; border-color:#ff0033; }
 .modal-content-default .modal-etiqueta { color:#ff00cc; border-color:#ff00cc; }
 
-/* 🔒 Scroll bloqueado */
+/* 🔒 Bloqueo de scroll del body mientras el modal está abierto */
 body.modal-open { overflow: hidden; }
+
+/* 📱 Ajustes móviles */
+@media (max-width: 480px) {
+  .modal {
+    padding: 16px;
+  }
+  .modal-content {
+    width: 94vw;
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .modal-body-buttons a {
+    min-width: 120px;
+    font-size: 0.85rem;
+  }
+}

@@ -123,7 +123,7 @@ body {
 .tag-button-adult { border-color: #ff0033; color: #ff0033; }
 
 /* ====== Layout general ====== */
-main { padding-bottom: 120px; }   /* más aire antes del footer */
+main { padding-bottom: 80px; }   /* menos espacio antes del footer */
 
 /* 🧱 Grid de tarjetas */
 .grid {
@@ -149,12 +149,12 @@ main { padding-bottom: 120px; }   /* más aire antes del footer */
 
   display: flex;
   flex-direction: column;
-  height: 380px;         /* TODAS iguales */
+  height: 320px;         /* MÁS COMPACTAS, todas iguales */
   overflow: hidden;
 }
 
 .card:hover {
-  transform: translateY(-2px);     /* sutil para no desarmar la grilla */
+  transform: translateY(-2px);
 }
 
 /* foco accesible */
@@ -180,7 +180,7 @@ main { padding-bottom: 120px; }   /* más aire antes del footer */
   margin-bottom: 10px;
 }
 
-/* 🧠 Título: se adapta y empuja el badge al fondo */
+/* 🧠 Título: se adapta */
 .card h3 {
   color: #ffffff;
   font-size: clamp(0.95rem, 1vw + 0.6rem, 1.1rem);
@@ -188,7 +188,7 @@ main { padding-bottom: 120px; }   /* más aire antes del footer */
   margin: 0 4px 6px;
   word-break: break-word;
   hyphens: auto;
-  flex: 1 1 auto;          /* ocupa el espacio disponible */
+  /* quitamos flex:1 para no generar tanto hueco */
 }
 
 /* 🏷️ Etiqueta visible en la tarjeta */
@@ -201,7 +201,7 @@ main { padding-bottom: 120px; }   /* más aire antes del footer */
   text-transform: uppercase;
   font-family: 'Roboto Mono', monospace;
   border: 1px solid;
-  margin-top: auto;        /* siempre queda al fondo de la card */
+  margin-top: auto;        /* se alinea al fondo */
 }
 
 /* 🎨 Colores dinámicos por clase */
@@ -234,11 +234,16 @@ main { padding-bottom: 120px; }   /* más aire antes del footer */
 /* 🧾 Footer estilo terminal */
 footer {
   text-align: center;
-  padding: 28px 20px;
+  padding: 24px 20px;
   border-top: 1px solid #333;
   color: #888;
   font-family: 'Roboto Mono', monospace;
   font-size: 0.9rem;
   position: relative;
   z-index: 2;
+}
+
+/* 📱 Ajustes en pantallas chicas: un poco más altas para títulos largos */
+@media (max-width: 480px) {
+  .card { height: 360px; }
 }
