@@ -37,18 +37,9 @@
     <button class="tag-button tag-button-adult" onclick="filtrarPorEtiqueta('Adult')">🔞 +18</button>
   </div>
 
-  <!-- 📦 Juegos destacados -->
+  <!-- 🧩 Grilla única de publicaciones -->
   <main>
-    <section class="destacados compact">
-      <h2>Juegos Destacados</h2>
-      <div class="grid" id="destacados"></div>
-    </section>
-
-    <!-- 📚 Publicaciones de autores -->
-    <section class="publicaciones-todas">
-      <h2>Todos los juegos publicados</h2>
-      <div class="grid" id="publicaciones-todas"></div>
-    </section>
+    <div class="grid" id="publicaciones-todas"></div>
   </main>
 
   <!-- 🪟 Modal de juego -->
@@ -65,8 +56,9 @@
   </footer>
 
   <!-- 🧠 Scripts -->
-  <script src="scripts/cargarPublicaciones.js"></script>
-  <script src="scripts/neonRain.js"></script>
   <script src="scripts/filtrarEtiquetas.js"></script>
+  <script type="module" src="scripts/modal.js"></script>
+  <script type="module" src="scripts/cargarPublicaciones.js"></script>
+  <script src="scripts/neonRain.js"></script>
 </body>
 </html>
