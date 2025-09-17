@@ -31,8 +31,9 @@
   width: min(600px, 92vw);
   border-radius: 12px;
 
-  /* 🔧 Base transparente: el color lo definen las clases por etiqueta */
-  border: 1px solid transparent;
+  /* 🔧 El borde usa variable (se setea con las clases dinámicas) */
+  --modal-borde: transparent;
+  border: 1px solid var(--modal-borde);
 
   box-shadow: 0 20px 60px rgba(0,0,0,.6);
 
@@ -146,12 +147,12 @@
   text-align: center;
 }
 
-/* 🎨 Borde dinámico por etiqueta */
-.modal-content-offline { border-color: #3399ff; }
-.modal-content-lan     { border-color: #00ff99; }
-.modal-content-online  { border-color: #00ffff; }
-.modal-content-adult   { border-color: #ff0033; }
-.modal-content-default { border-color: #ff00cc; }
+/* 🎨 Borde dinámico por etiqueta (seteamos variable) */
+.modal-content-offline { --modal-borde: #3399ff; }
+.modal-content-lan     { --modal-borde: #00ff99; }
+.modal-content-online  { --modal-borde: #00ffff; }
+.modal-content-adult   { --modal-borde: #ff0033; }
+.modal-content-default { --modal-borde: #ff00cc; }
 
 /* 🎨 Color dinámico para la etiqueta */
 .modal-content-offline .modal-etiqueta { color:#3399ff; border-color:#3399ff; }
