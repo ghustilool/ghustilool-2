@@ -1,3 +1,5 @@
+import { todasLasPublicaciones } from './cargarPublicaciones.js';
+
 export function abrirModal(juego) {
   const modal = document.getElementById('modal-juego');
   const modalBody = document.getElementById('modal-body');
@@ -35,6 +37,10 @@ export function abrirModal(juego) {
   `;
 
   modal.style.display = 'block';
+
+  if (juego.id) {
+    history.replaceState(null, '', `#${juego.id}`);
+  }
 }
 
 window.copiarContraseña = function(texto) {
@@ -70,11 +76,20 @@ function mostrarNotificacion(mensaje) {
   }, 2000);
 }
 
+export function verificarFragmentoURL() {
+  const fragmento = window.location.hash.replace('#', '');
+  if (!fragmento) return;
+
+  const juego = todasLasPublicaciones.find(j => j.id === fragmento);
+  if (juego) abrirModal(juego);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const closeBtn = document.querySelector('.modal-close');
   if (closeBtn) {
     closeBtn.onclick = () => {
       document.getElementById('modal-juego').style.display = 'none';
+      history.replaceState(null, '', window.location.pathname);
     };
   }
 
@@ -82,6 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('modal-juego');
     if (event.target === modal) {
       modal.style.display = 'none';
+      history.replaceState(null, '', window.location.pathname);
     }
   };
 });
