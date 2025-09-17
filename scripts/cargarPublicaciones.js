@@ -1,10 +1,10 @@
 // scripts/cargarPublicaciones.js
 import { abrirModal, verificarFragmentoURL } from './modal.js';
 
-const autores = ['ghustilool']; // agrega otros si tenés más JSONs
+const autores = ['ghustilool']; // agregá otros si tenés más JSONs
 export const todasLasPublicaciones = [];
 
-/* ------------ helpers ------------ */
+/* ---------- helpers ---------- */
 function normalizarEtiqueta(tags) {
   const raw = (tags?.[0] || '').toString().toLowerCase().trim();
   const compact = raw.replace(/\s+/g, '');
@@ -16,13 +16,13 @@ function normalizarEtiqueta(tags) {
 }
 
 /**
- * Reduce la fuente de h3.card-title hasta que quepa en 3 líneas.
- * No usa "..." y funciona con el alto fijo de la card.
+ * Ajusta la tipografía de h3.card-title para que quepa en 3 líneas sin "..."
+ * Mantiene todas las cards con el mismo alto fijo definido en CSS.
  */
 function fitTitles() {
   const TITLES = document.querySelectorAll('.card-title');
   TITLES.forEach((el) => {
-    // reset por si venimos de otra corrida (ej: resize)
+    // reset por si venimos de otra corrida (resize / filtro)
     el.style.fontSize = '';
     el.style.lineHeight = '';
 
@@ -31,22 +31,23 @@ function fitTitles() {
     let lineHeight = parseFloat(styles.lineHeight) || fontSize * 1.15;
 
     const MAX_LINES = 3;
-    const MAX_HEIGHT = lineHeight * MAX_LINES;
+    let maxHeight = lineHeight * MAX_LINES;
 
-    // Si ya entra, listo
-    if (el.scrollHeight <= MAX_HEIGHT) return;
+    if (el.scrollHeight <= maxHeight) return;
 
-    // Intento de ajuste: bajo fuente hasta 12px como mínimo
-    while (el.scrollHeight > MAX_HEIGHT && fontSize > 12) {
+    // baja gradual hasta 12px mínimo
+    while (el.scrollHeight > maxHeight && fontSize > 12) {
       fontSize -= 1;
       lineHeight = Math.max(14, Math.round(fontSize * 1.15));
       el.style.fontSize = fontSize + 'px';
       el.style.lineHeight = lineHeight + 'px';
+      maxHeight = lineHeight * MAX_LINES;
     }
   });
 }
+window.fitTitles = fitTitles;
 
-/* ------------ carga inicial ------------ */
+/* ---------- carga ---------- */
 function cargarPublicacionesIniciales() {
   const contenedor = document.getElementById('publicaciones-todas');
   contenedor.innerHTML = '';
@@ -68,7 +69,7 @@ function cargarPublicacionesIniciales() {
         cargados++;
         if (cargados === autores.length) {
           mostrarPublicacionesOrdenadas();
-          verificarFragmentoURL(); // abre modal si hay #id
+          verificarFragmentoURL(); // abre modal si hay #id en la URL
         }
       })
       .catch((err) => {
@@ -101,43 +102,45 @@ function mostrarPublicacionesOrdenadas() {
 
     const card = document.createElement('div');
     card.className = `card card-${etiqueta}`;
-    card.setAttribute(
-      'data-tags',
-      (juego.tags || []).map((t) => t.toString().toLowerCase().trim()).join(',') || ''
-    );
+    card.tabIndex = 0; // foco accesible
+
+    // para el filtro
+    const tagsNormalizados = (juego.tags || [])
+      .map((t) => t.toString().toLowerCase().trim())
+      .join(',') || '';
+    card.setAttribute('data-tags', tagsNormalizados);
     card.setAttribute('data-id', juego.id || '');
 
     const imagenHTML = juego.imagen
-      ? `<img src="${juego.imagen}" alt="${juego.nombre || 'Juego'}">`
+      ? `<img src="${juego.imagen}" alt="${juego.nombre || 'Juego'}" loading="lazy">`
       : `<div style="width:100%;height:120px;background:#222;color:#888;display:flex;align-items:center;justify-content:center;border-radius:4px;">Sin imagen</div>`;
 
     const nombreHTML = `<h3 class="card-title">${juego.nombre || 'Sin nombre'}</h3>`;
     const etiquetaHTML = `<div class="card-etiqueta">${etiqueta.toUpperCase()}</div>`;
 
-    card.innerHTML = `
-      ${imagenHTML}
-      ${nombreHTML}
-      ${etiquetaHTML}
-    `;
+    card.innerHTML = `${imagenHTML}${nombreHTML}${etiquetaHTML}`;
 
-    // Abrir modal desde la card (para animar desde el origen)
+    // abrir modal desde la card (y con Enter)
     card.onclick = () => abrirModal(juego, card);
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') abrirModal(juego, card);
+    });
 
     contenedor.appendChild(card);
   });
 
-  // Ajuste de títulos largos (después de pintar)
+  // ajuste de títulos largos (después de pintar)
   fitTitles();
 }
 
-/* ------------ init ------------ */
+/* ---------- init ---------- */
 document.addEventListener('DOMContentLoaded', () => {
   cargarPublicacionesIniciales();
 
-  // Recalcular títulos si cambia el ancho (responsive)
+  // recalcular títulos en cambios de tamaño (responsive)
+  let to;
   window.addEventListener('resize', () => {
-    // debounce simple
-    clearTimeout(window.__fitTitlesTO);
-    window.__fitTitlesTO = setTimeout(fitTitles, 100);
+    clearTimeout(to);
+    to = setTimeout(fitTitles, 120);
   });
 });
