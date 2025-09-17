@@ -4,6 +4,9 @@ import { abrirModal, verificarFragmentoURL } from './modal.js';
 const autores = ['ghustilool'];
 export const todasLasPublicaciones = [];
 
+/* emotes para la píldora */
+const EMOTES = { offline:'🎮', lan:'🔌', online:'🌐', adult:'🔞', default:'🏠' };
+
 /* ---------- helpers ---------- */
 function normalizarEtiqueta(tags) {
   const raw = (tags?.[0] || '').toString().toLowerCase().trim();
@@ -49,9 +52,9 @@ function cargarPublicacionesIniciales() {
         if (Array.isArray(data)) todasLasPublicaciones.push(...data);
         cargados++;
         if (cargados === autores.length) {
-          window.__PUBLICACIONES__ = todasLasPublicaciones; // global para modal.js
+          window.__PUBLICACIONES__ = todasLasPublicaciones;
           mostrarPublicacionesOrdenadas();
-          verificarFragmentoURL(); // por si ya hay #id
+          verificarFragmentoURL();
         }
       })
       .catch((e) => {
@@ -81,6 +84,7 @@ function mostrarPublicacionesOrdenadas() {
 
   ordenadas.forEach((juego) => {
     const etiqueta = normalizarEtiqueta(juego.tags);
+    const emote = EMOTES[etiqueta] || EMOTES.default;
     const id = juego.id || '';
 
     const card = document.createElement('div');
@@ -97,15 +101,15 @@ function mostrarPublicacionesOrdenadas() {
 
     const nombreHTML = `<h3 class="card-title">${juego.nombre || 'Sin nombre'}</h3>`;
     const metaHTML   = juego.version ? `<div class="card-meta">v${juego.version}</div>` : '';
-    const badgeHTML  = `<div class="card-etiqueta">${etiqueta.toUpperCase()}</div>`;
+
+    /* ✅ etiqueta unificada (emote + texto) */
+    const badgeHTML  = `<div class="card-etiqueta tag-pill tag-${etiqueta}">${emote} ${etiqueta.toUpperCase()}</div>`;
     const footerHTML = `<div class="card-footer">${metaHTML}${badgeHTML}</div>`;
 
-    // 🔗 overlay: si hay id, el click cambia el hash y modal.js lo abre
     const overlay = id ? `<a class="card-link" href="#${id}" aria-label="Abrir ${juego.nombre || 'publicación'}"></a>` : '';
 
     card.innerHTML = overlay + imagenHTML + nombreHTML + footerHTML;
 
-    // respaldo: si no hay id, abrimos directo
     if (!id) {
       card.onclick = () => abrirModal(juego, card);
       card.addEventListener('keydown', (e) => { if (e.key === 'Enter') abrirModal(juego, card); });
@@ -121,7 +125,6 @@ function mostrarPublicacionesOrdenadas() {
 document.addEventListener('DOMContentLoaded', () => {
   cargarPublicacionesIniciales();
 
-  // si cambian el hash manualmente o por el overlay, abrimos/cerramos
   window.addEventListener('hashchange', verificarFragmentoURL);
 
   let to;

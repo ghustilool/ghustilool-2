@@ -1,7 +1,7 @@
 // scripts/modal.js
-// Modal con fade/scale y apertura por #hash (hashchange) + utilidades sin imports.
+// Modal con fade/scale + etiqueta unificada abajo-derecha.
 
-const EMOTES = { offline: '🎮', lan: '🔌', online: '🌐', adult: '🔞', default: '🏠' };
+const EMOTES = { offline:'🎮', lan:'🔌', online:'🌐', adult:'🔞', default:'🏠' };
 
 function normalizarEtiqueta(tags) {
   const raw = (tags?.[0] || '').toString().toLowerCase().trim();
@@ -38,20 +38,19 @@ export function abrirModal(juego, origenElemento = null) {
   if (!modal || !modalBody || !modalContent) return;
 
   const etiqueta = normalizarEtiqueta(juego.tags);
+  const emote = EMOTES[etiqueta] || EMOTES.default;
+
   modalBody.className = 'modal-body';
   modalContent.className = 'modal-content';
   modalBody.classList.add(`modal-${etiqueta}`);
   modalContent.classList.add(`modal-content-${etiqueta}`);
 
-  const emote = EMOTES[etiqueta] || EMOTES.default;
-
   const imagenHTML = juego.imagen
     ? `<img src="${juego.imagen}" alt="${juego.nombre || 'Juego'}">`
     : `<div style="width:100%;height:220px;background:#222;color:#888;display:flex;align-items:center;justify-content:center;border-radius:6px;">Sin imagen</div>`;
 
-  const etiquetaHTML = `<div class="modal-etiqueta">${emote} ${etiqueta.toUpperCase()}</div>`;
-  const nombreHTML = `<h2 class="modal-title" style="text-align:center;margin:8px 0 12px">${juego.nombre || 'Sin nombre'}</h2>`;
-  const descripcionHTML = juego.descripcion ? `<p class="modal-description" style="text-align:center">${juego.descripcion}</p>` : '';
+  const nombreHTML = `<h2 class="modal-title">${juego.nombre || 'Sin nombre'}</h2>`;
+  const descripcionHTML = juego.descripcion ? `<p class="modal-description">${juego.descripcion}</p>` : '';
 
   const enlaceDescarga = juego.descargar;
   const contrasena = juego.contraseña ?? juego.contrasena;
@@ -67,7 +66,10 @@ export function abrirModal(juego, origenElemento = null) {
 
   const versionHTML = juego.version ? `<div class="modal-version">VERSIÓN: ${juego.version}</div>` : '';
 
-  modalBody.innerHTML = `${imagenHTML}${etiquetaHTML}${nombreHTML}${descripcionHTML}${botonesHTML}${versionHTML}`;
+  /* ✅ etiqueta unificada, ubicada abajo-derecha (no tapa los botones) */
+  const tagHTML = `<div class="modal-tag"><span class="modal-etiqueta tag-pill tag-${etiqueta}">${emote} ${etiqueta.toUpperCase()}</span></div>`;
+
+  modalBody.innerHTML = `${imagenHTML}${nombreHTML}${descripcionHTML}${botonesHTML}${versionHTML}${tagHTML}`;
 
   // origen estético
   modalContent.style.transformOrigin = '50% 50%';
@@ -87,7 +89,7 @@ function cerrarModal() {
   try { history.replaceState(null, '', location.pathname + location.search); } catch {}
 }
 
-/* Abre por hash siempre que cambie (overlay link u otras fuentes) */
+/* Abre por hash */
 export function verificarFragmentoURL() {
   const id = location.hash.replace('#', '');
   const lista = Array.isArray(window.__PUBLICACIONES__) ? window.__PUBLICACIONES__ : [];
@@ -98,14 +100,12 @@ export function verificarFragmentoURL() {
 
 window.copiarContraseña = (texto) => { if (texto) navigator.clipboard.writeText(texto).catch(() => {}); };
 
-/* Listeners básicos */
+/* Listeners */
 document.addEventListener('DOMContentLoaded', () => {
   const modal = document.getElementById('modal-juego');
   const closeBtn = modal?.querySelector('.modal-close');
   closeBtn?.addEventListener('click', cerrarModal);
   window.addEventListener('click', (e) => { if (e.target === modal) cerrarModal(); });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') cerrarModal(); });
-
-  // importantísimo: abrir si cambia el hash
   window.addEventListener('hashchange', verificarFragmentoURL);
 });

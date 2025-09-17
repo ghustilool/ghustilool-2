@@ -28,7 +28,7 @@ body {
   100% { transform: rotate(-5deg) scale(1); filter: blur(0.5px); }
 }
 
-/* ✨ Título principal */
+/* ✨ Título */
 .glitch-fragmented {
   font-family: 'Rovelink', sans-serif;
   font-size: 4rem; text-transform: uppercase; letter-spacing: 2px;
@@ -37,7 +37,7 @@ body {
   position: relative; z-index: 2;
 }
 
-/* 🎮 Filtros */
+/* 🎮 Filtros por etiqueta */
 .tag-filter-container { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin: 28px 0; z-index: 2; position: relative; }
 .tag-button {
   display: inline-flex; align-items: center; gap: 8px;
@@ -56,7 +56,7 @@ body {
 /* ====== Layout general ====== */
 main { padding-bottom: 60px; }
 
-/* Grid */
+/* 🧱 Grid */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -67,14 +67,14 @@ main { padding-bottom: 60px; }
   margin: 28px auto 0;
 }
 
-/* Card */
+/* 🧩 Card */
 .card {
   background-color: #1a1a2e;
   border-radius: 10px;
   border: 1px solid #333;
   overflow: hidden;
   cursor: pointer;
-  position: relative;           /* necesario para overlay link */
+  position: relative;
   z-index: 2;
 
   display: flex; flex-direction: column;
@@ -92,11 +92,8 @@ main { padding-bottom: 60px; }
   border-radius: 6px; margin-bottom: 6px;
 }
 
-/* Overlay link que hace click a #id */
-.card-link{
-  position:absolute; inset:0; z-index:5; 
-  text-indent:-9999px; overflow:hidden;
-}
+/* 🔗 Overlay que hace hash a #id */
+.card-link{ position:absolute; inset:0; z-index:5; text-indent:-9999px; overflow:hidden; }
 
 /* Título centrado */
 .card h3 {
@@ -112,22 +109,26 @@ main { padding-bottom: 60px; }
 .card-footer { margin-top: auto; display: flex; flex-direction: column; align-items: center; gap: 6px; }
 .card-meta { font-family: 'Roboto Mono', monospace; font-size: .72rem; color: #aeb3c0; opacity: .9; }
 
-/* Badge */
-.card-etiqueta {
-  font-size: .75rem; font-weight: 800;
-  padding: 4px 10px; border-radius: 20px;
-  display: inline-block; text-transform: uppercase;
-  font-family: 'Roboto Mono', monospace; border: 1px solid;
+/* ✅ ETIQUETA UNIFICADA (píldora) */
+.tag-pill{
+  display:inline-flex; align-items:center; gap:6px;
+  font-family:'Orbitron',sans-serif; font-weight:800;
+  font-size:.75rem; letter-spacing:.4px;
+  padding:4px 12px; border-radius:9999px;
+  border:1px solid currentColor;
+  background:rgba(255,255,255,.06);
 }
+.tag-offline{ color:#3399ff; border-color:#3399ff; background:rgba(51,153,255,.10); }
+.tag-lan    { color:#00ff99; border-color:#00ff99; background:rgba(0,255,153,.10); }
+.tag-online { color:#00ffff; border-color:#00ffff; background:rgba(0,255,255,.10); }
+.tag-adult  { color:#ff0033; border-color:#ff0033; background:rgba(255,0,51,.10); }
+.tag-default{ color:#ff00cc; border-color:#ff00cc; background:rgba(255,0,204,.10); }
 
-.card-offline .card-etiqueta{color:#3399ff;border-color:#3399ff;background:rgba(51,153,255,.1);}
-.card-lan .card-etiqueta    {color:#00ff99;border-color:#00ff99;background:rgba(0,255,153,.1);}
-.card-online .card-etiqueta {color:#00ffff;border-color:#00ffff;background:rgba(0,255,255,.1);}
-.card-adult .card-etiqueta  {color:#ff0033;border-color:#ff0033;background:rgba(255,0,51,.1);}
-.card-default .card-etiqueta{color:#ff00cc;border-color:#ff00cc;background:rgba(255,0,204,.1);}
+/* La card usa la misma píldora */
+.card-etiqueta { /* solo para mantener el selector; los estilos vienen de .tag-pill */ }
 
-/* Footer global */
+/* 🧾 Footer global */
 footer { text-align: center; padding: 20px; border-top: 1px solid #333; color:#888; font-family:'Roboto Mono', monospace; font-size:.9rem; position: relative; z-index: 2; }
 
-/* Móvil */
+/* 📱 Móvil */
 @media (max-width: 480px){ .card{ height: 300px; } }
