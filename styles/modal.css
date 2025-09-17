@@ -1,0 +1,140 @@
+/* 🪟 Modal general */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background-color: rgba(0,0,0,0.75);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease;
+}
+.modal.is-open,
+.modal[aria-hidden="false"] {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* 📦 Contenido */
+.modal-content {
+  background-color: #1a1a2e;
+  color: #e0e0e0;
+  font-family: 'Roboto Mono', monospace;
+  width: min(600px, 92vw);
+  border-radius: 12px;
+
+  /* ✅ borde dinámico */
+  --modal-borde: transparent;
+  border: 1px solid var(--modal-borde) !important;
+
+  box-shadow: 0 20px 60px rgba(0,0,0,.6);
+  transform: translateY(6px) scale(.96);
+  opacity: 0;
+  animation: zoomInModal .28s ease-out forwards;
+
+  max-height: 90vh;
+  overflow: auto;
+  padding: 18px;
+}
+@keyframes zoomInModal {
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .modal, .modal-content {
+    transition: none !important;
+    animation: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}
+
+/* ❌ Cerrar */
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  font-size: 1.6rem;
+  color: #ff00cc;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  padding: 4px;
+  border-radius: 8px;
+}
+.modal-close:hover { opacity: .9; }
+.modal-close:focus-visible { outline: 2px solid #ff00cc; outline-offset: 2px; }
+
+/* 🖼️ Imagen */
+.modal-content img {
+  width: 100%;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+/* 🏷️ Etiqueta */
+.modal-etiqueta {
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 6px 10px;
+  border-radius: 6px;
+  display: inline-block;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  font-family: 'Orbitron', sans-serif;
+  border: 1px solid;
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+/* 🎮 Botones */
+.modal-body-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 15px;
+}
+.modal-body-buttons a {
+  flex: 1;
+  min-width: 140px;
+  text-align: center;
+  padding: 10px 12px;
+  background-color: #ff00cc;
+  color: #000;
+  text-decoration: none;
+  border-radius: 10px;
+  font-weight: 800;
+  font-size: 0.9rem;
+  transition: transform .12s ease, background-color .2s ease;
+}
+.modal-body-buttons a:hover { background-color: #ff33dd; transform: translateY(-1px); }
+.modal-body-buttons a:active { transform: translateY(0); }
+
+/* 🧾 Versión */
+.modal-version {
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: #aaa;
+  text-align: center;
+}
+
+/* 🎨 Borde dinámico */
+.modal-content-offline { --modal-borde: #3399ff; }
+.modal-content-lan     { --modal-borde: #00ff99; }
+.modal-content-online  { --modal-borde: #00ffff; }
+.modal-content-adult   { --modal-borde: #ff0033; }
+.modal-content-default { --modal-borde: #ff00cc; }
+
+/* 🎨 Color etiqueta */
+.modal-content-offline .modal-etiqueta { color:#3399ff; border-color:#3399ff; }
+.modal-content-lan .modal-etiqueta     { color:#00ff99; border-color:#00ff99; }
+.modal-content-online .modal-etiqueta  { color:#00ffff; border-color:#00ffff; }
+.modal-content-adult .modal-etiqueta   { color:#ff0033; border-color:#ff0033; }
+.modal-content-default .modal-etiqueta { color:#ff00cc; border-color:#ff00cc; }
+
+/* 🔒 Scroll bloqueado */
+body.modal-open { overflow: hidden; }
