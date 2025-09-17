@@ -3,6 +3,17 @@ import { abrirModal, verificarFragmentoURL } from './modal.js';
 const autores = ['ghustilool']; // Agregá más si tenés más JSON
 export const todasLasPublicaciones = [];
 
+// Normaliza la etiqueta igual que el modal (evita "card-+18", "on line", etc.)
+function normalizarEtiqueta(tags) {
+  const raw = (tags?.[0] || '').toString().toLowerCase().trim();
+  const compact = raw.replace(/\s+/g, '');
+  if (/(\+?18|adult|adulto|18\+|mayores)/.test(compact)) return 'adult';
+  if (compact.includes('lan')) return 'lan';
+  if (compact.includes('online')) return 'online';
+  if (compact.includes('offline') || raw.includes('sin internet')) return 'offline';
+  return 'default';
+}
+
 function cargarPublicacionesIniciales() {
   const contenedor = document.getElementById('publicaciones-todas');
   contenedor.innerHTML = '';
@@ -16,11 +27,16 @@ function cargarPublicacionesIniciales() {
         return res.json();
       })
       .then(data => {
-        todasLasPublicaciones.push(...data);
+        // El JSON es un array: agregamos todos los juegos
+        if (Array.isArray(data)) {
+          todasLasPublicaciones.push(...data);
+        } else {
+          console.warn(`El JSON de ${autor} no es un array`, data);
+        }
         cargados++;
         if (cargados === autores.length) {
           mostrarPublicacionesOrdenadas();
-          verificarFragmentoURL(); // ✅ Abrir modal si hay #id en la URL
+          verificarFragmentoURL(); // abre modal si hay #id en la URL
         }
       })
       .catch(err => {
@@ -48,24 +64,24 @@ function mostrarPublicacionesOrdenadas() {
   );
 
   ordenadas.forEach(juego => {
-    const etiquetaPrincipal = juego.tags?.[0]?.toLowerCase().trim() || 'default';
+    const etiqueta = normalizarEtiqueta(juego.tags);
 
     const card = document.createElement('div');
-    card.className = `card card-${etiquetaPrincipal}`;
+    card.className = `card card-${etiqueta}`;
 
-    const tagsNormalizados = juego.tags?.map(t => t.toLowerCase().trim()).join(',') || '';
+    // Para el filtro por etiqueta
+    const tagsNormalizados = (juego.tags || [])
+      .map(t => t.toString().toLowerCase().trim())
+      .join(',') || '';
     card.setAttribute('data-tags', tagsNormalizados);
     card.setAttribute('data-id', juego.id || '');
 
     const imagenHTML = juego.imagen
-      ? `<img src="${juego.imagen}" alt="${juego.nombre}">`
+      ? `<img src="${juego.imagen}" alt="${juego.nombre || 'Juego'}">`
       : `<div style="width:100%;height:120px;background:#222;color:#888;display:flex;align-items:center;justify-content:center;border-radius:4px;">Sin imagen</div>`;
 
-    const nombreHTML = juego.nombre
-      ? `<h3>${juego.nombre}</h3>`
-      : `<h3>Sin nombre</h3>`;
-
-    const etiquetaHTML = `<div class="card-etiqueta">${etiquetaPrincipal.toUpperCase()}</div>`;
+    const nombreHTML = `<h3>${juego.nombre || 'Sin nombre'}</h3>`;
+    const etiquetaHTML = `<div class="card-etiqueta">${etiqueta.toUpperCase()}</div>`;
 
     card.innerHTML = `
       ${imagenHTML}
@@ -73,7 +89,9 @@ function mostrarPublicacionesOrdenadas() {
       ${etiquetaHTML}
     `;
 
-    card.onclick = () => abrirModal(juego);
+    // Pasamos la card para que el modal anime desde el origen
+    card.onclick = () => abrirModal(juego, card);
+
     contenedor.appendChild(card);
   });
 }
