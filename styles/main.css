@@ -166,6 +166,26 @@ body {
 
 .card:hover {
   transform: scale(1.03);
+}
+
+/* 🎨 Hover dinámico por etiqueta */
+.card-offline:hover {
+  box-shadow: 0 0 12px #3399ff;
+}
+
+.card-lan:hover {
+  box-shadow: 0 0 12px #00ff99;
+}
+
+.card-online:hover {
+  box-shadow: 0 0 12px #00ffff;
+}
+
+.card-adult:hover {
+  box-shadow: 0 0 12px #ff0033;
+}
+
+.card-default:hover {
   box-shadow: 0 0 12px #ff00cc;
 }
 
