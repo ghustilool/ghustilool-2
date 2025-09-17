@@ -1,4 +1,15 @@
 [
+{
+  "id": "gta-san-andreas",
+  "nombre": "Grand Theft Auto: San Andreas",
+  "descripcion": "Juego de mundo abierto ambientado en Los Santos.",
+  "imagen": "img/gta.jpg",
+  "descargar": "https://mega.nz/gta",
+  "contraseña": "ghusti123",
+  "comprar": "https://store.rockstar.com/gta",
+  "version": "1.0",
+  "tags": ["Offline", "LAN"]
+},
   {
     "nombre": "PEAK",
     "descripcion": "PEAK es un juego de escalada cooperativo, donde el más mínimo error puede significar tu perdición...",
@@ -40,4 +51,5 @@
     "tags": ["Online"]
   }
 ]
+
 
