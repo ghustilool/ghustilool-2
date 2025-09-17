@@ -4,13 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>GhustiLoOL</title>
+  <meta name="theme-color" content="#0a0a0f" />
   <link rel="icon" href="Ghusti-Ico.ico" type="image/x-icon" />
 
   <!-- 🎨 Estilos (cache-busting) -->
   <link rel="stylesheet" href="styles/main.css?v=12" />
   <link rel="stylesheet" href="styles/modal.css?v=12" />
 
-  <!-- 🧠 Fuentes -->
+  <!-- 🧠 Fuentes (preconnect para acelerar) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet" />
   <link href="https://fonts.cdnfonts.com/css/rovelink" rel="stylesheet" />
@@ -56,9 +59,12 @@
   </footer>
 
   <!-- 🧠 Scripts (cache-busting en todos) -->
-  <script src="scripts/filtrarEtiquetas.js?v=12"></script>
+  <!-- No-módulo con defer para no bloquear -->
+  <script src="scripts/filtrarEtiquetas.js?v=12" defer></script>
+  <script src="scripts/neonRain.js?v=12" defer></script>
+
+  <!-- Módulos (se diferencian solos) -->
   <script type="module" src="scripts/modal.js?v=12"></script>
   <script type="module" src="scripts/cargarPublicaciones.js?v=12"></script>
-  <script src="scripts/neonRain.js?v=12"></script>
 </body>
 </html>
