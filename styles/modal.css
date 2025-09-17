@@ -1,0 +1,92 @@
+/* 🪟 Modal general */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.8);
+  backdrop-filter: blur(4px);
+}
+
+/* 📦 Contenido del modal centrado */
+.modal-content {
+  background-color: #1a1a2e;
+  padding: 20px;
+  border: 1px solid #ff00cc;
+  width: 90%;
+  max-width: 600px;
+  border-radius: 8px;
+  color: #e0e0e0;
+  font-family: 'Roboto Mono', monospace;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: fadeInModal 0.5s ease-out;
+}
+
+/* 🎞️ Animación de aparición */
+@keyframes fadeInModal {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translate(-50%, -50%);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translate(-50%, -50%);
+  }
+}
+
+/* ❌ Botón de cierre */
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 16px;
+  font-size: 1.5rem;
+  color: #ff00cc;
+  cursor: pointer;
+}
+
+/* 🖼️ Imagen del juego */
+.modal-content img {
+  width: 100%;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+/* 🎮 Botones del modal */
+.modal-body-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.modal-body-buttons a {
+  flex: 1;
+  min-width: 120px;
+  text-align: center;
+  padding: 10px;
+  background-color: #ff00cc;
+  color: #000;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 0.85rem;
+  transition: background-color 0.2s ease;
+}
+
+.modal-body-buttons a:hover {
+  background-color: #ff33dd;
+}
+
+/* 🧾 Versión del juego */
+.modal-version {
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: #aaa;
+  text-align: center;
+}
