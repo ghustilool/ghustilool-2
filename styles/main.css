@@ -1,3 +1,5 @@
+/* styles/main.css */
+
 /* 🔄 Reset básico */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -28,7 +30,7 @@ body {
   100% { transform: rotate(-5deg) scale(1); filter: blur(0.5px); }
 }
 
-/* ✨ Título */
+/* ✨ Título principal */
 .glitch-fragmented {
   font-family: 'Rovelink', sans-serif;
   font-size: 4rem; text-transform: uppercase; letter-spacing: 2px;
@@ -74,7 +76,7 @@ main { padding-bottom: 60px; }
   border: 1px solid #333;
   overflow: hidden;
   cursor: pointer;
-  position: relative;
+  position: relative; /* overlay link */
   z-index: 2;
 
   display: flex; flex-direction: column;
@@ -92,7 +94,7 @@ main { padding-bottom: 60px; }
   border-radius: 6px; margin-bottom: 6px;
 }
 
-/* 🔗 Overlay que hace hash a #id */
+/* 🔗 Overlay que lleva a #id */
 .card-link{ position:absolute; inset:0; z-index:5; text-indent:-9999px; overflow:hidden; }
 
 /* Título centrado */
@@ -109,26 +111,46 @@ main { padding-bottom: 60px; }
 .card-footer { margin-top: auto; display: flex; flex-direction: column; align-items: center; gap: 6px; }
 .card-meta { font-family: 'Roboto Mono', monospace; font-size: .72rem; color: #aeb3c0; opacity: .9; }
 
-/* ✅ ETIQUETA UNIFICADA (píldora) */
+/* ✅ Etiqueta igual que los botones (no píldora alargada) */
 .tag-pill{
-  display:inline-flex; align-items:center; gap:6px;
-  font-family:'Orbitron',sans-serif; font-weight:800;
-  font-size:.75rem; letter-spacing:.4px;
-  padding:4px 12px; border-radius:9999px;
-  border:1px solid currentColor;
-  background:rgba(255,255,255,.06);
+  --ring: currentColor;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 800;
+  letter-spacing: .3px;
+  text-transform: uppercase;
+  font-size: .78rem;
+  padding: 6px 14px;
+  border-radius: 10px;            /* esquinas redondeadas, no ovalo */
+  border: 2px solid var(--ring);
+  color: var(--ring);
+  background: rgba(0,0,0,.25);
+  box-shadow:
+    inset 0 0 12px rgba(255,255,255,.05),
+    0 0 10px var(--ring);
 }
-.tag-offline{ color:#3399ff; border-color:#3399ff; background:rgba(51,153,255,.10); }
-.tag-lan    { color:#00ff99; border-color:#00ff99; background:rgba(0,255,153,.10); }
-.tag-online { color:#00ffff; border-color:#00ffff; background:rgba(0,255,255,.10); }
-.tag-adult  { color:#ff0033; border-color:#ff0033; background:rgba(255,0,51,.10); }
-.tag-default{ color:#ff00cc; border-color:#ff00cc; background:rgba(255,0,204,.10); }
+.tag-offline{ --ring:#3399ff; background: rgba(51,153,255,.08); }
+.tag-lan    { --ring:#00ff99; background: rgba(0,255,153,.08); }
+.tag-online { --ring:#00ffff; background: rgba(0,255,255,.08); }
+.tag-adult  { --ring:#ff0033; background: rgba(255,0,51,.08); }
+.tag-default{ --ring:#ff00cc; background: rgba(255,0,204,.08); }
 
-/* La card usa la misma píldora */
-.card-etiqueta { /* solo para mantener el selector; los estilos vienen de .tag-pill */ }
+/* La card usa la misma etiqueta (mantenemos selector por compat) */
+.card-etiqueta{}
 
 /* 🧾 Footer global */
-footer { text-align: center; padding: 20px; border-top: 1px solid #333; color:#888; font-family:'Roboto Mono', monospace; font-size:.9rem; position: relative; z-index: 2; }
+footer {
+  text-align: center;
+  padding: 20px;
+  border-top: 1px solid #333;
+  color:#888;
+  font-family:'Roboto Mono', monospace;
+  font-size:.9rem;
+  position: relative;
+  z-index: 2;
+}
 
 /* 📱 Móvil */
 @media (max-width: 480px){ .card{ height: 300px; } }

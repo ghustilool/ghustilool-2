@@ -1,3 +1,5 @@
+/* styles/modal.css */
+
 /* Overlay */
 .modal {
   position: fixed;
@@ -16,11 +18,11 @@
 
 /* Contenido */
 .modal-content {
-  position: relative;              /* necesario para etiqueta abajo-derecha */
+  position: relative;              /* para ubicar etiqueta */
   background: #1a1a2e;
   color: #e0e0e0;
   font-family: 'Roboto Mono', monospace;
-  padding: 24px 24px 72px;         /* extra bottom para no tapar botones con la etiqueta */
+  padding: 24px 24px 72px;         /* extra bottom para que no tape botones */
   width: min(800px, 94vw);
   max-height: 90vh;
   overflow-y: auto;
@@ -74,28 +76,42 @@
 /* Versión */
 .modal-version { margin-top: 12px; font-size: .8rem; color:#aaa; text-align:center; }
 
-/* ✅ Etiqueta unificada (misma píldora que en cards) */
+/* ✅ Misma etiqueta que los botones (no píldora alargada) */
 .tag-pill{
-  display:inline-flex; align-items:center; gap:6px;
-  font-family:'Orbitron',sans-serif; font-weight:800;
-  font-size:.75rem; letter-spacing:.4px;
-  padding:4px 12px; border-radius:9999px;
-  border:1px solid currentColor;
-  background:rgba(255,255,255,.06);
+  --ring: currentColor;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 800;
+  letter-spacing: .3px;
+  text-transform: uppercase;
+  font-size: .76rem;              /* un pelín más chica en el modal */
+  padding: 6px 12px;
+  border-radius: 10px;
+  border: 2px solid var(--ring);
+  color: var(--ring);
+  background: rgba(0,0,0,.25);
+  box-shadow:
+    inset 0 0 12px rgba(255,255,255,.05),
+    0 0 10px var(--ring);
 }
-.tag-offline{ color:#3399ff; border-color:#3399ff; background:rgba(51,153,255,.10); }
-.tag-lan    { color:#00ff99; border-color:#00ff99; background:rgba(0,255,153,.10); }
-.tag-online { color:#00ffff; border-color:#00ffff; background:rgba(0,255,255,.10); }
-.tag-adult  { color:#ff0033; border-color:#ff0033; background:rgba(255,0,51,.10); }
-.tag-default{ color:#ff00cc; border-color:#ff00cc; background:rgba(255,0,204,.10); }
+.tag-offline{ --ring:#3399ff; background: rgba(51,153,255,.08); }
+.tag-lan    { --ring:#00ff99; background: rgba(0,255,153,.08); }
+.tag-online { --ring:#00ffff; background: rgba(0,255,255,.08); }
+.tag-adult  { --ring:#ff0033; background: rgba(255,0,51,.08); }
+.tag-default{ --ring:#ff00cc; background: rgba(255,0,204,.08); }
 
-/* 📍 Ubicación abajo-derecha dentro del modal */
+/* 📍 Abajo-derecha en el modal (sin tapar botones) */
 .modal-tag{
-  position:absolute; right:16px; bottom:16px;
-  z-index: 2; pointer-events: none; /* no tapa los botones */
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  z-index: 2;
+  pointer-events: none;
 }
 
-/* Colores del borde por tipo */
+/* Colores de borde del modal según etiqueta */
 .modal-content-offline { --modal-borde:#3399ff; }
 .modal-content-lan     { --modal-borde:#00ff99; }
 .modal-content-online  { --modal-borde:#00ffff; }
@@ -109,5 +125,5 @@ body.modal-open { overflow: hidden; }
 @media (max-width: 600px) {
   .modal-content { max-width: 90%; padding: 18px 18px 66px; }
   .modal-body-buttons a { font-size: .85rem; padding: 8px 10px; min-width: 120px; }
-  .modal-tag{ right:12px; bottom:12px; }
+  .modal-tag{ right: 12px; bottom: 12px; }
 }
