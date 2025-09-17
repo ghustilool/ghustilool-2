@@ -85,7 +85,7 @@
     "contraseña": "ghustilool",
     "comprar": "https://store.steampowered.com/app/3716600/Mage_Arena/",
     "version": "0.6.2",
-    "tags": ["Online", "RandomOnline"]
+    "tags": ["Online"]
   },
   {
     "id": "duck-game",
@@ -107,7 +107,7 @@
     "contraseña": "ghustilool",
     "comprar": "https://store.steampowered.com/app/1966720/Lethal_Company/",
     "version": "72",
-    "tags": ["Online", "RandomOnline"]
+    "tags": ["Online"]
   },
   {
     "id": "subnautica-mod-online",
@@ -118,6 +118,8 @@
     "contraseña": "ghustilool",
     "comprar": "https://store.steampowered.com/app/264710/Subnautica/",
     "version": "68598",
-    "tags": ["Lan"]
+    "tags": ["lan"]
   }
 ]
+
+
