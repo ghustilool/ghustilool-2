@@ -15,7 +15,7 @@
 .modal-content {
   background-color: #1a1a2e;
   padding: 20px;
-  border: 1px solid #ff00cc;
+  border: 1px solid #ff00cc; /* default fallback */
   width: 90%;
   max-width: 600px;
   border-radius: 8px;
@@ -24,19 +24,16 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  animation: fadeInModal 0.4s ease-out;
+  transform: translate(-50%, -50%) scale(0.8);
+  opacity: 0;
+  animation: zoomInModal 0.3s ease-out forwards;
 }
 
-/* 🎞️ Animación de aparición desde el centro */
-@keyframes fadeInModal {
-  from {
-    opacity: 0;
-    transform: scale(0.8) translate(-50%, -50%);
-  }
+/* 🎞️ Animación de aparición tipo zoom desde el centro */
+@keyframes zoomInModal {
   to {
+    transform: translate(-50%, -50%) scale(1);
     opacity: 1;
-    transform: scale(1) translate(-50%, -50%);
   }
 }
 
@@ -91,28 +88,23 @@
   text-align: center;
 }
 
-/* 🎨 Iluminación dinámica por etiqueta */
+/* 🎨 Borde dinámico por etiqueta (sin box-shadow) */
 .modal-offline {
   border-color: #3399ff;
-  box-shadow: 0 0 20px #3399ff;
 }
 
 .modal-lan {
   border-color: #00ff99;
-  box-shadow: 0 0 20px #00ff99;
 }
 
 .modal-online {
   border-color: #00ffff;
-  box-shadow: 0 0 20px #00ffff;
 }
 
 .modal-adult {
   border-color: #ff0033;
-  box-shadow: 0 0 20px #ff0033;
 }
 
 .modal-default {
   border-color: #ff00cc;
-  box-shadow: 0 0 20px #ff00cc;
 }
