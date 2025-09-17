@@ -116,42 +116,24 @@ body {
 }
 
 /* 🎨 Colores únicos por botón */
-.tag-button-all {
-  border-color: #ffef00;
-  color: #ffef00;
-}
-
-.tag-button-offline {
-  border-color: #3399ff;
-  color: #3399ff;
-}
-
-.tag-button-lan {
-  border-color: #00ff99;
-  color: #00ff99;
-}
-
-.tag-button-online {
-  border-color: #00ffff;
-  color: #00ffff;
-}
-
-.tag-button-adult {
-  border-color: #ff0033;
-  color: #ff0033;
-}
+.tag-button-all { border-color: #ffef00; color: #ffef00; }
+.tag-button-offline { border-color: #3399ff; color: #3399ff; }
+.tag-button-lan { border-color: #00ff99; color: #00ff99; }
+.tag-button-online { border-color: #00ffff; color: #00ffff; }
+.tag-button-adult { border-color: #ff0033; color: #ff0033; }
 
 /* 🧱 Grid única de tarjetas */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* un poco más anchas */
+  gap: 18px;
   justify-content: center;
-  align-items: start;
+  align-items: stretch; /* <- que todas estiren */
   margin-top: 40px;
+  margin-bottom: 80px;  /* <- espacio extra antes del footer */
 }
 
-/* 🧩 Tarjetas */
+/* 🧩 Tarjetas (alto consistente) */
 .card {
   background-color: #1a1a2e;
   border: 1px solid #333;
@@ -162,48 +144,42 @@ body {
   position: relative;
   z-index: 2;
   cursor: pointer;
+
+  display: flex;
+  flex-direction: column;
+  height: 360px;           /* <- TODAS iguales */
+  overflow: hidden;        /* por si el título crece mucho */
 }
 
 .card:hover {
-  transform: scale(1.03);
+  transform: translateY(-2px); /* sutil para no desarmar la grilla */
 }
 
 /* 🎨 Hover dinámico por etiqueta */
-.card-offline:hover {
-  box-shadow: 0 0 12px #3399ff;
-}
+.card-offline:hover { box-shadow: 0 0 12px #3399ff; }
+.card-lan:hover     { box-shadow: 0 0 12px #00ff99; }
+.card-online:hover  { box-shadow: 0 0 12px #00ffff; }
+.card-adult:hover   { box-shadow: 0 0 12px #ff0033; }
+.card-default:hover { box-shadow: 0 0 12px #ff00cc; }
 
-.card-lan:hover {
-  box-shadow: 0 0 12px #00ff99;
-}
-
-.card-online:hover {
-  box-shadow: 0 0 12px #00ffff;
-}
-
-.card-adult:hover {
-  box-shadow: 0 0 12px #ff0033;
-}
-
-.card-default:hover {
-  box-shadow: 0 0 12px #ff00cc;
-}
-
-/* 🖼️ Imagen estilo Steam */
+/* 🖼️ Imagen estilo Steam (proporción fija) */
 .card img {
   width: 100%;
-  height: auto;
-  aspect-ratio: 460 / 215;
+  aspect-ratio: 16 / 9;    /* mantiene proporción uniforme */
   object-fit: cover;
   border-radius: 4px;
   margin-bottom: 10px;
 }
 
-/* 🧠 Contenido de la tarjeta */
+/* 🧠 Título: se adapta y empuja el footer de la card */
 .card h3 {
   color: #ffffff;
-  font-size: 1rem;
-  margin-bottom: 6px;
+  font-size: clamp(0.95rem, 1vw + 0.6rem, 1.1rem); /* fluido: baja un poco si falta espacio */
+  line-height: 1.15;
+  margin: 0 4px 6px;
+  word-break: break-word;  /* no cortamos con "..." */
+  hyphens: auto;
+  flex: 1 1 auto;          /* <- ocupa el espacio disponible */
 }
 
 /* 🏷️ Etiqueta visible en la tarjeta */
@@ -213,10 +189,10 @@ body {
   padding: 4px 8px;
   border-radius: 4px;
   display: inline-block;
-  margin-top: 4px;
   text-transform: uppercase;
   font-family: 'Roboto Mono', monospace;
   border: 1px solid;
+  margin-top: auto;         /* <- siempre queda al fondo de la card */
 }
 
 /* 🎨 Colores dinámicos por clase */
@@ -225,35 +201,31 @@ body {
   border-color: #3399ff;
   background-color: rgba(51, 153, 255, 0.1);
 }
-
 .card-lan .card-etiqueta {
   color: #00ff99;
   border-color: #00ff99;
   background-color: rgba(0, 255, 153, 0.1);
 }
-
 .card-online .card-etiqueta {
   color: #00ffff;
   border-color: #00ffff;
   background-color: rgba(0, 255, 255, 0.1);
 }
-
 .card-adult .card-etiqueta {
   color: #ff0033;
   border-color: #ff0033;
   background-color: rgba(255, 0, 51, 0.1);
 }
-
 .card-default .card-etiqueta {
   color: #ff00cc;
   border-color: #ff00cc;
   background-color: rgba(255, 0, 204, 0.1);
 }
 
-/* 🧾 Footer estilo terminal */
+/* 🧾 Footer estilo terminal (con respiro) */
 footer {
   text-align: center;
-  padding: 20px;
+  padding: 28px 20px;  /* un poco más de aire */
   border-top: 1px solid #333;
   color: #888;
   font-family: 'Roboto Mono', monospace;
