@@ -10,7 +10,6 @@
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
 
-  /* Oculto sin romper animaciones */
   opacity: 0;
   pointer-events: none;
   transition: opacity .25s ease;
@@ -31,34 +30,28 @@
   width: min(600px, 92vw);
   border-radius: 12px;
 
-  /* 🔧 El borde usa variable (se setea con las clases dinámicas) */
+  /* ✅ El borde sale de una variable (las clases la setean) */
   --modal-borde: transparent;
   border: 1px solid var(--modal-borde);
 
   box-shadow: 0 20px 60px rgba(0,0,0,.6);
 
-  /* Animación de entrada */
   transform: translateY(6px) scale(.96);
   opacity: 0;
   animation: zoomInModal .28s ease-out forwards;
 
-  /* Scroll interno si el contenido es largo */
   max-height: 90vh;
   overflow: auto;
 
-  /* Espaciado */
   padding: 18px;
 }
 
 /* 🎞️ Animación */
 @keyframes zoomInModal {
-  to {
-    transform: translateY(0) scale(1);
-    opacity: 1;
-  }
+  to { transform: translateY(0) scale(1); opacity: 1; }
 }
 
-/* Respeto a reduce motion */
+/* Reduce motion */
 @media (prefers-reduced-motion: reduce) {
   .modal, .modal-content {
     transition: none !important;
@@ -83,10 +76,7 @@
   border-radius: 8px;
 }
 .modal-close:hover { opacity: .9; }
-.modal-close:focus-visible {
-  outline: 2px solid #ff00cc;
-  outline-offset: 2px;
-}
+.modal-close:focus-visible { outline: 2px solid #ff00cc; outline-offset: 2px; }
 
 /* 🖼️ Imagen */
 .modal-content img {
@@ -118,7 +108,6 @@
   gap: 10px;
   margin-top: 15px;
 }
-
 .modal-body-buttons a {
   flex: 1;
   min-width: 140px;
@@ -133,10 +122,7 @@
   transition: transform .12s ease, background-color .2s ease, box-shadow .2s ease;
   box-shadow: 0 2px 0 #b3008f;
 }
-.modal-body-buttons a:hover {
-  background-color: #ff33dd;
-  transform: translateY(-1px);
-}
+.modal-body-buttons a:hover { background-color: #ff33dd; transform: translateY(-1px); }
 .modal-body-buttons a:active { transform: translateY(0); }
 
 /* 🧾 Versión */
