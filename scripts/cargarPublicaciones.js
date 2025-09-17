@@ -1,7 +1,7 @@
-import { abrirModal } from './modal.js';
+import { abrirModal, verificarFragmentoURL } from './modal.js';
 
-const autores = ['ghustilool']; // Agregá más nombres si tenés otros JSON
-const todasLasPublicaciones = [];
+const autores = ['ghustilool']; // Agregá más si tenés más JSON
+export const todasLasPublicaciones = [];
 
 function cargarPublicacionesIniciales() {
   const contenedor = document.getElementById('publicaciones-todas');
@@ -20,6 +20,7 @@ function cargarPublicacionesIniciales() {
         cargados++;
         if (cargados === autores.length) {
           mostrarPublicacionesOrdenadas();
+          verificarFragmentoURL(); // ✅ Abrir modal si hay #id en la URL
         }
       })
       .catch(err => {
@@ -27,6 +28,7 @@ function cargarPublicacionesIniciales() {
         cargados++;
         if (cargados === autores.length) {
           mostrarPublicacionesOrdenadas();
+          verificarFragmentoURL();
         }
       });
   });
@@ -49,6 +51,7 @@ function mostrarPublicacionesOrdenadas() {
     const card = document.createElement('div');
     card.className = 'card';
     card.setAttribute('data-tags', juego.tags?.join(',') || '');
+    card.setAttribute('data-id', juego.id || '');
 
     const imagenHTML = juego.imagen
       ? `<img src="${juego.imagen}" alt="${juego.nombre}">`
