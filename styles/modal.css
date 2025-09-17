@@ -90,3 +90,29 @@
   color: #aaa;
   text-align: center;
 }
+
+/* 🎨 Iluminación dinámica por etiqueta */
+.modal-offline {
+  border-color: #3399ff;
+  box-shadow: 0 0 20px #3399ff;
+}
+
+.modal-lan {
+  border-color: #00ff99;
+  box-shadow: 0 0 20px #00ff99;
+}
+
+.modal-online {
+  border-color: #00ffff;
+  box-shadow: 0 0 20px #00ffff;
+}
+
+.modal-adult {
+  border-color: #ff0033;
+  box-shadow: 0 0 20px #ff0033;
+}
+
+.modal-default {
+  border-color: #ff00cc;
+  box-shadow: 0 0 20px #ff00cc;
+}
