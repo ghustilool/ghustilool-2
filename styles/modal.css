@@ -1,4 +1,4 @@
-/* 🪟 Modal general (overlay) */
+/* 🪟 Modal general */
 .modal {
   position: fixed;
   inset: 0;
@@ -14,15 +14,13 @@
   pointer-events: none;
   transition: opacity .25s ease;
 }
-
-/* Estado visible */
 .modal.is-open,
 .modal[aria-hidden="false"] {
   opacity: 1;
   pointer-events: auto;
 }
 
-/* 📦 Contenido del modal */
+/* 📦 Contenido */
 .modal-content {
   background-color: #1a1a2e;
   color: #e0e0e0;
@@ -30,28 +28,22 @@
   width: min(600px, 92vw);
   border-radius: 12px;
 
-  /* ✅ El borde sale de una variable (las clases la setean) */
+  /* ✅ borde dinámico */
   --modal-borde: transparent;
-  border: 1px solid var(--modal-borde);
+  border: 1px solid var(--modal-borde) !important;
 
   box-shadow: 0 20px 60px rgba(0,0,0,.6);
-
   transform: translateY(6px) scale(.96);
   opacity: 0;
   animation: zoomInModal .28s ease-out forwards;
 
   max-height: 90vh;
   overflow: auto;
-
   padding: 18px;
 }
-
-/* 🎞️ Animación */
 @keyframes zoomInModal {
   to { transform: translateY(0) scale(1); opacity: 1; }
 }
-
-/* Reduce motion */
 @media (prefers-reduced-motion: reduce) {
   .modal, .modal-content {
     transition: none !important;
@@ -61,13 +53,12 @@
   }
 }
 
-/* ❌ Botón cerrar */
+/* ❌ Cerrar */
 .modal-close {
   position: absolute;
   top: 10px;
   right: 12px;
   font-size: 1.6rem;
-  line-height: 1;
   color: #ff00cc;
   cursor: pointer;
   background: transparent;
@@ -81,7 +72,6 @@
 /* 🖼️ Imagen */
 .modal-content img {
   width: 100%;
-  height: auto;
   border-radius: 6px;
   margin-bottom: 10px;
   display: block;
@@ -119,8 +109,7 @@
   border-radius: 10px;
   font-weight: 800;
   font-size: 0.9rem;
-  transition: transform .12s ease, background-color .2s ease, box-shadow .2s ease;
-  box-shadow: 0 2px 0 #b3008f;
+  transition: transform .12s ease, background-color .2s ease;
 }
 .modal-body-buttons a:hover { background-color: #ff33dd; transform: translateY(-1px); }
 .modal-body-buttons a:active { transform: translateY(0); }
@@ -133,19 +122,19 @@
   text-align: center;
 }
 
-/* 🎨 Borde dinámico por etiqueta (seteamos variable) */
+/* 🎨 Borde dinámico */
 .modal-content-offline { --modal-borde: #3399ff; }
 .modal-content-lan     { --modal-borde: #00ff99; }
 .modal-content-online  { --modal-borde: #00ffff; }
 .modal-content-adult   { --modal-borde: #ff0033; }
 .modal-content-default { --modal-borde: #ff00cc; }
 
-/* 🎨 Color dinámico para la etiqueta */
+/* 🎨 Color etiqueta */
 .modal-content-offline .modal-etiqueta { color:#3399ff; border-color:#3399ff; }
 .modal-content-lan .modal-etiqueta     { color:#00ff99; border-color:#00ff99; }
 .modal-content-online .modal-etiqueta  { color:#00ffff; border-color:#00ffff; }
 .modal-content-adult .modal-etiqueta   { color:#ff0033; border-color:#ff0033; }
 .modal-content-default .modal-etiqueta { color:#ff00cc; border-color:#ff00cc; }
 
-/* 🔒 Evitar scroll del body con modal abierto */
+/* 🔒 Scroll bloqueado */
 body.modal-open { overflow: hidden; }
