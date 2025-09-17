@@ -210,15 +210,44 @@ body {
 .card-etiqueta {
   font-size: 0.75rem;
   font-weight: bold;
-  color: #ff00cc;
-  background-color: rgba(255, 0, 204, 0.1);
-  border: 1px solid #ff00cc;
   padding: 4px 8px;
   border-radius: 4px;
   display: inline-block;
   margin-top: 4px;
   text-transform: uppercase;
   font-family: 'Roboto Mono', monospace;
+  border: 1px solid;
+}
+
+/* 🎨 Colores dinámicos por clase */
+.card-offline .card-etiqueta {
+  color: #3399ff;
+  border-color: #3399ff;
+  background-color: rgba(51, 153, 255, 0.1);
+}
+
+.card-lan .card-etiqueta {
+  color: #00ff99;
+  border-color: #00ff99;
+  background-color: rgba(0, 255, 153, 0.1);
+}
+
+.card-online .card-etiqueta {
+  color: #00ffff;
+  border-color: #00ffff;
+  background-color: rgba(0, 255, 255, 0.1);
+}
+
+.card-adult .card-etiqueta {
+  color: #ff0033;
+  border-color: #ff0033;
+  background-color: rgba(255, 0, 51, 0.1);
+}
+
+.card-default .card-etiqueta {
+  color: #ff00cc;
+  border-color: #ff00cc;
+  background-color: rgba(255, 0, 204, 0.1);
 }
 
 /* 🧾 Footer estilo terminal */
