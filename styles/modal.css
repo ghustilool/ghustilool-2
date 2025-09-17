@@ -25,14 +25,14 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  animation: fadeInModal 0.5s ease-out;
+  animation: fadeInModal 0.4s ease-out;
 }
 
-/* 🎞️ Animación de aparición */
+/* 🎞️ Animación de aparición desde el centro */
 @keyframes fadeInModal {
   from {
     opacity: 0;
-    transform: scale(0.95) translate(-50%, -50%);
+    transform: scale(0.8) translate(-50%, -50%);
   }
   to {
     opacity: 1;
