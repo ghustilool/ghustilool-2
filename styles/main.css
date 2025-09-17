@@ -99,6 +99,7 @@ body {
   box-shadow: 0 0 6px rgba(255, 0, 204, 0.3);
   transition: all 0.2s ease;
   font-family: 'Roboto Mono', monospace;
+  text-shadow: 0 0 2px #000;
 }
 
 .tag-button:hover,
@@ -107,35 +108,40 @@ body {
   filter: brightness(1.2);
 }
 
-/* 🎨 Colores únicos por botón */
+/* 🎨 Colores únicos por botón (mejor contraste) */
 .tag-button-all {
   background-color: #ffef00;
-  color: #000;
-  box-shadow: 0 0 8px #ffef00;
+  color: #111;
+  text-shadow: 0 0 2px #fff;
+  box-shadow: 0 0 6px rgba(255, 239, 0, 0.5);
 }
 
 .tag-button-offline {
   background-color: #3399ff;
-  color: #000;
-  box-shadow: 0 0 8px #3399ff;
+  color: #fff;
+  text-shadow: 0 0 2px #000;
+  box-shadow: 0 0 6px rgba(51, 153, 255, 0.5);
 }
 
 .tag-button-lan {
-  background-color: #00ff99;
-  color: #000;
-  box-shadow: 0 0 8px #00ff99;
+  background-color: #00cc88;
+  color: #fff;
+  text-shadow: 0 0 2px #000;
+  box-shadow: 0 0 6px rgba(0, 204, 136, 0.5);
 }
 
 .tag-button-online {
-  background-color: #00ffff;
-  color: #000;
-  box-shadow: 0 0 8px #00ffff;
+  background-color: #00cccc;
+  color: #fff;
+  text-shadow: 0 0 2px #000;
+  box-shadow: 0 0 6px rgba(0, 204, 204, 0.5);
 }
 
 .tag-button-adult {
-  background-color: #ff0033;
-  color: #000;
-  box-shadow: 0 0 8px #ff0033;
+  background-color: #cc0033;
+  color: #fff;
+  text-shadow: 0 0 2px #000;
+  box-shadow: 0 0 6px rgba(204, 0, 51, 0.5);
 }
 
 /* 🧱 Grid única de tarjetas */
