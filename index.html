@@ -7,10 +7,10 @@
   <link rel="icon" href="Ghusti-Ico.ico" type="image/x-icon">
 
   <!-- 🎨 Estilos -->
-  <link rel="stylesheet" href="styles/main.css">
-  <link rel="stylesheet" href="styles/modal.css">
+  <link rel="stylesheet" href="styles/main.css?v=3">
+  <link rel="stylesheet" href="styles/modal.css?v=3">
 
-  <!-- 🧠 Fuentes cyberpunk -->
+  <!-- 🧠 Fuentes -->
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
   <link href="https://fonts.cdnfonts.com/css/rovelink" rel="stylesheet">
@@ -19,7 +19,7 @@
   <!-- 🌌 Fondo animado -->
   <div id="neon-background"></div>
 
-  <!-- ⚡ Encabezado con calaveras corruptas -->
+  <!-- ⚡ Encabezado -->
   <header class="glitch-header">
     <div class="skull-wrapper">
       <span class="skull-corrupt">☠️</span>
@@ -42,22 +42,22 @@
     <div class="grid" id="publicaciones-todas"></div>
   </main>
 
-  <!-- 🪟 Modal de juego -->
+  <!-- 🪟 Modal de juego (accesible) -->
   <div id="modal-juego" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
     <div class="modal-content">
-      <span class="modal-close" aria-label="Cerrar">&times;</span>
+      <button class="modal-close" aria-label="Cerrar" title="Cerrar">×</button>
       <div id="modal-body"></div>
     </div>
   </div>
 
-  <!-- 🧾 Footer estilo terminal -->
+  <!-- 🧾 Footer -->
   <footer>
     <p>&copy; 2025 GhustiLoOL. Todos los derechos reservados.</p>
   </footer>
 
   <!-- 🧠 Scripts -->
   <script src="scripts/filtrarEtiquetas.js"></script>
-  <script type="module" src="scripts/modal.js"></script>
+  <script type="module" src="scripts/modal.js?v=3"></script>
   <script type="module" src="scripts/cargarPublicaciones.js"></script>
   <script src="scripts/neonRain.js"></script>
 </body>
