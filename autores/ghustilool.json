@@ -1,55 +1,57 @@
 [
-{
-  "id": "gta-san-andreas",
-  "nombre": "Grand Theft Auto: San Andreas",
-  "descripcion": "Juego de mundo abierto ambientado en Los Santos.",
-  "imagen": "img/gta.jpg",
-  "descargar": "https://mega.nz/gta",
-  "contraseña": "ghusti123",
-  "comprar": "https://store.rockstar.com/gta",
-  "version": "1.0",
-  "tags": ["Offline", "LAN"]
-},
   {
+    "id": "peak",
     "nombre": "PEAK",
     "descripcion": "PEAK es un juego de escalada cooperativo, donde el más mínimo error puede significar tu perdición...",
     "imagen": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3527290/31bac6b2eccf09b368f5e95ce510bae2baf3cfcd/header.jpg?t=1753856675",
-    "comprar": "https://store.steampowered.com/app/3527290/PEAK",
     "descargar": "https://privatebin.rinuploads.org/?f3ea446f4985c1cc#CfRxYYktopjcdeL8d3Dc8X7qJ1qqE6YNRkaeToDSk8Kd",
-    "tags": ["Online"]
+    "tags": ["Online"],
+    "tutorial": "https://youtu.be/GS6Uy2C_3xY",
+    "comprar": "https://store.steampowered.com/app/3527290/PEAK/",
+    "version": "1.28.a"
   },
   {
-    "nombre": "PEAK2",
-    "descripcion": "PEAK es un juego de escalada cooperativo, donde el más mínimo error puede significar tu perdición...",
-    "imagen": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3527290/31bac6b2eccf09b368f5e95ce510bae2baf3cfcd/header.jpg?t=1753856675",
-    "comprar": "https://store.steampowered.com/app/3527290/PEAK",
-    "descargar": "https://privatebin.rinuploads.org/?f3ea446f4985c1cc#CfRxYYktopjcdeL8d3Dc8X7qJ1qqE6YNRkaeToDSk8Kd",
-    "tags": ["Online"]
+    "id": "castle-crashers",
+    "nombre": "Castle Crashers",
+    "descripcion": "¡Corta, corta y aplasta tu camino hacia la victoria en esta galardonada aventura arcade en 2D de The Behemoth!",
+    "imagen": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/204360/header.jpg?t=1756576714",
+    "descargar": "https://privatebin.rinuploads.org/?6a26f31cd57ec24a#BqYVwwsn26jTvnDXgc7sjTTiVcvMJExjgqekcdi5dZYA",
+    "tags": ["Online"],
+    "tutorial": "https://youtu.be/GS6Uy2C_3xY",
+    "comprar": "https://store.steampowered.com/app/204360/Castle_Crashers/",
+    "version": "3.0 + DLC"
   },
   {
-    "nombre": "PEAK3",
-    "descripcion": "PEAK es un juego de escalada cooperativo, donde el más mínimo error puede significar tu perdición...",
-    "imagen": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3527290/31bac6b2eccf09b368f5e95ce510bae2baf3cfcd/header.jpg?t=1753856675",
-    "comprar": "https://store.steampowered.com/app/3527290/PEAK",
-    "descargar": "https://privatebin.rinuploads.org/?f3ea446f4985c1cc#CfRxYYktopjcdeL8d3Dc8X7qJ1qqE6YNRkaeToDSk8Kd",
-    "tags": ["Online"]
+    "id": "cuphead",
+    "nombre": "Cuphead",
+    "descripcion": "Juego de acción clásico estilo dispara y corre, que se centra en combates contra el jefe. Inspirado en los dibujos animados de los años 30.",
+    "imagen": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/268910/header.jpg?t=1709068852",
+    "descargar": "https://privatebin.rinuploads.org/?6c2c328e5cc6d357#AMuXn12vGbAHjEAvbonHVy77L1Ri4jQSAZ3NFNr1RuLv",
+    "tags": ["Offline"],
+    "tutorial": "https://youtu.be/GS6Uy2C_3xY",
+    "comprar": "https://store.steampowered.com/app/268910/Cuphead/?l=spanish",
+    "version": "1.3.4 + DLC"
   },
   {
-    "nombre": "PEAK4",
-    "descripcion": "PEAK es un juego de escalada cooperativo, donde el más mínimo error puede significar tu perdición...",
-    "imagen": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3527290/31bac6b2eccf09b368f5e95ce510bae2baf3cfcd/header.jpg?t=1753856675",
-    "comprar": "https://store.steampowered.com/app/3527290/PEAK",
-    "descargar": "https://privatebin.rinuploads.org/?f3ea446f4985c1cc#CfRxYYktopjcdeL8d3Dc8X7qJ1qqE6YNRkaeToDSk8Kd",
-    "tags": ["Online"]
+    "id": "binding-of-isaac-rebirth",
+    "nombre": "The Binding of Isaac: Rebirth",
+    "descripcion": "Juego de disparos RPG de acción generado aleatoriamente con fuertes elementos roguelike. Siguiendo a Isaac en su viaje...",
+    "imagen": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/250900/header.jpg?t=1731977365",
+    "descargar": "https://privatebin.rinuploads.org/?5a267b4b13bad12d#BES4rXjecummRfW6HMPZbaGX1zsQfCiWmCsmx3ueyaXM",
+    "tags": ["Online"],
+    "tutorial": "https://youtu.be/GS6Uy2C_3xY",
+    "comprar": "https://store.steampowered.com/app/250900/The_Binding_of_Isaac_Rebirth/",
+    "version": "1.9.7.10 + DLC"
   },
   {
-    "nombre": "PEAK5",
-    "descripcion": "PEAK es un juego de escalada cooperativo, donde el más mínimo error puede significar tu perdición...",
-    "imagen": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3527290/31bac6b2eccf09b368f5e95ce510bae2baf3cfcd/header.jpg?t=1753856675",
-    "comprar": "https://store.steampowered.com/app/3527290/PEAK",
-    "descargar": "https://privatebin.rinuploads.org/?f3ea446f4985c1cc#CfRxYYktopjcdeL8d3Dc8X7qJ1qqE6YNRkaeToDSk8Kd",
-    "tags": ["Online"]
+    "id": "a-few-quick-matches",
+    "nombre": "A Few Quick Matches",
+    "descripcion": "Juego de lucha de plataformas de ritmo rápido para 1-4 jugadores inspirado en batallas de palos de la vieja escuela.",
+    "imagen": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3805420/a63beed62637ef5402821a95d4b48888911ac2d7/header.jpg?t=1754511565",
+    "descargar": "https://privatebin.rinuploads.org/?55179a4c9c4f775f#BsBaTgwo75rer353FCAzJEzsv8g67VFRi8v5oTJmgdGS",
+    "tags": ["Online"],
+    "tutorial": "https://youtu.be/GS6Uy2C_3xY",
+    "comprar": "https://store.steampowered.com/app/3805420/A_Few_Quick_Matches/",
+    "version": "Build 11082025"
   }
 ]
-
-
