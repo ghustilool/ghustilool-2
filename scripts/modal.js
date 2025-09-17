@@ -1,5 +1,7 @@
+// modal.js
 import { todasLasPublicaciones } from './cargarPublicaciones.js';
 
+/* ============ API ============ */
 export function abrirModal(juego, origenElemento = null) {
   const modal = document.getElementById('modal-juego');
   const modalBody = document.getElementById('modal-body');
@@ -35,9 +37,7 @@ export function abrirModal(juego, origenElemento = null) {
     ? `<h2>${juego.nombre}</h2>`
     : `<h2>Sin nombre</h2>`;
 
-  const descripcionHTML = juego.descripcion
-    ? `<p>${juego.descripcion}</p>`
-    : '';
+  const descripcionHTML = juego.descripcion ? `<p>${juego.descripcion}</p>` : '';
 
   const botonesHTML = `
     <div class="modal-body-buttons">
@@ -67,19 +67,23 @@ export function abrirModal(juego, origenElemento = null) {
   } else {
     modalContent.style.transformOrigin = '50% 50%';
   }
-
   modalContent.classList.remove('animando');
-  void modalContent.offsetWidth;
+  void modalContent.offsetWidth; // reflow
   modalContent.classList.add('animando');
 
-  modal.style.display = 'block';
+  // ✅ Mostrar usando clases/aria (coincide con modal.css)
+  modal.classList.add('is-open');
+  modal.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('modal-open');
 
+  // Hash bonito
   if (juego.id) {
     history.replaceState(null, '', `#${juego.id}`);
   }
 }
 
-window.copiarContraseña = function(texto) {
+/* ============ Helpers globales ============ */
+window.copiarContraseña = function (texto) {
   navigator.clipboard.writeText(texto).then(() => {
     mostrarNotificacion('Contraseña copiada al portapapeles');
   }).catch(err => {
@@ -105,13 +109,14 @@ function mostrarNotificacion(mensaje) {
   aviso.style.transition = 'opacity 0.3s ease';
 
   document.body.appendChild(aviso);
-  setTimeout(() => aviso.style.opacity = '1', 10);
+  setTimeout(() => (aviso.style.opacity = '1'), 10);
   setTimeout(() => {
     aviso.style.opacity = '0';
     setTimeout(() => aviso.remove(), 300);
   }, 2000);
 }
 
+/* ============ Navegación por hash ============ */
 export function verificarFragmentoURL() {
   const fragmento = window.location.hash.replace('#', '');
   if (!fragmento) return;
@@ -120,24 +125,36 @@ export function verificarFragmentoURL() {
   if (juego) abrirModal(juego);
 }
 
+/* ============ Cierre centralizado ============ */
+function cerrarModal() {
+  const modal = document.getElementById('modal-juego');
+  if (!modal.classList.contains('is-open')) return;
+
+  modal.classList.remove('is-open');
+  modal.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('modal-open');
+  history.replaceState(null, '', window.location.pathname);
+}
+
+/* ============ Listeners DOM ============ */
 document.addEventListener('DOMContentLoaded', () => {
   const closeBtn = document.querySelector('.modal-close');
   if (closeBtn) {
-    closeBtn.onclick = () => {
-      document.getElementById('modal-juego').style.display = 'none';
-      history.replaceState(null, '', window.location.pathname);
-    };
+    closeBtn.onclick = () => cerrarModal();
   }
 
+  // Cerrar haciendo click fuera del contenido
   window.onclick = (event) => {
     const modal = document.getElementById('modal-juego');
-    if (event.target === modal) {
-      modal.style.display = 'none';
-      history.replaceState(null, '', window.location.pathname);
-    }
+    if (event.target === modal) cerrarModal();
   };
 
-  // 🧠 Capturar clic en tarjeta para animación desde origen
+  // Cerrar con Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') cerrarModal();
+  });
+
+  // (Opcional) Animación desde tarjeta si existieran en el DOM inicial
   document.querySelectorAll('.card').forEach(card => {
     card.addEventListener('click', () => {
       const id = card.getAttribute('data-id');
