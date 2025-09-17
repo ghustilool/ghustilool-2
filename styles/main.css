@@ -12,39 +12,14 @@ body {
 }
 
 /* 🌌 Fondo animado */
-#neon-background {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  background-color: #0a0a0f;
-}
+#neon-background { position: fixed; inset: 0; z-index: 0; background:#0a0a0f; }
 
 /* 🧠 Encabezado */
-.glitch-header {
-  background: transparent;
-  text-align: center;
-  padding: 40px 20px 20px;
-  position: relative;
-  z-index: 2;
-}
+.glitch-header { background: transparent; text-align: center; padding: 40px 20px 20px; position: relative; z-index: 2; }
 
 /* 🦴 Calaveras corruptas */
-.skull-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  margin-bottom: 10px;
-}
-
-.skull-corrupt {
-  font-size: 2.5rem;
-  color: #ff00cc;
-  animation: corruptSkull 1.8s infinite;
-  filter: contrast(150%) saturate(180%) blur(0.5px);
-  transform: rotate(-5deg);
-}
-
+.skull-wrapper { display: flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 10px; }
+.skull-corrupt { font-size: 2.5rem; color: #ff00cc; animation: corruptSkull 1.8s infinite; filter: contrast(150%) saturate(180%) blur(0.5px); transform: rotate(-5deg); }
 @keyframes corruptSkull {
   0% { transform: rotate(-5deg) scale(1); filter: blur(0.5px); }
   25% { transform: rotate(5deg) scale(1.05); filter: blur(1px); }
@@ -61,62 +36,35 @@ body {
   letter-spacing: 2px;
   color: #ffef00;
   text-align: center;
-  text-shadow:
-    0 0 4px rgba(255, 239, 0, 0.4),
-    0 0 8px rgba(255, 239, 0, 0.3),
-    1px 1px 2px #000;
-  position: relative;
-  z-index: 2;
+  text-shadow: 0 0 4px rgba(255,239,0,0.4), 0 0 8px rgba(255,239,0,0.3), 1px 1px 2px #000;
+  position: relative; z-index: 2;
 }
 
-/* 🎮 Botones de filtro por etiqueta */
-.tag-filter-container {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin: 30px 0;
-  z-index: 2;
-  position: relative;
-}
-
+/* 🎮 Filtros por etiqueta */
+.tag-filter-container { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin: 28px 0; z-index: 2; position: relative; }
 .tag-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 14px;
-  font-size: 0.95rem;
-  font-weight: bold;
-  font-family: 'Orbitron', sans-serif;
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px solid;
-  border-radius: 6px;
-  color: #fff;
-  text-shadow: 0 0 2px #000;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px;
+  font-size: 0.95rem; font-weight: 700; font-family: 'Orbitron', sans-serif;
+  background: rgba(0,0,0,0.4); border: 1px solid; border-radius: 6px; color: #fff; text-shadow: 0 0 2px #000;
+  cursor: pointer; transition: all .2s ease;
 }
-.tag-button:hover { background: rgba(0, 0, 0, 0.6); box-shadow: 0 0 10px currentColor; transform: scale(1.05); }
-.tag-button.active { background: rgba(0, 0, 0, 0.6); box-shadow: 0 0 12px currentColor; }
-
-/* 🎨 Colores únicos por botón */
-.tag-button-all { border-color: #ffef00; color: #ffef00; }
-.tag-button-offline { border-color: #3399ff; color: #3399ff; }
-.tag-button-lan { border-color: #00ff99; color: #00ff99; }
-.tag-button-online { border-color: #00ffff; color: #00ffff; }
-.tag-button-adult { border-color: #ff0033; color: #ff0033; }
+.tag-button:hover { background: rgba(0,0,0,0.6); box-shadow: 0 0 10px currentColor; transform: scale(1.05); }
+.tag-button.active { background: rgba(0,0,0,0.6); box-shadow: 0 0 12px currentColor; }
+.tag-button-all{border-color:#ffef00;color:#ffef00;} .tag-button-offline{border-color:#3399ff;color:#3399ff;}
+.tag-button-lan{border-color:#00ff99;color:#00ff99;} .tag-button-online{border-color:#00ffff;color:#00ffff;}
+.tag-button-adult{border-color:#ff0033;color:#ff0033;}
 
 /* ====== Layout general ====== */
-main { padding-bottom: 60px; }   /* menos espacio antes del footer */
+main { padding-bottom: 60px; }
 
 /* 🧱 Grid de tarjetas */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 14px;                      /* más compacta */
+  gap: 12px;
   justify-content: center;
   align-items: stretch;
-  margin-top: 32px;
+  margin-top: 28px;
 }
 
 /* 🧩 Tarjetas (alto consistente y compacto) */
@@ -124,26 +72,19 @@ main { padding-bottom: 60px; }   /* menos espacio antes del footer */
   background-color: #1a1a2e;
   border: 1px solid #333;
   border-radius: 8px;
-  padding: 10px;                  /* menos padding */
+  padding: 8px 10px;
   text-align: center;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  position: relative;
-  z-index: 2;
-  cursor: pointer;
+  transition: transform .2s ease, box-shadow .2s ease;
+  position: relative; z-index: 2; cursor: pointer;
 
-  display: flex;
-  flex-direction: column;
-  height: 280px;                  /* << MÁS CHICAS, todas iguales */
+  display: flex; flex-direction: column;
+  height: 260px;                    /* 🔽 más chico */
   overflow: hidden;
 }
 .card:hover { transform: translateY(-2px); }
 
 /* foco accesible */
-.card:focus-visible {
-  outline: 2px solid #00ffff;
-  outline-offset: 3px;
-  box-shadow: 0 0 14px rgba(0,255,255,.35);
-}
+.card:focus-visible { outline: 2px solid #00ffff; outline-offset: 3px; box-shadow: 0 0 14px rgba(0,255,255,.35); }
 
 /* 🎨 Hover dinámico por etiqueta */
 .card-offline:hover { box-shadow: 0 0 12px #3399ff; }
@@ -152,59 +93,53 @@ main { padding-bottom: 60px; }   /* menos espacio antes del footer */
 .card-adult:hover   { box-shadow: 0 0 12px #ff0033; }
 .card-default:hover { box-shadow: 0 0 12px #ff00cc; }
 
-/* 🖼️ Imagen estilo Steam (proporción fija) */
+/* 🖼️ Imagen */
 .card img {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-  border-radius: 4px;
-  margin-bottom: 8px;             /* menos espacio */
+  width: 100%; aspect-ratio: 16 / 9; object-fit: cover;
+  border-radius: 4px; margin-bottom: 6px;
 }
 
-/* 🧠 Título: se adapta sin “...” */
+/* 🧠 Título */
 .card h3 {
-  color: #ffffff;
-  font-size: clamp(0.9rem, 1vw + 0.5rem, 1rem); /* un toque más chico */
+  color: #fff;
+  font-size: clamp(0.9rem, 1vw + 0.5rem, 1rem);
   line-height: 1.15;
-  margin: 0 4px 4px;
-  word-break: break-word;
-  hyphens: auto;
+  margin: 0 4px 2px;   /* 🔽 menos separación */
+  word-break: break-word; hyphens: auto;
 }
 
-/* 🏷️ Etiqueta visible en la tarjeta (no ocupar todo el ancho) */
-.card-etiqueta {
+/* 🦶 Footer de la card (versión + badge) */
+.card-footer {
+  margin-top: auto;                 /* baja todo el bloque al fondo */
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+}
+
+/* 🧾 Versión pequeña */
+.card-meta {
+  font-family: 'Roboto Mono', monospace;
   font-size: 0.72rem;
-  font-weight: 800;
-  padding: 3px 10px;              /* más compacto */
-  border-radius: 6px;
-  display: inline-block;
-  text-transform: uppercase;
-  font-family: 'Roboto Mono', monospace;
-  border: 1px solid;
-  margin-top: auto;
-  align-self: center;              /* << evita estirarse a todo el ancho */
+  color: #aeb3c0;
+  opacity: .9;
 }
 
-/* 🎨 Colores dinámicos por clase */
-.card-offline .card-etiqueta { color:#3399ff; border-color:#3399ff; background-color:rgba(51,153,255,.1); }
-.card-lan .card-etiqueta     { color:#00ff99; border-color:#00ff99; background-color:rgba(0,255,153,.1); }
-.card-online .card-etiqueta  { color:#00ffff; border-color:#00ffff; background-color:rgba(0,255,255,.1); }
-.card-adult .card-etiqueta   { color:#ff0033; border-color:#ff0033; background-color:rgba(255,0,51,.1); }
-.card-default .card-etiqueta { color:#ff00cc; border-color:#ff00cc; background-color:rgba(255,0,204,.1); }
-
-/* 🧾 Footer estilo terminal */
-footer {
-  text-align: center;
-  padding: 22px 20px;
-  border-top: 1px solid #333;
-  color: #888;
-  font-family: 'Roboto Mono', monospace;
-  font-size: 0.9rem;
-  position: relative;
-  z-index: 2;
+/* 🏷️ Etiqueta */
+.card-etiqueta {
+  font-size: 0.72rem; font-weight: 800;
+  padding: 3px 10px; border-radius: 6px;
+  display: inline-block; text-transform: uppercase;
+  font-family: 'Roboto Mono', monospace; border: 1px solid;
 }
 
-/* 📱 Móvil: un poco más altas para títulos largos */
-@media (max-width: 480px) {
-  .card { height: 320px; }
-}
+/* 🎨 Colores dinámicos */
+.card-offline .card-etiqueta{color:#3399ff;border-color:#3399ff;background:rgba(51,153,255,.1);}
+.card-lan .card-etiqueta{color:#00ff99;border-color:#00ff99;background:rgba(0,255,153,.1);}
+.card-online .card-etiqueta{color:#00ffff;border-color:#00ffff;background:rgba(0,255,255,.1);}
+.card-adult .card-etiqueta{color:#ff0033;border-color:#ff0033;background:rgba(255,0,51,.1);}
+.card-default .card-etiqueta{color:#ff00cc;border-color:#ff00cc;background:rgba(255,0,204,.1);}
+
+/* 🧾 Footer global */
+footer { text-align: center; padding: 20px; border-top: 1px solid #333; color:#888;
+  font-family: 'Roboto Mono', monospace; font-size: .9rem; position: relative; z-index: 2; }
+
+/* 📱 Móvil: un poquito más alto */
+@media (max-width: 480px){ .card{ height: 300px; } }
