@@ -138,41 +138,14 @@ body {
   box-shadow: 0 0 8px #ff0033;
 }
 
-/* 📦 Secciones */
-section {
-  margin: 40px 0;
-  position: relative;
-  z-index: 2;
-  border-top: 1px solid rgba(255, 0, 204, 0.2);
-  padding-top: 40px;
-}
-
-h2 {
-  font-size: 1.5rem;
-  margin-bottom: 20px;
-  color: #00ffff;
-  text-align: center;
-  text-shadow: 0 0 6px rgba(0, 255, 255, 0.4);
-}
-
-/* 🧱 Grid de tarjetas */
+/* 🧱 Grid única de tarjetas */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 16px;
   justify-content: center;
   align-items: start;
-}
-
-/* 🎯 Compactar destacados */
-.destacados.compact .grid {
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-/* 📚 Publicaciones de autores */
-.publicaciones-todas .grid {
-  margin-top: 20px;
+  margin-top: 40px;
 }
 
 /* 🧩 Tarjetas */
