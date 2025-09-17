@@ -10,12 +10,26 @@ export function abrirModal(juego, origenElemento = null) {
 
   // 🧼 Limpiar clases anteriores
   modalBody.className = 'modal-body';
+  modalContent.className = 'modal-content'; // base
   modalBody.classList.add(`modal-${etiqueta}`);
+  modalContent.classList.add(`modal-content-${etiqueta}`);
+
+  // 🎭 Emote por etiqueta
+  const emotes = {
+    offline: '🎮',
+    lan: '🔌',
+    online: '🌐',
+    adult: '🔞',
+    default: '🏠'
+  };
+  const emote = emotes[etiqueta] || emotes.default;
 
   // 🖼️ Contenido del modal
   const imagenHTML = juego.imagen
     ? `<img src="${juego.imagen}" alt="${juego.nombre}">`
     : `<div style="width:100%;height:200px;background:#222;color:#888;display:flex;align-items:center;justify-content:center;border-radius:4px;">Sin imagen</div>`;
+
+  const etiquetaHTML = `<div class="modal-etiqueta">${emote} ${etiqueta.toUpperCase()}</div>`;
 
   const nombreHTML = juego.nombre
     ? `<h2>${juego.nombre}</h2>`
@@ -39,6 +53,7 @@ export function abrirModal(juego, origenElemento = null) {
 
   modalBody.innerHTML = `
     ${imagenHTML}
+    ${etiquetaHTML}
     ${nombreHTML}
     ${descripcionHTML}
     ${botonesHTML}
@@ -54,7 +69,7 @@ export function abrirModal(juego, origenElemento = null) {
   }
 
   modalContent.classList.remove('animando');
-  void modalContent.offsetWidth; // 🔁 Forzar reflow
+  void modalContent.offsetWidth;
   modalContent.classList.add('animando');
 
   modal.style.display = 'block';
