@@ -26,6 +26,7 @@
   transform: translate(-50%, -50%) scale(0.8);
   opacity: 0;
   animation: zoomInModal 0.3s ease-out forwards;
+  border: 1px solid #ff00cc; /* fallback */
 }
 
 /* 🎞️ Animación de aparición tipo zoom desde el centro */
@@ -103,23 +104,23 @@
 
 /* 🎨 Borde dinámico por etiqueta */
 .modal-content-offline {
-  border: 1px solid #3399ff;
+  border-color: #3399ff;
 }
 
 .modal-content-lan {
-  border: 1px solid #00ff99;
+  border-color: #00ff99;
 }
 
 .modal-content-online {
-  border: 1px solid #00ffff;
+  border-color: #00ffff;
 }
 
 .modal-content-adult {
-  border: 1px solid #ff0033;
+  border-color: #ff0033;
 }
 
 .modal-content-default {
-  border: 1px solid #ff00cc;
+  border-color: #ff00cc;
 }
 
 /* 🎨 Color dinámico para etiqueta con emote */
