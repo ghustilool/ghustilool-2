@@ -12,9 +12,10 @@ function filtrarPorEtiqueta(etiqueta) {
 
   const tarjetas = document.querySelectorAll('.card');
   tarjetas.forEach(card => {
-    const tags = card.getAttribute('data-tags')?.split(',') || [];
+    const rawTags = card.getAttribute('data-tags') || '';
+    const tags = rawTags.split(',').map(t => t.trim().toLowerCase());
 
-    if (etiqueta === null || tags.includes(etiqueta)) {
+    if (etiqueta === null || tags.includes(etiqueta.toLowerCase())) {
       card.style.display = 'block';
     } else {
       card.style.display = 'none';
