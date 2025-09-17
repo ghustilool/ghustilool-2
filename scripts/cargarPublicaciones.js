@@ -65,9 +65,12 @@ function mostrarPublicacionesOrdenadas() {
       ? `<h3>${juego.nombre}</h3>`
       : `<h3>Sin nombre</h3>`;
 
+    const etiquetaHTML = `<div class="card-etiqueta">${etiquetaPrincipal.toUpperCase()}</div>`;
+
     card.innerHTML = `
       ${imagenHTML}
       ${nombreHTML}
+      ${etiquetaHTML}
     `;
 
     card.onclick = () => abrirModal(juego);
