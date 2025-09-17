@@ -1,3 +1,5 @@
+import { abrirModal } from './modal.js';
+
 const autores = ['ghustilool']; // Agregá más nombres si tenés otros JSON
 const todasLasPublicaciones = [];
 
@@ -66,68 +68,6 @@ function mostrarPublicacionesOrdenadas() {
   });
 }
 
-function abrirModal(juego) {
-  const modal = document.getElementById('modal-juego');
-  const modalBody = document.getElementById('modal-body');
-
-  const imagenHTML = juego.imagen
-    ? `<img src="${juego.imagen}" alt="${juego.nombre}">`
-    : `<div style="width:100%;height:200px;background:#222;color:#888;display:flex;align-items:center;justify-content:center;border-radius:4px;">Sin imagen</div>`;
-
-  const nombreHTML = juego.nombre
-    ? `<h2>${juego.nombre}</h2>`
-    : `<h2>Sin nombre</h2>`;
-
-  const descripcionHTML = juego.descripcion
-    ? `<p>${juego.descripcion}</p>`
-    : '';
-
-  const botonesHTML = `
-    <div class="modal-body-buttons">
-      ${juego.descargar ? `<a href="${juego.descargar}" target="_blank">DESCARGAR</a>` : ''}
-      ${juego.contraseña ? `<a href="#" onclick="copiarContraseña('${juego.contraseña}');return false;">CONTRASEÑA</a>` : ''}
-      ${juego.comprar ? `<a href="${juego.comprar}" target="_blank">COMPRAR</a>` : ''}
-    </div>
-  `;
-
-  const versionHTML = juego.version
-    ? `<div class="modal-version">VERSIÓN: ${juego.version}</div>`
-    : '';
-
-  modalBody.innerHTML = `
-    ${imagenHTML}
-    ${nombreHTML}
-    ${descripcionHTML}
-    ${botonesHTML}
-    ${versionHTML}
-  `;
-
-  modal.style.display = 'block';
-}
-
-function copiarContraseña(texto) {
-  navigator.clipboard.writeText(texto).then(() => {
-    alert('Contraseña copiada al portapapeles');
-  }).catch(err => {
-    console.error('Error al copiar contraseña:', err);
-  });
-}
-
-// Cierre del modal
 document.addEventListener('DOMContentLoaded', () => {
-  const closeBtn = document.querySelector('.modal-close');
-  if (closeBtn) {
-    closeBtn.onclick = () => {
-      document.getElementById('modal-juego').style.display = 'none';
-    };
-  }
-
-  window.onclick = (event) => {
-    const modal = document.getElementById('modal-juego');
-    if (event.target === modal) {
-      modal.style.display = 'none';
-    }
-  };
-
   cargarPublicacionesIniciales();
 });
