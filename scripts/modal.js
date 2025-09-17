@@ -1,16 +1,18 @@
 import { todasLasPublicaciones } from './cargarPublicaciones.js';
 
-export function abrirModal(juego) {
+export function abrirModal(juego, origenElemento = null) {
   const modal = document.getElementById('modal-juego');
   const modalBody = document.getElementById('modal-body');
+  const modalContent = modal.querySelector('.modal-content');
 
   // 🧠 Detectar etiqueta principal
   const etiqueta = juego.tags?.[0]?.toLowerCase().trim() || 'default';
 
   // 🧼 Limpiar clases anteriores
-  modalBody.className = 'modal-body'; // base
-  modalBody.classList.add(`modal-${etiqueta}`); // dinámica
+  modalBody.className = 'modal-body';
+  modalBody.classList.add(`modal-${etiqueta}`);
 
+  // 🖼️ Contenido del modal
   const imagenHTML = juego.imagen
     ? `<img src="${juego.imagen}" alt="${juego.nombre}">`
     : `<div style="width:100%;height:200px;background:#222;color:#888;display:flex;align-items:center;justify-content:center;border-radius:4px;">Sin imagen</div>`;
@@ -43,6 +45,18 @@ export function abrirModal(juego) {
     ${versionHTML}
   `;
 
+  // 🌀 Animación desde el origen del clic
+  if (origenElemento) {
+    const rect = origenElemento.getBoundingClientRect();
+    modalContent.style.transformOrigin = `${rect.left + rect.width / 2}px ${rect.top + rect.height / 2}px`;
+  } else {
+    modalContent.style.transformOrigin = '50% 50%';
+  }
+
+  modalContent.classList.remove('animando');
+  void modalContent.offsetWidth; // 🔁 Forzar reflow
+  modalContent.classList.add('animando');
+
   modal.style.display = 'block';
 
   if (juego.id) {
@@ -69,7 +83,7 @@ function mostrarNotificacion(mensaje) {
   aviso.style.color = '#000';
   aviso.style.padding = '10px 20px';
   aviso.style.borderRadius = '6px';
-  aviso.style.fontFamily = 'Roboto Mono, monospace';
+  aviso.style.fontFamily = 'Roboto Mono', monospace;
   aviso.style.boxShadow = '0 0 10px rgba(255,0,204,0.4)';
   aviso.style.zIndex = '1000';
   aviso.style.opacity = '0';
@@ -107,4 +121,13 @@ document.addEventListener('DOMContentLoaded', () => {
       history.replaceState(null, '', window.location.pathname);
     }
   };
+
+  // 🧠 Capturar clic en tarjeta para animación desde origen
+  document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('click', () => {
+      const id = card.getAttribute('data-id');
+      const juego = todasLasPublicaciones.find(j => j.id === id);
+      if (juego) abrirModal(juego, card);
+    });
+  });
 });
