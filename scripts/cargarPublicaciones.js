@@ -50,7 +50,9 @@ function mostrarPublicacionesOrdenadas() {
   ordenadas.forEach(juego => {
     const card = document.createElement('div');
     card.className = 'card';
-    card.setAttribute('data-tags', juego.tags?.join(',') || '');
+
+    const tagsNormalizados = juego.tags?.map(t => t.toLowerCase().trim()).join(',') || '';
+    card.setAttribute('data-tags', tagsNormalizados);
     card.setAttribute('data-id', juego.id || '');
 
     const imagenHTML = juego.imagen
