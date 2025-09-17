@@ -37,7 +37,7 @@ body {
   position: relative; z-index: 2;
 }
 
-/* 🎮 Botones de filtro por etiqueta */
+/* 🎮 Filtros por etiqueta */
 .tag-filter-container { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin: 28px 0; z-index: 2; position: relative; }
 .tag-button {
   display: inline-flex; align-items: center; gap: 8px;
@@ -56,20 +56,20 @@ body {
 /* ====== Layout general ====== */
 main { padding-bottom: 60px; }
 
-/* 🧱 Grid tipo "ghustilool.netlify.app" */
+/* Grid */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* como en la referencia */
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px;
   justify-content: center;
   align-items: stretch;
-  max-width: 1200px;            /* ancho contenido */
+  max-width: 1200px;
   margin: 28px auto 0;
 }
 
-/* 🧩 Tarjetas (forma replicada: sombra + hover scale) */
+/* Card */
 .card {
-  background-color: #1a1a2e;    /* mantenemos tu base */
+  background-color: #1a1a2e;
   border-radius: 10px;
   border: 1px solid #333;
   overflow: hidden;
@@ -77,68 +77,51 @@ main { padding-bottom: 60px; }
   position: relative;
   z-index: 2;
 
-  display: flex;
-  flex-direction: column;
-  height: 260px;                /* altura consistente para filas prolijas */
+  display: flex; flex-direction: column;
+  height: 260px;
   padding: 10px;
 
-  box-shadow: 0 0 15px rgba(255, 0, 204, 0.25); /* glow en tu color */
+  box-shadow: 0 0 15px rgba(255, 0, 204, 0.25);
   transition: transform .25s ease, box-shadow .25s ease;
 }
 .card:hover { transform: scale(1.02); }
-
-/* foco accesible */
 .card:focus-visible { outline: 2px solid #00ffff; outline-offset: 3px; box-shadow: 0 0 14px rgba(0,255,255,.35); }
 
-/* 🎨 Hover dinámico por etiqueta */
-.card-offline:hover { box-shadow: 0 0 15px rgba(51,153,255,.45); }
-.card-lan:hover     { box-shadow: 0 0 15px rgba(0,255,153,.45); }
-.card-online:hover  { box-shadow: 0 0 15px rgba(0,255,255,.45); }
-.card-adult:hover   { box-shadow: 0 0 15px rgba(255,0,51,.45); }
-.card-default:hover { box-shadow: 0 0 15px rgba(255,0,204,.55); }
-
-/* 🖼️ Imagen */
 .card img {
-  width: 100%;
-  aspect-ratio: 616 / 353;      /* referencia */
-  object-fit: cover;
-  border-radius: 6px;
-  margin-bottom: 6px;
+  width: 100%; aspect-ratio: 616/353; object-fit: cover;
+  border-radius: 6px; margin-bottom: 6px;
 }
 
-/* 🧠 Título (1 línea con "…", como la referencia) */
+/* Título centrado */
 .card h3 {
-  color: #ffffff;
+  color: #fff;
   font-size: 1.05rem;
   line-height: 1.15;
   margin: 0 4px 4px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  text-align: center; /* ⬅️ centrado */
 }
 
-/* 🦶 Footer de la card: versión + badge centrados */
+/* Footer de la card */
 .card-footer { margin-top: auto; display: flex; flex-direction: column; align-items: center; gap: 6px; }
 .card-meta { font-family: 'Roboto Mono', monospace; font-size: .72rem; color: #aeb3c0; opacity: .9; }
 
-/* 🏷️ Etiqueta */
+/* Badge */
 .card-etiqueta {
-  font-size: 0.75rem; font-weight: 800;
+  font-size: .75rem; font-weight: 800;
   padding: 4px 10px; border-radius: 20px;
   display: inline-block; text-transform: uppercase;
   font-family: 'Roboto Mono', monospace; border: 1px solid;
 }
 
-/* 🎨 Colores dinámicos */
 .card-offline .card-etiqueta{color:#3399ff;border-color:#3399ff;background:rgba(51,153,255,.1);}
 .card-lan .card-etiqueta    {color:#00ff99;border-color:#00ff99;background:rgba(0,255,153,.1);}
 .card-online .card-etiqueta {color:#00ffff;border-color:#00ffff;background:rgba(0,255,255,.1);}
 .card-adult .card-etiqueta  {color:#ff0033;border-color:#ff0033;background:rgba(255,0,51,.1);}
 .card-default .card-etiqueta{color:#ff00cc;border-color:#ff00cc;background:rgba(255,0,204,.1);}
 
-/* 🧾 Footer global */
-footer { text-align: center; padding: 20px; border-top: 1px solid #333; color:#888;
-  font-family: 'Roboto Mono', monospace; font-size: .9rem; position: relative; z-index: 2; }
+/* Footer global */
+footer { text-align: center; padding: 20px; border-top: 1px solid #333; color:#888; font-family:'Roboto Mono', monospace; font-size:.9rem; position: relative; z-index: 2; }
 
-/* 📱 Móvil: un poquito más alto */
+/* Móvil */
 @media (max-width: 480px){ .card{ height: 300px; } }

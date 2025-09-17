@@ -1,9 +1,7 @@
 // scripts/modal.js
-// Forma y animación replicadas del sitio de referencia (fade + scale), manteniendo tus colores. :contentReference[oaicite:1]{index=1}
+// Modal con fade/scale, sin import circular, y soporte de deep-link (#id).
 
-import { todasLasPublicaciones } from './cargarPublicaciones.js';
-
-const EMOTES = { offline:'🎮', lan:'🔌', online:'🌐', adult:'🔞', default:'🏠' };
+const EMOTES = { offline: '🎮', lan: '🔌', online: '🌐', adult: '🔞', default: '🏠' };
 
 function normalizarEtiqueta(tags) {
   const raw = (tags?.[0] || '').toString().toLowerCase().trim();
@@ -15,19 +13,16 @@ function normalizarEtiqueta(tags) {
   return 'default';
 }
 
-/* ---------- abrir/cerrar con fade-in/fade-out ---------- */
+/* -------- abrir/cerrar con fade-in/fade-out -------- */
 function showModal(modalEl) {
-  if (!modalEl) return;
+  modalEl.style.display = 'flex';
   modalEl.classList.remove('fade-out');
   modalEl.classList.add('fade-in');
   document.body.classList.add('modal-open');
 }
-
 function hideModal(modalEl) {
-  if (!modalEl) return;
   modalEl.classList.remove('fade-in');
   modalEl.classList.add('fade-out');
-  // al terminar la transición, ocultamos completamente
   const onEnd = () => {
     modalEl.style.display = 'none';
     modalEl.removeEventListener('transitionend', onEnd);
@@ -36,16 +31,14 @@ function hideModal(modalEl) {
   modalEl.addEventListener('transitionend', onEnd);
 }
 
-/* ---------- API principal ---------- */
+/* -------- API pública -------- */
 export function abrirModal(juego, origenElemento = null) {
   const modal = document.getElementById('modal-juego');
   const modalBody = document.getElementById('modal-body');
   const modalContent = modal?.querySelector('.modal-content');
   if (!modal || !modalBody || !modalContent) return;
 
-  // preparar display antes de animar
-  modal.style.display = 'flex';
-
+  // prepara clases por etiqueta
   const etiqueta = normalizarEtiqueta(juego.tags);
   modalBody.className = 'modal-body';
   modalContent.className = 'modal-content';
@@ -59,22 +52,16 @@ export function abrirModal(juego, origenElemento = null) {
     : `<div style="width:100%;height:220px;background:#222;color:#888;display:flex;align-items:center;justify-content:center;border-radius:6px;">Sin imagen</div>`;
 
   const etiquetaHTML = `<div class="modal-etiqueta">${emote} ${etiqueta.toUpperCase()}</div>`;
-  const nombreHTML = `<h2 class="modal-title" style="text-align:center;margin:8px 0 14px">${juego.nombre || 'Sin nombre'}</h2>`;
+  const nombreHTML = `<h2 class="modal-title" style="text-align:center;margin:8px 0 12px">${juego.nombre || 'Sin nombre'}</h2>`;
   const descripcionHTML = juego.descripcion ? `<p class="modal-description" style="text-align:center">${juego.descripcion}</p>` : '';
 
   const enlaceDescarga = juego.descargar;
   const contrasena = juego.contraseña ?? juego.contrasena;
   const enlaceCompra = juego.comprar;
 
-  const btnDescargar = enlaceDescarga
-    ? `<a class="download-btn" href="${enlaceDescarga}" target="_blank" rel="noopener">DESCARGAR</a>`
-    : '';
-  const btnContrasena = contrasena
-    ? `<a class="password-btn" href="#" onclick="copiarContraseña('${(contrasena + '').replace(/'/g, "\\'")}');return false;">CONTRASEÑA</a>`
-    : '';
-  const btnComprar = enlaceCompra
-    ? `<a class="comprar-btn" href="${enlaceCompra}" target="_blank" rel="noopener">COMPRAR</a>`
-    : '';
+  const btnDescargar = enlaceDescarga ? `<a href="${enlaceDescarga}" target="_blank" rel="noopener">DESCARGAR</a>` : '';
+  const btnContrasena = contrasena ? `<a href="#" onclick="copiarContraseña('${(contrasena + '').replace(/'/g, "\\'")}');return false;">CONTRASEÑA</a>` : '';
+  const btnComprar   = enlaceCompra ? `<a href="${enlaceCompra}" target="_blank" rel="noopener">COMPRAR</a>` : '';
 
   const botonesHTML = (btnDescargar || btnContrasena || btnComprar)
     ? `<div class="modal-body-buttons">${btnDescargar}${btnContrasena}${btnComprar}</div>`
@@ -84,10 +71,15 @@ export function abrirModal(juego, origenElemento = null) {
 
   modalBody.innerHTML = `${imagenHTML}${etiquetaHTML}${nombreHTML}${descripcionHTML}${botonesHTML}${versionHTML}`;
 
-  // animación de apertura
-  requestAnimationFrame(() => showModal(modal));
+  // origen de animación
+  modalContent.style.transformOrigin = '50% 50%';
+  if (origenElemento?.getBoundingClientRect) {
+    const r = origenElemento.getBoundingClientRect();
+    modalContent.style.transformOrigin = `${r.left + r.width/2}px ${r.top + r.height/2}px`;
+  }
 
-  // actualizar hash
+  showModal(modal);
+
   if (juego.id) { try { history.replaceState(null, '', `#${juego.id}`); } catch {} }
 }
 
@@ -98,33 +90,26 @@ function cerrarModal() {
   try { history.replaceState(null, '', location.pathname + location.search); } catch {}
 }
 
-/* Deep-link con #id */
+/* Deep-link con #id usando la lista global cargada por cargarPublicaciones.js */
 export function verificarFragmentoURL() {
   const id = location.hash.replace('#', '');
-  if (!id) return;
-  const juego = (todasLasPublicaciones || []).find((j) => j.id === id);
+  const lista = Array.isArray(window.__PUBLICACIONES__) ? window.__PUBLICACIONES__ : [];
+  if (!id || !lista.length) return;
+  const juego = lista.find(j => j.id === id);
   if (juego) abrirModal(juego);
 }
 
-/* Copiar pass */
-window.copiarContraseña = function (texto) {
+/* util copiar pass */
+window.copiarContraseña = (texto) => {
   if (!texto) return;
-  navigator.clipboard.writeText(texto).then(
-    () => console.log('Contraseña copiada'),
-    () => console.warn('No se pudo copiar')
-  );
+  navigator.clipboard.writeText(texto).catch(() => {});
 };
 
-/* Listeners */
+/* listeners básicos */
 document.addEventListener('DOMContentLoaded', () => {
   const modal = document.getElementById('modal-juego');
   const closeBtn = modal?.querySelector('.modal-close');
-
   closeBtn?.addEventListener('click', cerrarModal);
-
-  // cerrar al clickear overlay
   window.addEventListener('click', (e) => { if (e.target === modal) cerrarModal(); });
-
-  // cerrar con ESC
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') cerrarModal(); });
 });
