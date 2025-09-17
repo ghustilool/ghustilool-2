@@ -1,18 +1,18 @@
-/* 🪟 Overlay del modal */
+/* 🪟 Overlay del modal (sin scroll) */
 .modal {
   position: fixed;
   inset: 0;
   z-index: 999;
   display: grid;
   place-items: center;
-  padding: 24px;
+  padding: clamp(12px, 3vw, 24px);
   background-color: rgba(0,0,0,0.75);
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
-
   opacity: 0;
   pointer-events: none;
   transition: opacity .25s ease;
+  overflow: hidden;              /* ← evita scrollbar del overlay */
 }
 
 /* Estados abiertos */
@@ -22,16 +22,16 @@
   pointer-events: auto;
 }
 
-/* 📦 Contenedor del modal */
+/* 📦 Contenedor del modal (sin scroll) */
 .modal-content {
   background-color: #1a1a2e;
   color: #e0e0e0;
   font-family: 'Roboto Mono', monospace;
 
-  width: min(680px, 92vw);
+  width: min(720px, 94vw);
   border-radius: 12px;
 
-  /* ✅ Borde dinámico (no hardcodear #ff00cc) */
+  /* Borde dinámico */
   --modal-borde: transparent;
   border: 1px solid var(--modal-borde) !important;
 
@@ -41,9 +41,15 @@
   opacity: 0;
   animation: zoomInModal .28s ease-out forwards;
 
-  max-height: 90vh;
-  overflow: auto;
-  padding: 18px;
+  /* 🔑 que SIEMPRE entre en la pantalla */
+  max-height: 90dvh;            /* usa viewport "dinámico" (móvil) */
+  height: auto;
+  overflow: hidden;             /* ← sin scroll interno */
+  padding: 16px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 /* 🎞️ Animación de aparición */
@@ -51,7 +57,7 @@
   to { transform: translateY(0) scale(1); opacity: 1; }
 }
 
-/* ⚠️ Preferencia del usuario: menos movimiento */
+/* ⚠️ Menos movimiento si el usuario lo prefiere */
 @media (prefers-reduced-motion: reduce) {
   .modal, .modal-content {
     transition: none !important;
@@ -63,10 +69,9 @@
 
 /* ❌ Botón cerrar */
 .modal-close {
-  position: sticky;       /* siempre visible arriba mientras scrolleás */
+  position: sticky;  /* visible arriba */
   top: 0;
-  float: right;
-  margin: -4px -4px 8px 0;
+  align-self: flex-end;
   width: 32px;
   height: 32px;
   line-height: 28px;
@@ -77,15 +82,19 @@
   background: transparent;
   border: 0;
   border-radius: 8px;
+  margin: -4px -4px 0 0;
 }
 .modal-close:hover { opacity: .9; }
 .modal-close:focus-visible { outline: 2px solid #ff00cc; outline-offset: 2px; }
 
-/* 🖼️ Imagen */
+/* 🖼️ Imagen: limitada por viewport para que NO desborde */
 .modal-content img {
   width: 100%;
-  border-radius: 6px;
-  margin-bottom: 12px;
+  height: auto;
+  max-height: 36dvh;            /* ~36% del viewport */
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  border-radius: 8px;
   display: block;
 }
 
@@ -96,7 +105,6 @@
   padding: 6px 10px;
   border-radius: 6px;
   display: inline-block;
-  margin-bottom: 10px;
   text-transform: uppercase;
   font-family: 'Orbitron', sans-serif;
   border: 1px solid;
@@ -108,9 +116,8 @@
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-top: 15px;
+  margin-top: 6px;             /* menos espacio */
 }
-
 .modal-body-buttons a {
   flex: 1;
   min-width: 140px;
@@ -129,20 +136,19 @@
 
 /* 🧾 Versión del juego */
 .modal-version {
-  margin-top: 12px;
+  margin-top: 6px;
   font-size: 0.8rem;
   color: #aaa;
   text-align: center;
 }
 
-/* 🎨 Color del borde por etiqueta */
+/* 🎨 Borde/etiqueta por tipo */
 .modal-content-offline { --modal-borde: #3399ff; }
 .modal-content-lan     { --modal-borde: #00ff99; }
 .modal-content-online  { --modal-borde: #00ffff; }
 .modal-content-adult   { --modal-borde: #ff0033; }
 .modal-content-default { --modal-borde: #ff00cc; }
 
-/* 🎨 Color de la etiqueta por etiqueta */
 .modal-content-offline .modal-etiqueta { color:#3399ff; border-color:#3399ff; }
 .modal-content-lan .modal-etiqueta     { color:#00ff99; border-color:#00ff99; }
 .modal-content-online .modal-etiqueta  { color:#00ffff; border-color:#00ffff; }
@@ -152,15 +158,24 @@
 /* 🔒 Bloqueo de scroll del body mientras el modal está abierto */
 body.modal-open { overflow: hidden; }
 
+/* 📱 Pantallas "bajitas": permite un poquito más al contenido
+   pero manteniendo SIN scroll (limitamos más la imagen) */
+@media (max-height: 700px) {
+  .modal-content { max-height: 94dvh; }
+  .modal-content img { max-height: 30dvh; }
+}
+@media (max-height: 560px) {
+  .modal-content { max-height: 96dvh; }
+  .modal-content img { max-height: 26dvh; }
+}
+
 /* 📱 Ajustes móviles */
 @media (max-width: 480px) {
-  .modal {
-    padding: 16px;
-  }
   .modal-content {
-    width: 94vw;
+    width: 96vw;
     border-radius: 10px;
-    padding: 16px;
+    padding: 14px;
+    gap: 10px;
   }
   .modal-body-buttons a {
     min-width: 120px;
