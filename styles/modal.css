@@ -3,34 +3,37 @@
   position: fixed;
   inset: 0;
   z-index: 999;
-  display: grid;              /* centra el contenido */
-  place-items: center;        /* centra el contenido */
-  padding: 24px;              /* margen interior p/ que no pegue contra bordes */
+  display: grid;
+  place-items: center;
+  padding: 24px;
   background-color: rgba(0,0,0,0.75);
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
 
-  /* Oculta sin romper animaciones */
+  /* Oculto sin romper animaciones */
   opacity: 0;
   pointer-events: none;
   transition: opacity .25s ease;
 }
 
-/* Estado visible (usá .modal.is-open o aria-hidden="false") */
+/* Estado visible */
 .modal.is-open,
 .modal[aria-hidden="false"] {
   opacity: 1;
   pointer-events: auto;
 }
 
-/* 📦 Contenido del modal centrado y responsive */
+/* 📦 Contenido del modal */
 .modal-content {
   background-color: #1a1a2e;
   color: #e0e0e0;
   font-family: 'Roboto Mono', monospace;
   width: min(600px, 92vw);
   border-radius: 12px;
-  border: 1px solid #ff00cc; /* fallback */
+
+  /* 🔧 Base transparente: el color lo definen las clases por etiqueta */
+  border: 1px solid transparent;
+
   box-shadow: 0 20px 60px rgba(0,0,0,.6);
 
   /* Animación de entrada */
@@ -46,7 +49,7 @@
   padding: 18px;
 }
 
-/* 🎞️ Animación de aparición tipo zoom desde el centro */
+/* 🎞️ Animación */
 @keyframes zoomInModal {
   to {
     transform: translateY(0) scale(1);
@@ -54,10 +57,9 @@
   }
 }
 
-/* Respeta usuarios que prefieren menos movimiento */
+/* Respeto a reduce motion */
 @media (prefers-reduced-motion: reduce) {
-  .modal,
-  .modal-content {
+  .modal, .modal-content {
     transition: none !important;
     animation: none !important;
     transform: none !important;
@@ -65,7 +67,7 @@
   }
 }
 
-/* ❌ Botón de cierre (mejor foco/hover) */
+/* ❌ Botón cerrar */
 .modal-close {
   position: absolute;
   top: 10px;
@@ -85,7 +87,7 @@
   outline-offset: 2px;
 }
 
-/* 🖼️ Imagen del juego */
+/* 🖼️ Imagen */
 .modal-content img {
   width: 100%;
   height: auto;
@@ -94,7 +96,7 @@
   display: block;
 }
 
-/* 🏷️ Etiqueta con emote en el modal */
+/* 🏷️ Etiqueta */
 .modal-etiqueta {
   font-size: 0.8rem;
   font-weight: 700;
@@ -108,7 +110,7 @@
   background-color: rgba(255, 255, 255, 0.06);
 }
 
-/* 🎮 Botones del modal */
+/* 🎮 Botones */
 .modal-body-buttons {
   display: flex;
   flex-wrap: wrap;
@@ -134,11 +136,9 @@
   background-color: #ff33dd;
   transform: translateY(-1px);
 }
-.modal-body-buttons a:active {
-  transform: translateY(0);
-}
+.modal-body-buttons a:active { transform: translateY(0); }
 
-/* 🧾 Versión del juego */
+/* 🧾 Versión */
 .modal-version {
   margin-top: 10px;
   font-size: 0.8rem;
@@ -153,12 +153,12 @@
 .modal-content-adult   { border-color: #ff0033; }
 .modal-content-default { border-color: #ff00cc; }
 
-/* 🎨 Color dinámico para etiqueta con emote */
+/* 🎨 Color dinámico para la etiqueta */
 .modal-content-offline .modal-etiqueta { color:#3399ff; border-color:#3399ff; }
 .modal-content-lan .modal-etiqueta     { color:#00ff99; border-color:#00ff99; }
 .modal-content-online .modal-etiqueta  { color:#00ffff; border-color:#00ffff; }
 .modal-content-adult .modal-etiqueta   { color:#ff0033; border-color:#ff0033; }
 .modal-content-default .modal-etiqueta { color:#ff00cc; border-color:#ff00cc; }
 
-/* 🔒 Evitar scroll del body cuando el modal está abierto (agregá la clase en <body>) */
+/* 🔒 Evitar scroll del body con modal abierto */
 body.modal-open { overflow: hidden; }

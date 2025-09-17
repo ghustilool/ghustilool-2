@@ -1,55 +1,77 @@
 // modal.js
 import { todasLasPublicaciones } from './cargarPublicaciones.js';
 
-/* ============ API ============ */
+/* ============================
+   Utils
+============================ */
+const EMOTES = {
+  offline: '🎮',
+  lan: '🔌',
+  online: '🌐',
+  adult: '🔞',
+  default: '🏠',
+};
+
+function normalizarEtiqueta(tags) {
+  const raw = (tags?.[0] || '').toString().toLowerCase().trim();
+  if (/(\+?18|adult)/.test(raw)) return 'adult';
+  if (raw.includes('lan')) return 'lan';
+  if (raw.includes('online')) return 'online';
+  if (raw.includes('offline') || raw.includes('sin internet')) return 'offline';
+  return 'default';
+}
+
+function setModalOpen(isOpen) {
+  const modal = document.getElementById('modal-juego');
+  if (!modal) return;
+  if (isOpen) {
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('modal-open');
+  } else {
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('modal-open');
+  }
+}
+
+/* ============================
+   API
+============================ */
 export function abrirModal(juego, origenElemento = null) {
   const modal = document.getElementById('modal-juego');
   const modalBody = document.getElementById('modal-body');
   const modalContent = modal.querySelector('.modal-content');
+  if (!modal || !modalBody || !modalContent) return;
 
-  // 🧠 Detectar etiqueta principal
-  const etiqueta = juego.tags?.[0]?.toLowerCase().trim() || 'default';
-
-  // 🧼 Limpiar clases anteriores
+  // Etiqueta y clases dinámicas
+  const etiqueta = normalizarEtiqueta(juego.tags);
   modalBody.className = 'modal-body';
-  modalContent.className = 'modal-content'; // base
+  modalContent.className = 'modal-content';
   modalBody.classList.add(`modal-${etiqueta}`);
   modalContent.classList.add(`modal-content-${etiqueta}`);
 
-  // 🎭 Emote por etiqueta
-  const emotes = {
-    offline: '🎮',
-    lan: '🔌',
-    online: '🌐',
-    adult: '🔞',
-    default: '🏠'
-  };
-  const emote = emotes[etiqueta] || emotes.default;
-
-  // 🖼️ Contenido del modal
+  // Contenidos
+  const emote = EMOTES[etiqueta] || EMOTES.default;
   const imagenHTML = juego.imagen
-    ? `<img src="${juego.imagen}" alt="${juego.nombre}">`
-    : `<div style="width:100%;height:200px;background:#222;color:#888;display:flex;align-items:center;justify-content:center;border-radius:4px;">Sin imagen</div>`;
+    ? `<img src="${juego.imagen}" alt="${juego.nombre || 'Juego'}">`
+    : `<div style="width:100%;height:200px;background:#222;color:#888;display:flex;align-items:center;justify-content:center;border-radius:6px;">Sin imagen</div>`;
 
   const etiquetaHTML = `<div class="modal-etiqueta">${emote} ${etiqueta.toUpperCase()}</div>`;
-
-  const nombreHTML = juego.nombre
-    ? `<h2>${juego.nombre}</h2>`
-    : `<h2>Sin nombre</h2>`;
-
+  const nombreHTML = `<h2>${juego.nombre || 'Sin nombre'}</h2>`;
   const descripcionHTML = juego.descripcion ? `<p>${juego.descripcion}</p>` : '';
 
-  const botonesHTML = `
-    <div class="modal-body-buttons">
-      ${juego.descargar ? `<a href="${juego.descargar}" target="_blank">DESCARGAR</a>` : ''}
-      ${juego.contraseña ? `<a href="#" onclick="copiarContraseña('${juego.contraseña}');return false;">CONTRASEÑA</a>` : ''}
-      ${juego.comprar ? `<a href="${juego.comprar}" target="_blank">COMPRAR</a>` : ''}
-    </div>
-  `;
+  const btnDescargar = juego.descargar
+    ? `<a href="${juego.descargar}" target="_blank" rel="noopener">DESCARGAR</a>` : '';
+  const btnContrasena = juego.contraseña
+    ? `<a href="#" onclick="copiarContraseña('${juego.contraseña.replace(/'/g, "\\'")}');return false;">CONTRASEÑA</a>` : '';
+  const btnComprar = juego.comprar
+    ? `<a href="${juego.comprar}" target="_blank" rel="noopener">COMPRAR</a>` : '';
 
-  const versionHTML = juego.version
-    ? `<div class="modal-version">VERSIÓN: ${juego.version}</div>`
-    : '';
+  const botonesHTML = (btnDescargar || btnContrasena || btnComprar)
+    ? `<div class="modal-body-buttons">${btnDescargar}${btnContrasena}${btnComprar}</div>` : '';
+
+  const versionHTML = juego.version ? `<div class="modal-version">VERSIÓN: ${juego.version}</div>` : '';
 
   modalBody.innerHTML = `
     ${imagenHTML}
@@ -60,29 +82,49 @@ export function abrirModal(juego, origenElemento = null) {
     ${versionHTML}
   `;
 
-  // 🌀 Animación desde el origen del clic
+  // Animación desde el origen del click
   if (origenElemento) {
     const rect = origenElemento.getBoundingClientRect();
     modalContent.style.transformOrigin = `${rect.left + rect.width / 2}px ${rect.top + rect.height / 2}px`;
   } else {
     modalContent.style.transformOrigin = '50% 50%';
   }
+  // re-disparar animación
   modalContent.classList.remove('animando');
-  void modalContent.offsetWidth; // reflow
+  void modalContent.offsetWidth;
   modalContent.classList.add('animando');
 
-  // ✅ Mostrar usando clases/aria (coincide con modal.css)
-  modal.classList.add('is-open');
-  modal.setAttribute('aria-hidden', 'false');
-  document.body.classList.add('modal-open');
+  // Mostrar
+  setModalOpen(true);
 
-  // Hash bonito
+  // Actualizar hash bonito
   if (juego.id) {
     history.replaceState(null, '', `#${juego.id}`);
   }
 }
 
-/* ============ Helpers globales ============ */
+function cerrarModal() {
+  const modal = document.getElementById('modal-juego');
+  if (!modal) return;
+  if (!modal.classList.contains('is-open')) return;
+
+  setModalOpen(false);
+  history.replaceState(null, '', window.location.pathname);
+}
+
+/* ============================
+   Navegación por hash
+============================ */
+export function verificarFragmentoURL() {
+  const fragmento = window.location.hash.replace('#', '');
+  if (!fragmento) return;
+  const juego = todasLasPublicaciones.find(j => j.id === fragmento);
+  if (juego) abrirModal(juego);
+}
+
+/* ============================
+   Helpers globales
+============================ */
 window.copiarContraseña = function (texto) {
   navigator.clipboard.writeText(texto).then(() => {
     mostrarNotificacion('Contraseña copiada al portapapeles');
@@ -94,67 +136,49 @@ window.copiarContraseña = function (texto) {
 function mostrarNotificacion(mensaje) {
   const aviso = document.createElement('div');
   aviso.textContent = mensaje;
-  aviso.style.position = 'fixed';
-  aviso.style.bottom = '20px';
-  aviso.style.left = '50%';
-  aviso.style.transform = 'translateX(-50%)';
-  aviso.style.background = '#ff00cc';
-  aviso.style.color = '#000';
-  aviso.style.padding = '10px 20px';
-  aviso.style.borderRadius = '6px';
-  aviso.style.fontFamily = 'Roboto Mono', monospace;
-  aviso.style.boxShadow = '0 0 10px rgba(255,0,204,0.4)';
-  aviso.style.zIndex = '1000';
-  aviso.style.opacity = '0';
-  aviso.style.transition = 'opacity 0.3s ease';
-
+  Object.assign(aviso.style, {
+    position: 'fixed',
+    bottom: '20px',
+    left: '50%',
+    transform: 'translateX(-50%)',
+    background: '#ff00cc',
+    color: '#000',
+    padding: '10px 20px',
+    borderRadius: '6px',
+    fontFamily: 'Roboto Mono, monospace',
+    boxShadow: '0 0 10px rgba(255,0,204,0.4)',
+    zIndex: '1000',
+    opacity: '0',
+    transition: 'opacity 0.3s ease'
+  });
   document.body.appendChild(aviso);
-  setTimeout(() => (aviso.style.opacity = '1'), 10);
+  requestAnimationFrame(() => (aviso.style.opacity = '1'));
   setTimeout(() => {
     aviso.style.opacity = '0';
     setTimeout(() => aviso.remove(), 300);
   }, 2000);
 }
 
-/* ============ Navegación por hash ============ */
-export function verificarFragmentoURL() {
-  const fragmento = window.location.hash.replace('#', '');
-  if (!fragmento) return;
-
-  const juego = todasLasPublicaciones.find(j => j.id === fragmento);
-  if (juego) abrirModal(juego);
-}
-
-/* ============ Cierre centralizado ============ */
-function cerrarModal() {
-  const modal = document.getElementById('modal-juego');
-  if (!modal.classList.contains('is-open')) return;
-
-  modal.classList.remove('is-open');
-  modal.setAttribute('aria-hidden', 'true');
-  document.body.classList.remove('modal-open');
-  history.replaceState(null, '', window.location.pathname);
-}
-
-/* ============ Listeners DOM ============ */
+/* ============================
+   Listeners
+============================ */
 document.addEventListener('DOMContentLoaded', () => {
-  const closeBtn = document.querySelector('.modal-close');
-  if (closeBtn) {
-    closeBtn.onclick = () => cerrarModal();
-  }
+  const modal = document.getElementById('modal-juego');
+  const closeBtn = modal?.querySelector('.modal-close');
 
-  // Cerrar haciendo click fuera del contenido
-  window.onclick = (event) => {
-    const modal = document.getElementById('modal-juego');
-    if (event.target === modal) cerrarModal();
-  };
+  if (closeBtn) closeBtn.addEventListener('click', cerrarModal);
+
+  // Cerrar clic fuera del contenido
+  window.addEventListener('click', (e) => {
+    if (e.target === modal) cerrarModal();
+  });
 
   // Cerrar con Escape
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') cerrarModal();
   });
 
-  // (Opcional) Animación desde tarjeta si existieran en el DOM inicial
+  // (Opcional) Si tus cards existen en el DOM inicial y tienen data-id
   document.querySelectorAll('.card').forEach(card => {
     card.addEventListener('click', () => {
       const id = card.getAttribute('data-id');
