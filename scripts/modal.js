@@ -4,6 +4,13 @@ export function abrirModal(juego) {
   const modal = document.getElementById('modal-juego');
   const modalBody = document.getElementById('modal-body');
 
+  // 🧠 Detectar etiqueta principal
+  const etiqueta = juego.tags?.[0]?.toLowerCase().trim() || 'default';
+
+  // 🧼 Limpiar clases anteriores
+  modalBody.className = 'modal-body'; // base
+  modalBody.classList.add(`modal-${etiqueta}`); // dinámica
+
   const imagenHTML = juego.imagen
     ? `<img src="${juego.imagen}" alt="${juego.nombre}">`
     : `<div style="width:100%;height:200px;background:#222;color:#888;display:flex;align-items:center;justify-content:center;border-radius:4px;">Sin imagen</div>`;
