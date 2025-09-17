@@ -48,8 +48,10 @@ function mostrarPublicacionesOrdenadas() {
   );
 
   ordenadas.forEach(juego => {
+    const etiquetaPrincipal = juego.tags?.[0]?.toLowerCase().trim() || 'default';
+
     const card = document.createElement('div');
-    card.className = 'card';
+    card.className = `card card-${etiquetaPrincipal}`;
 
     const tagsNormalizados = juego.tags?.map(t => t.toLowerCase().trim()).join(',') || '';
     card.setAttribute('data-tags', tagsNormalizados);
