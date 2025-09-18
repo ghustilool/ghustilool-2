@@ -1,13 +1,13 @@
 // scripts/cargarPublicaciones.js
-// Carga y dibuja las tarjetas. Robusto ante cache y rutas.
-// IMPORTANTE: recuerda subir el ?v= en index.html para este archivo y modal.js.
+// Carga y dibuja las tarjetas de forma robusta (sin romper con rewrites/router).
+// ⚠️ En index.html: <script type="module" src="scripts/cargarPublicaciones.js?v=26"></script>
 
-import { abrirModal, verificarFragmentoURL } from './modal.js?v=24';
+import { abrirModal, verificarFragmentoURL } from './modal.js?v=26';
 
 const autores = ['ghustilool'];
 export const todasLasPublicaciones = [];
 
-/* emotes por etiqueta (para la chapita) */
+/* Emotes para las etiquetas */
 const EMOTES = { offline:'🎮', lan:'🔌', online:'🌐', adult:'🔞', default:'🏠' };
 
 /* ---------- helpers ---------- */
@@ -19,6 +19,12 @@ function normalizarEtiqueta(tags) {
   if (compact.includes('online')) return 'online';
   if (compact.includes('offline') || raw.includes('sin internet')) return 'offline';
   return 'default';
+}
+
+function pintarEstado(msg, color = '#aeb3c0') {
+  const cont = document.getElementById('publicaciones-todas');
+  if (!cont) return;
+  cont.innerHTML = `<p style="color:${color};text-align:center;padding:20px">${msg}</p>`;
 }
 
 function fitTitles() {
@@ -40,12 +46,6 @@ function fitTitles() {
   });
 }
 
-function pintarEstado(mensaje, color = '#aeb3c0') {
-  const cont = document.getElementById('publicaciones-todas');
-  if (!cont) return;
-  cont.innerHTML = `<p style="color:${color};text-align:center;padding:20px">${mensaje}</p>`;
-}
-
 /* ---------- carga ---------- */
 function cargarPublicacionesIniciales() {
   const contenedor = document.getElementById('publicaciones-todas');
@@ -55,12 +55,13 @@ function cargarPublicacionesIniciales() {
   let pendientes = autores.length;
 
   autores.forEach((autor) => {
-    // Resuelve siempre a /autores/autor.json sin importar desde dónde se sirva /scripts/
+    // Resuelve SIEMPRE a /autores/autor.json sin importar desde dónde sirvas /scripts/
     const url = new URL(`../autores/${autor}.json`, import.meta.url);
 
-    fetch(url)
+    fetch(url, { headers: { Accept: 'application/json' } })
       .then((r) => {
         if (!r.ok) throw new Error(`HTTP ${r.status} ${r.statusText}`);
+        // Si por algo nos devolvieran HTML, esto fallará y lo mostraremos abajo.
         return r.json();
       })
       .then((data) => {
@@ -73,12 +74,12 @@ function cargarPublicacionesIniciales() {
         pendientes--;
         if (pendientes === 0) {
           if (!todasLasPublicaciones.length) {
-            pintarEstado('No se encontraron publicaciones (revisa la consola del navegador).', '#ff3366');
+            pintarEstado('No se encontraron publicaciones. Revisa la consola del navegador.', '#ff3366');
             return;
           }
           window.__PUBLICACIONES__ = todasLasPublicaciones;
           mostrarPublicacionesOrdenadas();
-          verificarFragmentoURL(); // abre si hay #id en la URL
+          verificarFragmentoURL();
         }
       });
   });
@@ -119,7 +120,7 @@ function mostrarPublicacionesOrdenadas() {
 
     card.innerHTML = overlay + imagenHTML + nombreHTML + footerHTML;
 
-    // Respaldo si no hay id
+    // Respaldo si no hay id en el JSON
     if (!id) {
       card.onclick = () => abrirModal(juego, card);
       card.addEventListener('keydown', (e) => { if (e.key === 'Enter') abrirModal(juego, card); });
@@ -140,7 +141,6 @@ document.addEventListener('DOMContentLoaded', () => {
     pintarEstado('Ocurrió un error inicializando las publicaciones.', '#ff3366');
   }
 
-  // Si cambian el hash (o entra directo con #id), abrimos el modal indicado.
   window.addEventListener('hashchange', verificarFragmentoURL);
 
   let to;
