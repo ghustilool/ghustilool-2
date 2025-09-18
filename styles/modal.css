@@ -14,20 +14,23 @@
 .modal.fade-in { display: flex; opacity: 1; }
 .modal.fade-out { display: flex; opacity: 0; }
 
-/* Contenido */
+/* Contenido (más compacto) */
 .modal-content {
   position: relative;
   background: #1a1a2e;
   color: #e0e0e0;
   font-family: 'Roboto Mono', monospace;
-  padding: 24px 24px 72px;
-  width: min(800px, 94vw);
-  max-height: 90vh;
+
+  /* compactado */
+  padding: 18px 18px 28px;
+  width: min(720px, 92vw);
+  max-height: 86vh;
+
   overflow-y: auto;
   border-radius: 12px;
   border: 1px solid var(--modal-borde, #ff00cc);
 
-  /* ❌ sin glow por defecto */
+  /* sin glow por defecto */
   box-shadow: none;
 
   transform: scale(.95);
@@ -51,25 +54,33 @@
   background: transparent; border: 0;
 }
 
-/* Imagen (sin recortes) */
+/* Imagen (más bajita, sin recortes) */
 .modal-content img {
   max-width: 100%;
   height: auto;
-  max-height: 300px;
+  max-height: 240px;
   object-fit: contain;
   border-radius: 8px;
   display: block;
-  margin: 0 auto 14px auto;
+  margin: 0 auto 12px auto;
 }
 
 /* Texto */
-.modal-title { text-align:center; margin:8px 0 12px; }
-.modal-description { text-align:center; }
+.modal-title { text-align:center; margin: 6px 0 6px; }
+.modal-description { text-align:center; margin: 6px 0 8px; }
+
+/* Versión: AHORA arriba de los botones */
+.modal-version {
+  margin: 6px 0 10px;
+  font-size: .82rem;
+  color:#aeb3c0;
+  text-align:center;
+}
 
 /* Botones */
 .modal-body-buttons {
   display: flex; gap: 10px; flex-wrap: nowrap; justify-content: center;
-  margin-top: 16px; padding: 0 6px;
+  margin-top: 6px; padding: 0 6px;
 }
 .modal-body-buttons a {
   display: inline-flex; align-items: center; justify-content: center;
@@ -78,9 +89,6 @@
   color: #000; background: #ff00cc; border: 2px solid #ff00cc;
 }
 .modal-body-buttons a:hover { background:#ff33dd; border-color:#ff33dd; }
-
-/* Versión */
-.modal-version { margin-top: 12px; font-size: .8rem; color:#aaa; text-align:center; }
 
 /* ✅ Etiqueta igual que los botones */
 .tag-pill{
@@ -92,7 +100,7 @@
   font-weight: 800;
   letter-spacing: .3px;
   text-transform: uppercase;
-  font-size: .76rem;
+  font-size: .78rem;
   padding: 6px 12px;
   border-radius: 10px;
   border: 2px solid var(--ring);
@@ -108,11 +116,11 @@
 .tag-adult  { --ring:#ff0033; background: rgba(255,0,51,.08); }
 .tag-default{ --ring:#ff00cc; background: rgba(255,0,204,.08); }
 
-/* 📍 Abajo-derecha en el modal (sin tapar botones) */
+/* 📍 Etiqueta arriba-izquierda */
 .modal-tag{
   position: absolute;
-  right: 16px;
-  bottom: 16px;
+  left: 14px;
+  top: 14px;
   z-index: 2;
   pointer-events: none;
 }
@@ -129,7 +137,8 @@ body.modal-open { overflow: hidden; }
 
 /* Responsive */
 @media (max-width: 600px) {
-  .modal-content { max-width: 90%; padding: 18px 18px 66px; }
+  .modal-content { width: 92vw; max-width: 92vw; padding: 16px 16px 24px; }
+  .modal-content img { max-height: 180px; }
   .modal-body-buttons a { font-size: .85rem; padding: 8px 10px; min-width: 120px; }
-  .modal-tag{ right: 12px; bottom: 12px; }
+  .modal-tag{ left: 10px; top: 10px; }
 }
