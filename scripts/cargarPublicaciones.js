@@ -1,16 +1,11 @@
 // scripts/cargarPublicaciones.js
-// Carga y dibuja las tarjetas de forma robusta (sin romper con rewrites/router).
-// ⚠️ En index.html: <script type="module" src="scripts/cargarPublicaciones.js?v=26"></script>
-
-import { abrirModal, verificarFragmentoURL } from './modal.js?v=28';
+import { abrirModal, verificarFragmentoURL } from './modal.js?v=27';
 
 const autores = ['ghustilool'];
 export const todasLasPublicaciones = [];
 
-/* Emotes para las etiquetas */
 const EMOTES = { offline:'🎮', lan:'🔌', online:'🌐', adult:'🔞', default:'🏠' };
 
-/* ---------- helpers ---------- */
 function normalizarEtiqueta(tags) {
   const raw = (tags?.[0] || '').toString().toLowerCase().trim();
   const compact = raw.replace(/\s+/g, '');
@@ -23,8 +18,7 @@ function normalizarEtiqueta(tags) {
 
 function pintarEstado(msg, color = '#aeb3c0') {
   const cont = document.getElementById('publicaciones-todas');
-  if (!cont) return;
-  cont.innerHTML = `<p style="color:${color};text-align:center;padding:20px">${msg}</p>`;
+  if (cont) cont.innerHTML = `<p style="color:${color};text-align:center;padding:20px">${msg}</p>`;
 }
 
 function fitTitles() {
@@ -46,7 +40,6 @@ function fitTitles() {
   });
 }
 
-/* ---------- carga ---------- */
 function cargarPublicacionesIniciales() {
   const contenedor = document.getElementById('publicaciones-todas');
   if (!contenedor) return;
@@ -55,26 +48,15 @@ function cargarPublicacionesIniciales() {
   let pendientes = autores.length;
 
   autores.forEach((autor) => {
-    // Resuelve SIEMPRE a /autores/autor.json sin importar desde dónde sirvas /scripts/
     const url = new URL(`../autores/${autor}.json`, import.meta.url);
-
     fetch(url, { headers: { Accept: 'application/json' } })
-      .then((r) => {
-        if (!r.ok) throw new Error(`HTTP ${r.status} ${r.statusText}`);
-        // Si por algo nos devolvieran HTML, esto fallará y lo mostraremos abajo.
-        return r.json();
-      })
-      .then((data) => {
-        if (Array.isArray(data)) todasLasPublicaciones.push(...data);
-      })
-      .catch((err) => {
-        console.error(`[Publicaciones] Error cargando ${autor}.json →`, err);
-      })
+      .then((r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); })
+      .then((data) => { if (Array.isArray(data)) todasLasPublicaciones.push(...data); })
+      .catch((err) => { console.error(`[Publicaciones] Error cargando ${autor}.json →`, err); })
       .finally(() => {
-        pendientes--;
-        if (pendientes === 0) {
+        if (--pendientes === 0) {
           if (!todasLasPublicaciones.length) {
-            pintarEstado('No se encontraron publicaciones. Revisa la consola del navegador.', '#ff3366');
+            pintarEstado('No se encontraron publicaciones. Revisa la consola.', '#ff3366');
             return;
           }
           window.__PUBLICACIONES__ = todasLasPublicaciones;
@@ -120,7 +102,6 @@ function mostrarPublicacionesOrdenadas() {
 
     card.innerHTML = overlay + imagenHTML + nombreHTML + footerHTML;
 
-    // Respaldo si no hay id en el JSON
     if (!id) {
       card.onclick = () => abrirModal(juego, card);
       card.addEventListener('keydown', (e) => { if (e.key === 'Enter') abrirModal(juego, card); });
@@ -132,14 +113,9 @@ function mostrarPublicacionesOrdenadas() {
   fitTitles();
 }
 
-/* ---------- init ---------- */
 document.addEventListener('DOMContentLoaded', () => {
-  try {
-    cargarPublicacionesIniciales();
-  } catch (e) {
-    console.error('[Publicaciones] Error inesperado:', e);
-    pintarEstado('Ocurrió un error inicializando las publicaciones.', '#ff3366');
-  }
+  try { cargarPublicacionesIniciales(); }
+  catch (e) { console.error('[Publicaciones] Error inesperado:', e); pintarEstado('Error inicializando publicaciones.', '#ff3366'); }
 
   window.addEventListener('hashchange', verificarFragmentoURL);
 

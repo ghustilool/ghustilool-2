@@ -1,16 +1,16 @@
-// scripts/modal.js v28
-// Modal con fade/scale, etiqueta arriba-izquierda y versi車n sobre los botones.
-// Sin sintaxis moderna problem芍tica para evitar errores de parseo.
+// scripts/modal.js
+// Modal con fade/scale + etiqueta arriba-izquierda y versi車n sobre los botones.
+// Sin inline-onclick; usamos event listeners para evitar errores de comillas.
 
 const EMOTES = { offline: '??', lan: '??', online: '??', adult: '??', default: '??' };
 
 function normalizarEtiqueta(tags) {
-  var raw = ((tags && tags[0]) || '').toString().toLowerCase().trim();
-  var compact = raw.replace(/\s+/g, '');
+  const raw = (tags?.[0] || '').toString().toLowerCase().trim();
+  const compact = raw.replace(/\s+/g, '');
   if (/(\+?18|adult|adulto|18\+|mayores)/.test(compact)) return 'adult';
-  if (compact.indexOf('lan') !== -1) return 'lan';
-  if (compact.indexOf('online') !== -1) return 'online';
-  if (compact.indexOf('offline') !== -1 || raw.indexOf('sin internet') !== -1) return 'offline';
+  if (compact.includes('lan')) return 'lan';
+  if (compact.includes('online')) return 'online';
+  if (compact.includes('offline') || raw.includes('sin internet')) return 'offline';
   return 'default';
 }
 
@@ -24,7 +24,7 @@ function showModal(modalEl) {
 function hideModal(modalEl) {
   modalEl.classList.remove('fade-in');
   modalEl.classList.add('fade-out');
-  var onEnd = function () {
+  const onEnd = () => {
     modalEl.style.display = 'none';
     modalEl.removeEventListener('transitionend', onEnd);
     document.body.classList.remove('modal-open');
@@ -32,99 +32,105 @@ function hideModal(modalEl) {
   modalEl.addEventListener('transitionend', onEnd);
 }
 
-/* ==================== API ==================== */
-export function abrirModal(juego, origenElemento) {
-  var modal = document.getElementById('modal-juego');
-  var modalBody = document.getElementById('modal-body');
-  var modalContent = modal ? modal.querySelector('.modal-content') : null;
+// Escapa para atributo HTML (data-*)
+function escAttr(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;');
+}
+
+/* ---------- API ---------- */
+export function abrirModal(juego, origenElemento = null) {
+  const modal = document.getElementById('modal-juego');
+  const modalBody = document.getElementById('modal-body');
+  const modalContent = modal?.querySelector('.modal-content');
   if (!modal || !modalBody || !modalContent) return;
 
-  var etiqueta = normalizarEtiqueta(juego.tags);
-  var emote = EMOTES[etiqueta] || EMOTES.default;
+  const etiqueta = normalizarEtiqueta(juego.tags);
+  const emote = EMOTES[etiqueta] || EMOTES.default;
 
-  // Reset clases
+  // reset + clases por tipo (para borde/glow)
   modalBody.className = 'modal-body';
   modalContent.className = 'modal-content';
-  modalBody.classList.add('modal-' + etiqueta);
-  modalContent.classList.add('modal-content-' + etiqueta);
+  modalBody.classList.add(`modal-${etiqueta}`);
+  modalContent.classList.add(`modal-content-${etiqueta}`);
 
-  // Imagen (contain, sin recortes)
-  var imagenHTML = juego.imagen
-    ? '<img src="' + juego.imagen + '" alt="' + (juego.nombre || 'Juego') + '">'
-    : '<div style="width:100%;height:200px;background:#222;color:#888;display:flex;align-items:center;justify-content:center;border-radius:6px;">Sin imagen</div>';
+  const imagenHTML = juego.imagen
+    ? `<img src="${juego.imagen}" alt="${juego.nombre ? escAttr(juego.nombre) : 'Juego'}">`
+    : `<div style="width:100%;height:200px;background:#222;color:#888;display:flex;align-items:center;justify-content:center;border-radius:6px;">Sin imagen</div>`;
 
-  var nombreHTML = '<h2 class="modal-title">' + (juego.nombre || 'Sin nombre') + '</h2>';
-  var versionHTML = juego.version ? '<div class="modal-version">VERSI車N: ' + juego.version + '</div>' : '';
-  var descripcionHTML = juego.descripcion ? '<p class="modal-description">' + juego.descripcion + '</p>' : '';
+  const nombreHTML = `<h2 class="modal-title">${juego.nombre || 'Sin nombre'}</h2>`;
+  const versionHTML = juego.version ? `<div class="modal-version">VERSI車N: ${juego.version}</div>` : '';
+  const descripcionHTML = juego.descripcion ? `<p class="modal-description">${juego.descripcion}</p>` : '';
 
-  var enlaceDescarga = juego.descargar;
-  var contrasena = (juego.contrase?a || juego.contrasena || '');
-  var enlaceCompra = juego.comprar;
-
-  var btnDescargar = enlaceDescarga ? '<a href="' + enlaceDescarga + '" target="_blank" rel="noopener">DESCARGAR</a>' : '';
-  var btnContrasena = contrasena ? '<a href="#" id="btn-copy-pass">CONTRASE?A</a>' : '';
-  var btnComprar = enlaceCompra ? '<a href="' + enlaceCompra + '" target="_blank" rel="noopener">COMPRAR</a>' : '';
-  var botonesHTML = (btnDescargar || btnContrasena || btnComprar)
-    ? '<div class="modal-body-buttons">' + btnDescargar + btnContrasena + btnComprar + '</div>'
+  // Botones
+  const pieces = [];
+  if (juego.descargar) {
+    pieces.push(`<a href="${juego.descargar}" target="_blank" rel="noopener">DESCARGAR</a>`);
+  }
+  if (juego.contrase?a ?? juego.contrasena) {
+    const pass = escAttr(juego.contrase?a ?? juego.contrasena);
+    pieces.push(`<a href="#" class="btn-copy" data-pass="${pass}">CONTRASE?A</a>`);
+  }
+  if (juego.comprar) {
+    pieces.push(`<a href="${juego.comprar}" target="_blank" rel="noopener">COMPRAR</a>`);
+  }
+  const botonesHTML = pieces.length
+    ? `<div class="modal-body-buttons">${pieces.join('')}</div>`
     : '';
 
-  // Etiqueta arriba-izquierda (mismo estilo que los botones)
-  var tagHTML = '<div class="modal-tag"><span class="modal-etiqueta tag-pill tag-' + etiqueta + '">' + emote + ' ' + etiqueta.toUpperCase() + '</span></div>';
+  // Etiqueta arriba-izquierda
+  const tagHTML = `<div class="modal-tag"><span class="modal-etiqueta tag-pill tag-${etiqueta}">${emote} ${etiqueta.toUpperCase()}</span></div>`;
 
-  // Orden final
-  modalBody.innerHTML = imagenHTML + nombreHTML + versionHTML + descripcionHTML + botonesHTML + tagHTML;
+  // Orden: imagen ↙ t赤tulo ↙ versi車n ↙ descripci車n ↙ botones ↙ etiqueta
+  modalBody.innerHTML = `${imagenHTML}${nombreHTML}${versionHTML}${descripcionHTML}${botonesHTML}${tagHTML}`;
 
-  // Handler copiar contrase?a
-  var btnCopy = modalBody.querySelector('#btn-copy-pass');
-  if (btnCopy) {
-    btnCopy.addEventListener('click', function (ev) {
-      ev.preventDefault();
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(contrasena);
-      }
+  // Listener para copiar contrase?a (sin inline onclick)
+  const copyBtn = modalBody.querySelector('.btn-copy');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const t = copyBtn.getAttribute('data-pass') || '';
+      if (t) navigator.clipboard.writeText(t).catch(() => {});
     });
   }
 
-  // Origen animaci車n si viene de una card
+  // Origen est谷tico del zoom
   modalContent.style.transformOrigin = '50% 50%';
-  if (origenElemento && origenElemento.getBoundingClientRect) {
-    var r = origenElemento.getBoundingClientRect();
-    modalContent.style.transformOrigin = (r.left + r.width / 2) + 'px ' + (r.top + r.height / 2) + 'px';
+  if (origenElemento?.getBoundingClientRect) {
+    const r = origenElemento.getBoundingClientRect();
+    modalContent.style.transformOrigin = `${r.left + r.width / 2}px ${r.top + r.height / 2}px`;
   }
 
   showModal(modal);
-
-  // Actualiza hash si hay id
   if (juego.id) {
-    try { history.replaceState(null, '', '#' + juego.id); } catch (e) {}
+    try { history.replaceState(null, '', `#${juego.id}`); } catch {}
   }
 }
 
 function cerrarModal() {
-  var modal = document.getElementById('modal-juego');
+  const modal = document.getElementById('modal-juego');
   if (!modal) return;
   hideModal(modal);
-  try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
+  try { history.replaceState(null, '', location.pathname + location.search); } catch {}
 }
 
+/* Abre por hash */
 export function verificarFragmentoURL() {
-  var id = location.hash.replace('#', '');
-  if (!id) return;
-  var lista = Array.isArray(window.__PUBLICACIONES__) ? window.__PUBLICACIONES__ : [];
-  if (!lista.length) return;
-  var juego = null;
-  for (var i = 0; i < lista.length; i++) {
-    if ((lista[i].id || '') === id) { juego = lista[i]; break; }
-  }
+  const id = location.hash.replace('#', '');
+  const lista = Array.isArray(window.__PUBLICACIONES__) ? window.__PUBLICACIONES__ : [];
+  if (!id || !lista.length) return;
+  const juego = lista.find((j) => (j.id || '') === id);
   if (juego) abrirModal(juego);
 }
 
-/* ==================== Listeners ==================== */
-document.addEventListener('DOMContentLoaded', function () {
-  var modal = document.getElementById('modal-juego');
-  var closeBtn = modal ? modal.querySelector('.modal-close') : null;
-  if (closeBtn) closeBtn.addEventListener('click', cerrarModal);
-  window.addEventListener('click', function (e) { if (e.target === modal) cerrarModal(); });
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') cerrarModal(); });
+/* Listeners globales */
+document.addEventListener('DOMContentLoaded', () => {
+  const modal = document.getElementById('modal-juego');
+  const closeBtn = modal?.querySelector('.modal-close');
+  closeBtn?.addEventListener('click', cerrarModal);
+  window.addEventListener('click', (e) => { if (e.target === modal) cerrarModal(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') cerrarModal(); });
   window.addEventListener('hashchange', verificarFragmentoURL);
 });
