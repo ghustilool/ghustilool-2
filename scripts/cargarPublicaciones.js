@@ -2,7 +2,7 @@
 // Carga y dibuja las tarjetas de forma robusta (sin romper con rewrites/router).
 // ⚠️ En index.html: <script type="module" src="scripts/cargarPublicaciones.js?v=26"></script>
 
-import { abrirModal, verificarFragmentoURL } from './modal.js?v=26';
+import { abrirModal, verificarFragmentoURL } from './modal.js?v=27';
 
 const autores = ['ghustilool'];
 export const todasLasPublicaciones = [];
