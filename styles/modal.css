@@ -2,8 +2,7 @@
 .modal {
   position: fixed;
   inset: 0;
-  width: 100%;
-  height: 100%;
+  width: 100%; height: 100%;
   background: rgba(0,0,0,.85);
   display: none;
   align-items: center;
@@ -12,110 +11,96 @@
   transition: opacity .3s ease-in-out;
   opacity: 0;
 }
-.modal.fade-in  { display: flex; opacity: 1; }
+.modal.fade-in { display: flex; opacity: 1; }
 .modal.fade-out { display: flex; opacity: 0; }
 
 /* Contenido */
 .modal-content {
-  position: relative;                 /* para ubicar la etiqueta */
+  position: relative;
   background: #1a1a2e;
   color: #e0e0e0;
   font-family: 'Roboto Mono', monospace;
-  padding: 20px 22px 72px;            /* extra bottom para no tapar botones */
-  width: min(820px, 94vw);
-  max-height: 88vh;                   /* cabe siempre en pantalla */
-  overflow: hidden;                   /* 🚫 sin scroll */
+  padding: 24px 24px 72px;
+  width: min(800px, 94vw);
+  max-height: 90vh;
+  overflow-y: auto;
   border-radius: 12px;
   border: 1px solid var(--modal-borde, #ff00cc);
-  box-shadow: 0 0 15px rgba(255,0,204,.45);
+
+  /* ❌ sin glow por defecto */
+  box-shadow: none;
 
   transform: scale(.95);
   opacity: 0;
-  transition: transform .3s ease-out, opacity .3s ease-out;
+  transition: transform .3s ease-out, opacity .3s ease-out, box-shadow .25s ease;
 }
-.modal.fade-in  .modal-content { transform: scale(1);   opacity: 1; }
+/* Glow SOLO en hover/focus, color por etiqueta */
+.modal-content:hover,
+.modal-content:focus-within {
+  box-shadow: 0 0 18px var(--modal-glow, transparent);
+}
+
+.modal.fade-in .modal-content { transform: scale(1); opacity: 1; }
 .modal.fade-out .modal-content { transform: scale(.95); opacity: 0; }
 
 /* Cierre */
-.modal-close{
-  position:absolute; top:10px; right:14px;
-  width:32px; height:32px; line-height:28px; text-align:center;
-  font-size:24px; color:#ff00cc; cursor:pointer; background:transparent; border:0;
+.modal-close {
+  position: absolute; top: 10px; right: 14px;
+  width: 32px; height: 32px; line-height: 28px; text-align: center;
+  font-size: 24px; color: #ff00cc; cursor: pointer;
+  background: transparent; border: 0;
 }
 
-/* Cuerpo del modal (columna centrada) */
-#modal-body{
-  display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
-}
-
-/* Imagen: siempre visible y sin recortes */
-.modal-content img{
-  width:100%;
-  height:auto;
-  max-height: min(42vh, 320px);
+/* Imagen (sin recortes) */
+.modal-content img {
+  max-width: 100%;
+  height: auto;
+  max-height: 300px;
   object-fit: contain;
-  border-radius: 10px;
-  display:block;
+  border-radius: 8px;
+  display: block;
   margin: 0 auto 14px auto;
 }
 
-/* Título */
-.modal-title{
-  text-align:center;
-  margin: 6px 0 8px;
-  font-family:'Orbitron', sans-serif;
-  font-weight: 800;
-  letter-spacing:.4px;
-}
+/* Texto */
+.modal-title { text-align:center; margin:8px 0 12px; }
+.modal-description { text-align:center; }
 
-/* --- Botonera --- */
-.modal-body-buttons{
-  display:flex; gap:12px; flex-wrap:wrap; justify-content:center;
-  margin-top: 10px;
+/* Botones */
+.modal-body-buttons {
+  display: flex; gap: 10px; flex-wrap: nowrap; justify-content: center;
+  margin-top: 16px; padding: 0 6px;
 }
-
-/* Botón base (mismo lenguaje visual que tus etiquetas/botones) */
-.btn{
-  --ring: #ff00cc;
-  --bg:   #ff00cc;
-  display:inline-flex; align-items:center; gap:8px;
-  padding: 10px 14px;
-  border-radius: 10px;
-  border: 2px solid var(--ring);
-  color:#000;
-  background: var(--bg);
-  font-family:'Orbitron',sans-serif;
-  font-weight:800; letter-spacing:.3px; text-transform:uppercase;
-  text-decoration:none;
-  box-shadow: inset 0 0 12px rgba(255,255,255,.05), 0 0 10px var(--ring);
-  transition: transform .15s ease, box-shadow .2s ease, filter .2s ease;
+.modal-body-buttons a {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 10px 12px; font-weight: 800; border-radius: 8px; text-decoration: none;
+  text-transform: uppercase; font-size: .9rem; flex-shrink: 0; white-space: nowrap;
+  color: #000; background: #ff00cc; border: 2px solid #ff00cc;
 }
-.btn:hover{ transform: translateY(-1px) scale(1.02); box-shadow: 0 0 16px var(--ring); filter: brightness(1.06); }
-.btn:active{ transform: translateY(0) scale(.98); }
-
-/* Variantes por acción */
-.btn-download{ --ring:#00ffff; --bg:#00ffff; }  /* ⬇️ Descargar */
-.btn-pass    { --ring:#ff00cc; --bg:#ff00cc; }  /* 🔑 Contraseña */
-.btn-buy     { --ring:#00ff99; --bg:#00ff99; }  /* 🛒 Comprar */
+.modal-body-buttons a:hover { background:#ff33dd; border-color:#ff33dd; }
 
 /* Versión */
-.modal-version{
-  margin-top: 10px;
-  font-size: .8rem;
-  color: #aaa;
-  text-align: center;
-}
+.modal-version { margin-top: 12px; font-size: .8rem; color:#aaa; text-align:center; }
 
-/* ✅ Etiqueta igual que los botones (no “píldora” oval) */
+/* ✅ Etiqueta igual que los botones */
 .tag-pill{
   --ring: currentColor;
-  display:inline-flex; align-items:center; gap:8px;
-  font-family:'Orbitron',sans-serif; font-weight:800;
-  letter-spacing:.3px; text-transform:uppercase;
-  font-size:.76rem; padding:6px 12px;
-  border-radius:10px; border:2px solid var(--ring);
-  color:var(--ring); background: rgba(0,0,0,.25);
-  box-shadow: inset 0 0 12px rgba(255,255,255,.05), 0 0 10px var(--ring);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 800;
+  letter-spacing: .3px;
+  text-transform: uppercase;
+  font-size: .76rem;
+  padding: 6px 12px;
+  border-radius: 10px;
+  border: 2px solid var(--ring);
+  color: var(--ring);
+  background: rgba(0,0,0,.25);
+  box-shadow:
+    inset 0 0 12px rgba(255,255,255,.05),
+    0 0 10px var(--ring);
 }
 .tag-offline{ --ring:#3399ff; background: rgba(51,153,255,.08); }
 .tag-lan    { --ring:#00ff99; background: rgba(0,255,153,.08); }
@@ -123,29 +108,28 @@
 .tag-adult  { --ring:#ff0033; background: rgba(255,0,51,.08); }
 .tag-default{ --ring:#ff00cc; background: rgba(255,0,204,.08); }
 
-/* Ubicación de la etiqueta en el modal */
+/* 📍 Abajo-derecha en el modal (sin tapar botones) */
 .modal-tag{
-  position:absolute;
-  right:16px;
-  bottom:16px;
-  z-index:2;
-  pointer-events:none;  /* no tapa los botones */
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  z-index: 2;
+  pointer-events: none;
 }
 
-/* Borde del modal según tipo */
-.modal-content-offline { --modal-borde:#3399ff; }
-.modal-content-lan     { --modal-borde:#00ff99; }
-.modal-content-online  { --modal-borde:#00ffff; }
-.modal-content-adult   { --modal-borde:#ff0033; }
-.modal-content-default { --modal-borde:#ff00cc; }
+/* 🎨 Colores por etiqueta (borde + glow variable) */
+.modal-content-offline { --modal-borde:#3399ff; --modal-glow: rgba(51,153,255,.45); }
+.modal-content-lan     { --modal-borde:#00ff99; --modal-glow: rgba(0,255,153,.45); }
+.modal-content-online  { --modal-borde:#00ffff; --modal-glow: rgba(0,255,255,.45); }
+.modal-content-adult   { --modal-borde:#ff0033; --modal-glow: rgba(255,0,51,.45); }
+.modal-content-default { --modal-borde:#ff00cc; --modal-glow: rgba(255,0,204,.55); }
 
-/* Bloqueo scroll del body */
-body.modal-open{ overflow:hidden; }
+/* Bloqueo de scroll del body al abrir */
+body.modal-open { overflow: hidden; }
 
 /* Responsive */
-@media (max-width: 600px){
-  .modal-content{ max-width:90%; padding:16px 16px 64px; }
-  .modal-title{ font-size: 1.15rem; }
-  .btn{ font-size:.88rem; padding:9px 12px; }
-  .modal-tag{ right:12px; bottom:12px; }
+@media (max-width: 600px) {
+  .modal-content { max-width: 90%; padding: 18px 18px 66px; }
+  .modal-body-buttons a { font-size: .85rem; padding: 8px 10px; min-width: 120px; }
+  .modal-tag{ right: 12px; bottom: 12px; }
 }
