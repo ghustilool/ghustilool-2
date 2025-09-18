@@ -1,10 +1,13 @@
 // scripts/cargarPublicaciones.js
-import { abrirModal, verificarFragmentoURL } from './modal.js';
+// Carga y dibuja las tarjetas. Robusto ante cache y rutas.
+// IMPORTANTE: recuerda subir el ?v= en index.html para este archivo y modal.js.
+
+import { abrirModal, verificarFragmentoURL } from './modal.js?v=24';
 
 const autores = ['ghustilool'];
 export const todasLasPublicaciones = [];
 
-/* emotes para la píldora */
+/* emotes por etiqueta (para la chapita) */
 const EMOTES = { offline:'🎮', lan:'🔌', online:'🌐', adult:'🔞', default:'🏠' };
 
 /* ---------- helpers ---------- */
@@ -18,7 +21,6 @@ function normalizarEtiqueta(tags) {
   return 'default';
 }
 
-/* Ajusta títulos a 3 líneas si hiciera falta (backup) */
 function fitTitles() {
   const TITLES = document.querySelectorAll('.card-title');
   TITLES.forEach((el) => {
@@ -37,33 +39,46 @@ function fitTitles() {
     }
   });
 }
-window.fitTitles = fitTitles;
+
+function pintarEstado(mensaje, color = '#aeb3c0') {
+  const cont = document.getElementById('publicaciones-todas');
+  if (!cont) return;
+  cont.innerHTML = `<p style="color:${color};text-align:center;padding:20px">${mensaje}</p>`;
+}
 
 /* ---------- carga ---------- */
 function cargarPublicacionesIniciales() {
   const contenedor = document.getElementById('publicaciones-todas');
-  contenedor.innerHTML = '';
-  let cargados = 0;
+  if (!contenedor) return;
+  pintarEstado('Cargando…', '#888');
+
+  let pendientes = autores.length;
 
   autores.forEach((autor) => {
-    fetch(`autores/${autor}.json`)
-      .then((r) => { if (!r.ok) throw new Error(`No se pudo cargar ${autor}.json`); return r.json(); })
+    // Resuelve siempre a /autores/autor.json sin importar desde dónde se sirva /scripts/
+    const url = new URL(`../autores/${autor}.json`, import.meta.url);
+
+    fetch(url)
+      .then((r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status} ${r.statusText}`);
+        return r.json();
+      })
       .then((data) => {
         if (Array.isArray(data)) todasLasPublicaciones.push(...data);
-        cargados++;
-        if (cargados === autores.length) {
-          window.__PUBLICACIONES__ = todasLasPublicaciones;
-          mostrarPublicacionesOrdenadas();
-          verificarFragmentoURL();
-        }
       })
-      .catch((e) => {
-        console.error(e);
-        cargados++;
-        if (cargados === autores.length) {
+      .catch((err) => {
+        console.error(`[Publicaciones] Error cargando ${autor}.json →`, err);
+      })
+      .finally(() => {
+        pendientes--;
+        if (pendientes === 0) {
+          if (!todasLasPublicaciones.length) {
+            pintarEstado('No se encontraron publicaciones (revisa la consola del navegador).', '#ff3366');
+            return;
+          }
           window.__PUBLICACIONES__ = todasLasPublicaciones;
           mostrarPublicacionesOrdenadas();
-          verificarFragmentoURL();
+          verificarFragmentoURL(); // abre si hay #id en la URL
         }
       });
   });
@@ -71,12 +86,8 @@ function cargarPublicacionesIniciales() {
 
 function mostrarPublicacionesOrdenadas() {
   const contenedor = document.getElementById('publicaciones-todas');
+  if (!contenedor) return;
   contenedor.innerHTML = '';
-
-  if (!todasLasPublicaciones.length) {
-    contenedor.innerHTML = '<p style="color:#ff0033;text-align:center;">No se encontraron publicaciones.</p>';
-    return;
-  }
 
   const ordenadas = [...todasLasPublicaciones].sort((a, b) =>
     (a.nombre || '').localeCompare(b.nombre || '')
@@ -101,8 +112,6 @@ function mostrarPublicacionesOrdenadas() {
 
     const nombreHTML = `<h3 class="card-title">${juego.nombre || 'Sin nombre'}</h3>`;
     const metaHTML   = juego.version ? `<div class="card-meta">v${juego.version}</div>` : '';
-
-    /* ✅ etiqueta unificada (emote + texto) */
     const badgeHTML  = `<div class="card-etiqueta tag-pill tag-${etiqueta}">${emote} ${etiqueta.toUpperCase()}</div>`;
     const footerHTML = `<div class="card-footer">${metaHTML}${badgeHTML}</div>`;
 
@@ -110,6 +119,7 @@ function mostrarPublicacionesOrdenadas() {
 
     card.innerHTML = overlay + imagenHTML + nombreHTML + footerHTML;
 
+    // Respaldo si no hay id
     if (!id) {
       card.onclick = () => abrirModal(juego, card);
       card.addEventListener('keydown', (e) => { if (e.key === 'Enter') abrirModal(juego, card); });
@@ -123,8 +133,14 @@ function mostrarPublicacionesOrdenadas() {
 
 /* ---------- init ---------- */
 document.addEventListener('DOMContentLoaded', () => {
-  cargarPublicacionesIniciales();
+  try {
+    cargarPublicacionesIniciales();
+  } catch (e) {
+    console.error('[Publicaciones] Error inesperado:', e);
+    pintarEstado('Ocurrió un error inicializando las publicaciones.', '#ff3366');
+  }
 
+  // Si cambian el hash (o entra directo con #id), abrimos el modal indicado.
   window.addEventListener('hashchange', verificarFragmentoURL);
 
   let to;
