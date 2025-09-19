@@ -7,11 +7,11 @@
   <link rel="icon" href="Ghusti-Ico.ico" type="image/x-icon" />
 
   <!-- 🎨 Estilos -->
-  <link rel="stylesheet" href="styles/main.css?v=51" />
-  <link rel="stylesheet" href="styles/modal.css?v=51" />
-  <link rel="stylesheet" href="styles/brand.css?v=51" />
+  <link rel="stylesheet" href="styles/main.css?v=52" />
+  <link rel="stylesheet" href="styles/modal.css?v=52" />
+  <link rel="stylesheet" href="styles/brand.css?v=52" />
 
-  <!-- Nueva fuente confiable (parecida a SM64) -->
+  <!-- Fuente estable parecida a Mario64 -->
   <link href="https://fonts.googleapis.com/css2?family=Titan+One&display=swap" rel="stylesheet" />
 </head>
 <body>
@@ -22,14 +22,18 @@
   <header class="brand-ar">
     <div class="brand-ar__wrap">
       <h1 class="brand-ar__logo" aria-label="GhustiLoOL">
-        <span class="brand-word">
+        <!-- NOTA: el degradado se aplica a .brand-word vía JS si hay soporte -->
+        <span class="brand-word" id="brandWord">
           <span class="brand-letter">G</span>
           <span class="brand-letter">H</span>
           <span class="brand-letter">U</span>
           <span class="brand-letter">S</span>
           <span class="brand-letter brand-letter--T" id="bonziTrigger">
             T
-            <span class="brand-bonzi" role="img" aria-label="BonziBuddy"></span>
+            <!-- Bonzi como IMG real -->
+            <span class="brand-bonzi">
+              <img src="assets/bonzibuddy.gif" alt="BonziBuddy" loading="lazy" />
+            </span>
           </span>
           <span class="brand-letter">I</span>
           <span class="brand-letter">L</span>
@@ -69,10 +73,10 @@
   </footer>
 
   <!-- 🧠 Scripts -->
-  <script src="scripts/filtrarEtiquetas.js?v=51"></script>
-  <script type="module" src="scripts/modal.js?v=51"></script>
-  <script type="module" src="scripts/cargarPublicaciones.js?v=51"></script>
-  <script src="scripts/neonRain.js?v=51"></script>
-  <script src="scripts/brand.js?v=51"></script>
+  <script src="scripts/filtrarEtiquetas.js?v=52"></script>
+  <script type="module" src="scripts/modal.js?v=52"></script>
+  <script type="module" src="scripts/cargarPublicaciones.js?v=52"></script>
+  <script src="scripts/neonRain.js?v=52"></script>
+  <script src="scripts/brand.js?v=52"></script> <!-- NUEVO -->
 </body>
 </html>
