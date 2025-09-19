@@ -73,7 +73,7 @@ function showToastTop(modalContent, msg, kind){
   toast.textContent=msg;
   toast.classList.remove('ok','err','show');
   toast.classList.add(kind==='err'?'err':'ok');
-  void toast.offsetWidth;
+  void toast.offsetWidth;           // restart anim
   toast.classList.add('show');
   clearTimeout(showToastTop._t);
   showToastTop._t=setTimeout(function(){ toast.classList.remove('show'); },1600);
@@ -124,26 +124,6 @@ export function abrirModal(juego, origenElemento){
   tagWrap.innerHTML = '<span class="modal-etiqueta tag-pill tag-'+etiqueta+'">'+emote+' '+etiqueta.toUpperCase()+'</span>';
   modalContent.appendChild(tagWrap);
 
-  /* Delegaci¨®n: cualquier click dentro del modal-body que caiga en .btn-copy */
-  modalBody.addEventListener('click', function onClick(e){
-    var btn = e.target.closest('.btn-copy');
-    if(!btn) return;
-    e.preventDefault();
-    var t = btn.getAttribute('data-pass')||'';
-    if(!t){
-      beep('err'); showToastTop(modalContent,'No hay contrase\u00F1a \u274C','err');
-      return;
-    }
-    (navigator.clipboard && navigator.clipboard.writeText
-      ? navigator.clipboard.writeText(t)
-      : (function(){ var ta=document.createElement('textarea'); ta.value=t; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.focus(); ta.select(); var ok=document.execCommand('copy'); document.body.removeChild(ta); return ok?Promise.resolve():Promise.reject(); })()
-    ).then(function(){
-      beep('ok'); showToastTop(modalContent,'Contrase\u00F1a copiada \u2705','ok');
-    }).catch(function(){
-      beep('err'); showToastTop(modalContent,'No se pudo copiar \u274C','err');
-    });
-  }, { once:true }); // se vuelve a registrar al abrir de nuevo
-
   /* Origen del zoom */
   modalContent.style.transformOrigin='50% 50%';
   if(origenElemento && origenElemento.getBoundingClientRect){
@@ -171,12 +151,12 @@ export function verificarFragmentoURL(){
   if(juego) abrirModal(juego);
 }
 
-/* Listeners globales */
+/* Listeners globales (una sola vez) */
 document.addEventListener('DOMContentLoaded',function(){
   var modal=document.getElementById('modal-juego');
   var closeBtn=modal?modal.querySelector('.modal-close'):null;
   if(closeBtn){
-    /* usar entidad HTML para evitar ¡°??¡± */
+    // s¨ªmbolo seguro para evitar "??"
     closeBtn.innerHTML = '&times;';
     closeBtn.setAttribute('aria-label','Cerrar');
     closeBtn.addEventListener('click',cerrarModal);
@@ -184,4 +164,28 @@ document.addEventListener('DOMContentLoaded',function(){
   window.addEventListener('click',function(e){ if(e.target===modal) cerrarModal(); });
   document.addEventListener('keydown',function(e){ if(e.key==='Escape') cerrarModal(); });
   window.addEventListener('hashchange',verificarFragmentoURL);
+
+  // === Delegaci¨®n permanente para el bot¨®n CONTRASE?A ===
+  var modalBody=document.getElementById('modal-body');
+  if(modalBody && !modalBody.dataset.copyBound){
+    modalBody.addEventListener('click',function(e){
+      var btn=e.target.closest('.btn-copy');
+      if(!btn) return;
+      e.preventDefault();
+
+      var t = btn.getAttribute('data-pass')||'';
+      var modalContent = modalBody.closest('.modal-content') ||
+                         document.querySelector('#modal-juego .modal-content');
+
+      if(!t){ beep('err'); showToastTop(modalContent,'No hay contrase\u00F1a \u274C','err'); return; }
+
+      var p = (navigator.clipboard && navigator.clipboard.writeText)
+        ? navigator.clipboard.writeText(t)
+        : (function(){ var ta=document.createElement('textarea'); ta.value=t; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.focus(); ta.select(); var ok=document.execCommand('copy'); document.body.removeChild(ta); return ok?Promise.resolve():Promise.reject(); })();
+
+      p.then(function(){ beep('ok');  showToastTop(modalContent,'Contrase\u00F1a copiada \u2705','ok'); })
+       .catch(function(){ beep('err'); showToastTop(modalContent,'No se pudo copiar \u274C','err'); });
+    });
+    modalBody.dataset.copyBound='1';
+  }
 });
