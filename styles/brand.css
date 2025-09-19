@@ -1,135 +1,124 @@
-/* ===========================================
-   GHUSTILOOL — Wordmark limpio con guiño 🇦🇷
-   - sin calaveras / sin barra
-   - dos líneas celeste-blanco-celeste detrás
-   - brillo diagonal MUY sutil
-   - mini “sol” al centro
-   =========================================== */
+/* ==================================================
+   GHUSTILOOL — Wordmark Cyberpunk con Glitch Real
+   - sin calaveras ni barras
+   - capas cian/magenta desplazadas
+   - glitch suave (idle) y fuerte en hover
+   - 3 esquemas: brand--neon (default), brand--red, brand--ar
+   ================================================== */
 
-:root{
-  --ink: #0a0d14;
-
-  /* Argentina */
-  --ar-celeste:  #65c8ff;
-  --ar-celeste2: #2fb7ff;
-  --ar-gold:     #ffd166;
-
-  /* Rojo/negro opcional */
-  --red-main:    #ff2948;
-  --red-dark:    #17050a;
-}
-
-/* Contenedor del header */
 .brand{
+  /* colores por defecto (neón synthwave) */
+  --c-base:  #eaf6ff;   /* texto principal */
+  --c1:      #00eaff;  /* cian */
+  --c2:      #ff00cc;  /* magenta */
+  --shadow:  rgba(8,10,16,.9);
+
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 28px 16px 10px;
-  z-index: 2;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding: 30px 16px 12px;
+  z-index:2;
 }
 
-/* Líneas bandera detrás del texto (no invaden el título) */
-.brand-flaglines{
-  position: absolute; inset: 0;
-  pointer-events: none;
-  opacity: .8;
+.brand__wrap{
+  display:flex;
+  align-items:baseline;
+  gap: 12px;
 }
-.brand-flaglines::before,
-.brand-flaglines::after{
-  content: '';
-  position: absolute;
-  left: 6vw; right: 6vw;
-  height: 4px; border-radius: 4px;
-  background: linear-gradient(90deg,
-    transparent 0%,
-    var(--ar-celeste) 15%,
-    #fff 50%,
-    var(--ar-celeste2) 85%,
-    transparent 100%);
-  filter: blur(.2px);
-}
-.brand-flaglines::before{ top: 38%; }
-.brand-flaglines::after { top: 62%; }
 
-/* Título */
-.brand-title{
+/* brackets tipo HUD */
+.brand__bracket{
+  font-family: 'Roboto Mono', monospace;
+  font-weight: 700;
+  font-size: clamp(1rem, 2.2vw, 1.4rem);
+  color: var(--c1);
+  text-shadow:
+    0 0 10px var(--c1),
+    0 0 20px color-mix(in oklab, var(--c1) 65%, transparent);
+  opacity:.85;
+}
+.brand__bracket--right{ color: var(--c2); text-shadow: 0 0 10px var(--c2), 0 0 20px color-mix(in oklab, var(--c2) 65%, transparent); }
+
+/* palabra GHUSTILOOL */
+.brand__logo{
+  position: relative;
   margin: 0;
-  position: relative;
-  font-family: 'Saira Stencil One', system-ui, sans-serif;
+  font-family: 'Russo One', system-ui, sans-serif;
+  font-weight: 800;
+  letter-spacing: .08em;
   text-transform: uppercase;
-  letter-spacing: .05em;
   font-size: clamp(2.6rem, 8vw, 5rem);
-  color: #eaf6ff;                           /* blanco frío */
-  -webkit-text-stroke: 1px rgba(10,13,20,.85);
+  line-height: 1;
+  color: var(--c-base);
+
+  /* “neon” sobrio */
+  -webkit-text-stroke: 1px var(--shadow);
   text-shadow:
-    0 1px 0 rgba(10,13,20,.6),
-    0 0 14px rgba(101,200,255,.16);
-  user-select: none;
-  padding: 0 .08em;
+    0 1px 0 var(--shadow),
+    0 -1px 0 var(--shadow),
+    0 0 14px color-mix(in oklab, var(--c1) 36%, transparent),
+    0 0 24px color-mix(in oklab, var(--c2) 24%, transparent);
 }
 
-/* brillo diagonal muy suave que pasa cada tanto */
-.brand-title::after{
-  content:'';
+/* capas de glitch: cian y magenta */
+.brand__logo::before,
+.brand__logo::after{
+  content: attr(data-text);
   position:absolute; inset:0;
-  background: linear-gradient(75deg,
-    rgba(255,255,255,0) 0%,
-    rgba(255,255,255,.65) 50%,
-    rgba(255,255,255,0) 100%);
-  mix-blend-mode: screen;
-  transform: translateX(-120%) skewX(-12deg);
-  animation: titleSweep 7s ease-in-out infinite;
-  opacity:.25;
   pointer-events:none;
+  mix-blend-mode: screen;
 }
-@keyframes titleSweep{
-  0%   { transform: translateX(-120%) skewX(-12deg); }
-  8%   { transform: translateX(120%)  skewX(-12deg); }
-  100% { transform: translateX(120%)  skewX(-12deg); }
+.brand__logo::before{ color: var(--c1); opacity:.55; animation: glitchSlice1 3.2s steps(12,end) infinite; }
+.brand__logo::after { color: var(--c2); opacity:.50; animation: glitchSlice2 3.2s steps(12,end) infinite; }
+
+/* al pasar el mouse, glitch más intenso */
+.brand__wrap:hover .brand__logo::before{ animation-duration: 1.4s; opacity:.75; }
+.brand__wrap:hover .brand__logo::after { animation-duration: 1.4s; opacity:.72; }
+
+/* Slices con clip-path (no barra, no scan) */
+@keyframes glitchSlice1{
+  0%   { clip-path: inset(0 0 78% 0); transform: translate(-1px,-1px); }
+  10%  { clip-path: inset(12% 0 60% 0); transform: translate(1px, 1px);  }
+  20%  { clip-path: inset(28% 0 46% 0); transform: translate(-2px,0);   }
+  30%  { clip-path: inset(40% 0 34% 0); transform: translate(2px,-1px); }
+  40%  { clip-path: inset(58% 0 20% 0); transform: translate(-1px,1px); }
+  50%  { clip-path: inset(70% 0 12% 0); transform: translate(1px,0);    }
+  60%  { clip-path: inset(8% 0 70% 0);  transform: translate(-1px,-1px); }
+  70%  { clip-path: inset(46% 0 30% 0); transform: translate(1px,1px);   }
+  80%  { clip-path: inset(20% 0 52% 0); transform: translate(-2px,0);    }
+  90%  { clip-path: inset(64% 0 10% 0); transform: translate(2px,-1px);  }
+  100% { clip-path: inset(0 0 78% 0);  transform: translate(0,0);       }
+}
+@keyframes glitchSlice2{
+  0%   { clip-path: inset(72% 0 0 0);  transform: translate(1px,0);     }
+  10%  { clip-path: inset(54% 0 10% 0); transform: translate(-1px,1px); }
+  20%  { clip-path: inset(40% 0 26% 0); transform: translate(2px,0);   }
+  30%  { clip-path: inset(30% 0 36% 0); transform: translate(-1px,-1px);}
+  40%  { clip-path: inset(18% 0 48% 0); transform: translate(1px,0);   }
+  50%  { clip-path: inset(10% 0 56% 0); transform: translate(-2px,1px); }
+  60%  { clip-path: inset(64% 0 8% 0);  transform: translate(1px,0);   }
+  70%  { clip-path: inset(34% 0 32% 0); transform: translate(-1px,0);  }
+  80%  { clip-path: inset(22% 0 44% 0); transform: translate(2px,-1px);}
+  90%  { clip-path: inset(6% 0 60% 0);  transform: translate(-1px,1px);}
+  100% { clip-path: inset(72% 0 0 0);  transform: translate(0,0);      }
 }
 
-/* Mini “sol” al centro (detalle dorado) */
-.brand-sun{
-  position:absolute;
-  left:50%; bottom: 8px;
-  transform: translateX(-50%);
-  width: 10px; height: 10px; border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #fff8c4 0, var(--ar-gold) 55%, #caa03a 100%);
-  box-shadow:
-    0 0 10px rgba(255,209,102,.55),
-    0 0 24px rgba(255,209,102,.25);
-  animation: sunPulse 3.4s ease-in-out infinite;
-  pointer-events: none;
-  opacity: .9;
-}
-@keyframes sunPulse{
-  0%,100%{ transform: translateX(-50%) scale(1);   opacity:.9; }
-  50%    { transform: translateX(-50%) scale(1.08); opacity:1;  }
-}
+/* =========================
+   Temas de color
+   ========================= */
 
-/* ===== Esquema rojo/negro opcional ===== */
-.brand--red .brand-flaglines::before,
-.brand--red .brand-flaglines::after{
-  background: linear-gradient(90deg,
-    transparent 0%,
-    #ff8596 15%,
-    #fff 50%,
-    #ff2948 85%,
-    transparent 100%);
-}
-.brand--red .brand-title{
-  color:#ffe6ea;
-  -webkit-text-stroke:1px rgba(23,5,10,.9);
-  text-shadow:
-    0 1px 0 rgba(23,5,10,.7),
-    0 0 14px rgba(255,41,72,.18);
-}
-.brand--red .brand-sun{ background: radial-gradient(circle at 35% 35%, #ffd0d6 0, #ff7487 55%, #dd2341 100%); }
+/* Synthwave (default) */
+.brand--neon{ --c1:#00eaff; --c2:#ff00cc; --c-base:#eaf6ff; }
+
+/* Rojo/negro (si querés marcar tu marca) */
+.brand--red{ --c1:#ff2948; --c2:#ff9100; --c-base:#ffe9ee; }
+
+/* Celeste/dorado sutil (guiño AR, sin banderitas) */
+.brand--ar{ --c1:#6dd8ff; --c2:#ffd166; --c-base:#f4fbff; }
 
 /* Responsive */
-@media (max-width: 600px){
-  .brand{ padding: 24px 12px 6px; }
-  .brand-flaglines::before,
-  .brand-flaglines::after{ left: 4vw; right: 4vw; }
+@media (max-width:600px){
+  .brand{ padding:24px 12px 8px; }
+  .brand__bracket{ display:none; } /* más limpio en móvil */
 }
