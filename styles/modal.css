@@ -12,17 +12,28 @@
 .modal-content{
   position:relative;
   background:#1a1a2e; color:#e0e0e0; font-family:'Roboto Mono', monospace;
-  padding:18px 18px 36px;     /* más aire abajo para la chapita */
-  width:min(720px,92vw); max-height:86vh; overflow-y:auto;
+  padding:18px 18px 36px;            /* aire abajo para la chapita */
+  width:min(720px,92vw);
   border-radius:12px; border:1px solid var(--modal-borde,#ff00cc);
+
+  /* NO recorta, para que la chapita por fuera sea visible */
+  overflow:visible;
+
   box-shadow:none; transform:scale(.95); opacity:0;
   transition:transform .3s ease-out, opacity .3s ease-out, box-shadow .25s ease;
 }
-.modal-content:hover,.modal-content:focus-within{
+.modal-content:hover,
+.modal-content:focus-within{
   box-shadow:0 0 18px var(--modal-glow,transparent);
 }
 .modal.fade-in .modal-content{ transform:scale(1); opacity:1; }
 .modal.fade-out .modal-content{ transform:scale(.95); opacity:0; }
+
+/* El contenido interno SÍ scrollea */
+#modal-body{
+  max-height:70vh;
+  overflow-y:auto;
+}
 
 /* Cerrar */
 .modal-close{
@@ -51,7 +62,6 @@
   margin-top:10px; padding:0 6px;
 }
 .modal-body-buttons .btn{
-  /* base */
   position:relative; overflow:hidden;
   flex:1 1 200px; min-width:200px; text-align:center;
   display:inline-flex; align-items:center; justify-content:center; gap:10px;
@@ -88,7 +98,7 @@
   outline:2px solid #fff; outline-offset:3px;
 }
 
-/* ===== Etiqueta (chapita) – centrada abajo, superpuesta ===== */
+/* ===== Etiqueta (chapita) – centrada abajo, superpuesta AL MODAL (no al scroller) ===== */
 .tag-pill{
   --ring: currentColor;
   display:inline-flex; align-items:center; gap:8px;
@@ -104,10 +114,14 @@
 .tag-adult  { --ring:#ff0033; background: rgba(255,0,51,.08); }
 .tag-default{ --ring:#ff00cc; background: rgba(255,0,204,.08); }
 
-/* centrada abajo – fuera del borde */
+/* centrada abajo – fuera del borde del contenido, nunca requiere scroll */
 .modal-tag{
-  position:absolute; left:50%; bottom:-22px; transform:translateX(-50%);
-  z-index:6; pointer-events:none;
+  position:absolute;
+  left:50%;
+  bottom:-22px;
+  transform:translateX(-50%);
+  z-index:6;
+  pointer-events:none;
 }
 
 /* ===== Colores por etiqueta (borde + glow) ===== */
@@ -133,6 +147,7 @@ body.modal-open{ overflow:hidden; }
 /* ===== Responsive ===== */
 @media (max-width:600px){
   .modal-content{ width:92vw; max-width:92vw; padding:16px 16px 42px; }
+  #modal-body{ max-height:64vh; }
   .modal-content img{ max-height:180px; }
   .modal-body-buttons .btn{ flex:1 1 100%; min-width:unset; }
   .modal-tag{ bottom:-20px; }

@@ -1,8 +1,7 @@
-// Modal con: etiqueta centrada abajo, imagen grande, t赤tulo, "VERSI車N", y
-// tres botones con color por acci車n (Descargar/Contrase?a/Comprar).
+// Modal con: etiqueta centrada abajo (fuera del scroller), imagen grande,
+// t赤tulo, "VERSI車N" y tres botones con color por acci車n.
 // ES6 b芍sico y Unicode escapado para evitar problemas de codificaci車n.
 
-// Emojis en secuencias Unicode (evita "??")
 var EMOTES = {
   offline: '\uD83C\uDFAE',  // ??
   lan:     '\uD83D\uDD0C',  // ??
@@ -10,7 +9,6 @@ var EMOTES = {
   adult:   '\uD83D\uDD1E',  // ??
   default: '\uD83C\uDFE0'   // ??
 };
-// Iconos para los botones (Unicode seguro)
 var ICON_DL   = '\uD83D\uDCE5'; // ??
 var ICON_KEY  = '\uD83D\uDD11'; // ??
 var ICON_CART = '\uD83D\uDED2'; // ??
@@ -24,7 +22,6 @@ function normalizarEtiqueta(tags){
   if (compact.indexOf('offline')!==-1 || raw.indexOf('sin internet')!==-1) return 'offline';
   return 'default';
 }
-
 function showModal(m){ m.style.display='flex'; m.classList.remove('fade-out'); m.classList.add('fade-in'); document.body.classList.add('modal-open'); }
 function hideModal(m){
   m.classList.remove('fade-in'); m.classList.add('fade-out');
@@ -48,7 +45,7 @@ function buscarPassword(j){
   return '';
 }
 
-/* ===== Copiado + Toast ===== */
+/* Copiado + Toast */
 function copyToClipboard(text){
   if(!text) return Promise.reject(new Error('empty'));
   if(navigator.clipboard && navigator.clipboard.writeText){
@@ -68,7 +65,7 @@ function showToast(modalContent,msg){
   clearTimeout(showToast._t); showToast._t=setTimeout(function(){ toast.classList.remove('show'); },1600);
 }
 
-/* ===== API ===== */
+/* API */
 export function abrirModal(juego, origenElemento){
   var modal=document.getElementById('modal-juego');
   var modalBody=document.getElementById('modal-body');
@@ -78,39 +75,43 @@ export function abrirModal(juego, origenElemento){
   var etiqueta=normalizarEtiqueta(juego && juego.tags ? juego.tags : []);
   var emote=EMOTES[etiqueta]||EMOTES.default;
 
-  // reset + clases por tipo
+  /* reset + clases por tipo */
   modalBody.className='modal-body';
   modalContent.className='modal-content';
   modalBody.classList.add('modal-'+etiqueta);
   modalContent.classList.add('modal-content-'+etiqueta);
 
-  // Imagen
+  /* construir contenido SCROLLEABLE dentro de #modal-body */
   var imagenHTML=(juego && juego.imagen)
     ? '<img src="'+juego.imagen+'" alt="'+(juego.nombre?escAttr(juego.nombre):'Juego')+'">'
     : '<div style="width:100%;height:200px;background:#222;color:#888;display:flex;align-items:center;justify-content:center;border-radius:6px;">Sin imagen</div>';
 
-  // T赤tulo + versi車n + descripci車n
-  var nombreHTML='<h2 class="modal-title">'+(juego && juego.nombre?juego.nombre:'Sin nombre')+'</h2>';
-  var versionHTML=(juego && juego.version)?'<div class="modal-version">VERSI\u00D3N: '+juego.version+'</div>':'';
-  var descripcionHTML=(juego && juego.descripcion)?'<p class="modal-description">'+juego.descripcion+'</p>':'';
+  var nombreHTML   = '<h2 class="modal-title">'+(juego && juego.nombre?juego.nombre:'Sin nombre')+'</h2>';
+  var versionHTML  = (juego && juego.version)?'<div class="modal-version">VERSI\u00D3N: '+juego.version+'</div>':'';
+  var descripcionHTML = (juego && juego.descripcion)?'<p class="modal-description">'+juego.descripcion+'</p>':'';
 
-  // Datos y botones
   var enlaceDescarga=(juego && juego.descargar)?juego.descargar:'';
   var passProp=buscarPassword(juego);
   var enlaceCompra=(juego && juego.comprar)?juego.comprar:'';
 
   var pieces=[];
-  if(enlaceDescarga){ pieces.push('<a class="btn btn--dl" href="'+enlaceDescarga+'" target="_blank" rel="noopener">'+ICON_DL+' DESCARGAR</a>'); }
-  if(passProp){ pieces.push('<a class="btn btn--pass btn-copy" href="#" data-pass="'+escAttr(passProp)+'">'+ICON_KEY+' CONTRASE\u00D1A</a>'); }
-  if(enlaceCompra){ pieces.push('<a class="btn btn--buy" href="'+enlaceCompra+'" target="_blank" rel="noopener">'+ICON_CART+' COMPRAR</a>'); }
+  if(enlaceDescarga){ pieces.push('<a class="btn btn--dl" href="'+enlaceDescarga+'" target="_blank" rel="noopener">\uD83D\uDCE5 DESCARGAR</a>'); }
+  if(passProp){       pieces.push('<a class="btn btn--pass btn-copy" href="#" data-pass="'+escAttr(passProp)+'">\uD83D\uDD11 CONTRASE\u00D1A</a>'); }
+  if(enlaceCompra){   pieces.push('<a class="btn btn--buy" href="'+enlaceCompra+'" target="_blank" rel="noopener">\uD83D\uDED2 COMPRAR</a>'); }
   var botonesHTML = pieces.length?'<div class="modal-body-buttons">'+pieces.join('')+'</div>':'';
 
-  // Etiqueta centrada abajo (superpuesta)
-  var tagHTML='<div class="modal-tag"><span class="modal-etiqueta tag-pill tag-'+etiqueta+'">'+emote+' '+etiqueta.toUpperCase()+'</span></div>';
+  /* PINTAR SOLO EL CONTENIDO en #modal-body (sin la chapita) */
+  modalBody.innerHTML = imagenHTML + nombreHTML + versionHTML + descripcionHTML + botonesHTML;
 
-  modalBody.innerHTML=imagenHTML+nombreHTML+versionHTML+descripcionHTML+botonesHTML+tagHTML;
+  /* Agregar/actualizar la CHAPITA como HERMANA de #modal-body (no se scrollea) */
+  var oldTag = modalContent.querySelector('.modal-tag');
+  if (oldTag) oldTag.remove();
+  var tagWrap = document.createElement('div');
+  tagWrap.className = 'modal-tag';
+  tagWrap.innerHTML = '<span class="modal-etiqueta tag-pill tag-'+etiqueta+'">'+emote+' '+etiqueta.toUpperCase()+'</span>';
+  modalContent.appendChild(tagWrap);
 
-  // Copiar contrase?a + toast
+  /* Copiar contrase?a + toast */
   var copyBtn=modalBody.querySelector('.btn-copy');
   if(copyBtn){
     copyBtn.addEventListener('click',function(e){
@@ -122,7 +123,7 @@ export function abrirModal(juego, origenElemento){
     });
   }
 
-  // Origen est谷tico del zoom
+  /* Origen est谷tico del zoom */
   modalContent.style.transformOrigin='50% 50%';
   if(origenElemento && origenElemento.getBoundingClientRect){
     var r=origenElemento.getBoundingClientRect();
