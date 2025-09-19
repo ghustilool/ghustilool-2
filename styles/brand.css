@@ -1,90 +1,179 @@
-/* ===================== *
- *  BRAND / WORD-MARK    *
- * ===================== */
+/* ================================
+   GhustiLoOL — Wordmark Neon
+   - sin calaveras
+   - animación sutil (glitch + scan)
+   - 3 esquemas: brand--cyan (default), brand--red, brand--ar
+   ================================= */
+
 :root{
-  --brand-red: #ff1133;      /* rojo principal */
-  --brand-dark: #07080c;     /* casi negro para sombras internas */
-  --brand-cyan: #00f0ff;     /* glow cian para cyber */
+  /* Paleta base (cyan) */
+  --brand-main: #00f0ff;    /* acento principal */
+  --brand-sub : #9cfbff;    /* brillo interior */
+  --brand-dark: #0a0c11;    /* sombra interna */
+  --brand-glow: 0 0 22px rgba(0,255,255,.35), 0 0 44px rgba(0,255,255,.2);
 }
 
+/* ===== Header container ===== */
 .brand{
+  position: relative;
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:18px;
-  padding: 32px 20px 14px;
-  position: relative;
-  z-index: 2;
+  padding: 34px 16px 12px;
+  z-index:2;
 }
 
-.brand__skull{
-  font-size: clamp(1.6rem, 2vw, 2.2rem);
-  color: var(--brand-cyan);
-  filter: drop-shadow(0 0 6px rgba(0,255,255,.45));
-  animation: skullPulse 2.8s ease-in-out infinite;
-}
-@keyframes skullPulse{
-  0%,100%{ transform: translateY(0) rotate(-4deg); opacity:.95; }
-  50%   { transform: translateY(-2px) rotate(4deg);  opacity:1;   }
-}
-
-.brand__word{
+/* ===== Wordmark ===== */
+.brand__logo{
+  --size: clamp(2.6rem, 7.5vw, 5rem);
   position: relative;
-  font-family: 'Rovelink', 'Orbitron', system-ui, sans-serif;
-  font-weight: 900;
+  font-family: 'Oxanium', 'Orbitron', system-ui, sans-serif;
+  font-weight: 800;
   letter-spacing: .06em;
   text-transform: uppercase;
+  font-size: var(--size);
   line-height: 1;
-  font-size: clamp(2.4rem, 7vw, 4.6rem);
+  margin: 0;
+  user-select: none;
 
+  /* relleno con degradé y “metal” */
   color: transparent;
-  background: linear-gradient(180deg, #ff3a3a 0%, var(--brand-red) 55%, #a40016 100%);
+  background:
+    linear-gradient(180deg, var(--brand-sub) 0%, var(--brand-main) 42%, #008b95 100%);
   -webkit-background-clip: text;
-  background-clip: text;
+          background-clip: text;
 
+  /* borde interno + glow */
   text-shadow:
     0 1px 0 var(--brand-dark),
     0 -1px 0 var(--brand-dark),
     1px 0 0 var(--brand-dark),
     -1px 0 0 var(--brand-dark),
-    0 0 14px rgba(255,0,64,.35),      /* glow rojo */
-    0 0 24px rgba(0,255,255,.18);     /* glow cian suave */
+    var(--brand-glow);
 }
 
-/* aberración cromática sutil */
-.brand__word::after{
+/* cromatic aberration: cian/magenta en capas */
+.brand__logo::before,
+.brand__logo::after{
   content: attr(data-text);
   position:absolute; inset:0;
-  color:#00ffff;
-  opacity:.22;
-  transform: translate(2px, 0);
-  filter: blur(.5px);
+  pointer-events:none; mix-blend-mode: screen;
+  opacity:.18; filter: blur(.6px);
+}
+.brand__logo::before{ color:#00ffff; transform: translate(2px, 0); }
+.brand__logo::after { color:#ff2aa8; transform: translate(-2px, 0); }
+
+/* capa real con antialiasing al máximo */
+.brand__logo > span{
+  position: relative;
+  display:inline-block;
+  -webkit-text-stroke: .5px rgba(10,12,17,.7);
+}
+
+/* scanline sutil sobre el texto */
+.brand__logo::marker{ content:''; } /* evitar warns raros */
+.brand::after{
+  content:'';
+  position:absolute; inset:0 0 auto 0;
+  height: 42%;
   pointer-events:none;
-  mix-blend-mode: screen;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,.06) 0px,
+      rgba(255,255,255,.06) 1px,
+      transparent 2px,
+      transparent 4px
+    );
+  mask-image: linear-gradient(to bottom, transparent 0%, black 35%, transparent 100%);
+  animation: scanDown 7.5s linear infinite;
+  opacity:.45;
+}
+@keyframes scanDown{
+  0%   { transform: translateY(-20%); }
+  50%  { transform: translateY( 15%); }
+  100% { transform: translateY(-20%); }
 }
 
-/* scanlines */
-.brand__scan{
+/* glitch leve (no molesto) */
+.brand__logo{
+  animation: calmGlitch 4.2s steps(2,end) infinite;
+}
+@keyframes calmGlitch{
+  0%, 96%, 100% { transform: translate3d(0,0,0); }
+  97% { transform: translate3d(1px, 0, 0) skewX(.6deg); }
+  98% { transform: translate3d(-1px,0, 0) skewX(-.6deg); }
+  99% { transform: translate3d(0,0,0); }
+}
+
+/* barra inferior “holográfica” */
+.brand__bar{
+  position:absolute; left:50%; bottom:4px; transform:translateX(-50%);
+  width:min(680px, 80vw); height:6px; border-radius:999px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(0,255,255,.35) 20%,
+    rgba(255,255,255,.65) 50%,
+    rgba(0,255,255,.35) 80%,
+    transparent 100%);
+  filter: blur(0.6px);
+  opacity:.75;
+}
+.brand__bar::after{
+  content:'';
   position:absolute; inset:0;
-  background: repeating-linear-gradient(
-    to bottom,
-    rgba(255,255,255,0.06) 0px,
-    rgba(255,255,255,0.06) 1px,
-    transparent 2px,
-    transparent 4px
-  );
-  mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
-  pointer-events: none;
-  animation: scanMove 8s linear infinite;
+  background: linear-gradient(90deg, transparent, #fff, transparent);
+  width:30%; transform:translateX(-100%);
+  animation: shimmer 2.8s ease-in-out infinite;
+  opacity:.55; filter: blur(1px);
 }
-@keyframes scanMove{
-  0%   { transform: translateY(-10%); opacity:.6; }
-  50%  { transform: translateY(10%);  opacity:.3; }
-  100% { transform: translateY(-10%); opacity:.6; }
+@keyframes shimmer{
+  0%{ transform:translateX(-100%); }
+  100%{ transform:translateX(300%); }
 }
 
-/* responsive */
-@media (max-width: 600px){
-  .brand{ padding-top: 26px; }
-  .brand__skull{ display:none; }
+/* =========================
+   Paletas alternativas
+   ========================= */
+
+/* Rojo/Negro (tu marca) */
+.brand--red .brand__logo{
+  background: linear-gradient(180deg, #ff6262 0%, #ff1b3a 42%, #7a0010 100%);
+  text-shadow:
+    0 1px 0 #07080c, 0 -1px 0 #07080c, 1px 0 0 #07080c, -1px 0 0 #07080c,
+    0 0 22px rgba(255,32,64,.35), 0 0 44px rgba(255,32,64,.22);
+}
+.brand--red .brand__logo::before{ color:#ff2aa8; transform: translate(2px, 0); }
+.brand--red .brand__logo::after { color:#00ffff; transform: translate(-2px,0); }
+.brand--red .brand__bar{
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(255,48,72,.38) 20%,
+    rgba(255,255,255,.65) 50%,
+    rgba(255,48,72,.38) 80%,
+    transparent 100%);
+}
+
+/* “AR” celeste-blanco-celeste (sutil homenaje 🇦🇷) */
+.brand--ar .brand__logo{
+  background: linear-gradient(180deg, #a8e8ff 0%, #6dd8ff 38%, #cde8ff 60%, #6dd8ff 100%);
+  text-shadow:
+    0 1px 0 #0a0c11, 0 -1px 0 #0a0c11, 1px 0 0 #0a0c11, -1px 0 0 #0a0c11,
+    0 0 22px rgba(160,230,255,.35), 0 0 44px rgba(160,230,255,.22);
+}
+.brand--ar .brand__logo::before{ color:#6dd8ff; transform: translate(2px, 0); }
+.brand--ar .brand__logo::after { color:#ffd166; transform: translate(-2px,0); } /* pequeño dorado */
+.brand--ar .brand__bar{
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(109,216,255,.38) 18%,
+    rgba(255,255,255,.75) 50%,
+    rgba(109,216,255,.38) 82%,
+    transparent 100%);
+}
+
+/* Responsive */
+@media (max-width:600px){
+  .brand{ padding-top:26px; }
+  .brand__bar{ width: 86vw; }
 }
