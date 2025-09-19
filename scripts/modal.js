@@ -1,7 +1,7 @@
 // scripts/modal.js
-// Modal con etiqueta arriba-izquierda, versi車n sobre botones,
-// botones con iconos y color por etiqueta.
-// Sin optional chaining ni nullish para m芍xima compatibilidad.
+// Layout del modal como en tu captura: etiqueta arriba-izquierda,
+// imagen grande, t赤tulo, "VERSI車N" y 3 botones magenta.
+// ES6 b芍sico (sin optional chaining ni nullish) para evitar errores de sintaxis.
 
 var EMOTES = { offline: '??', lan: '??', online: '??', adult: '??', default: '??' };
 
@@ -48,16 +48,18 @@ export function abrirModal(juego, origenElemento) {
   var etiqueta = normalizarEtiqueta(juego && juego.tags ? juego.tags : []);
   var emote = EMOTES[etiqueta] || EMOTES.default;
 
-  // reset + clases por tipo (para borde/glow)
+  // reset + clases por tipo (borde/glow)
   modalBody.className = 'modal-body';
   modalContent.className = 'modal-content';
   modalBody.classList.add('modal-' + etiqueta);
   modalContent.classList.add('modal-content-' + etiqueta);
 
+  // Imagen
   var imagenHTML = (juego && juego.imagen)
     ? '<img src="' + juego.imagen + '" alt="' + (juego.nombre ? escAttr(juego.nombre) : 'Juego') + '">'
     : '<div style="width:100%;height:200px;background:#222;color:#888;display:flex;align-items:center;justify-content:center;border-radius:6px;">Sin imagen</div>';
 
+  // T赤tulo + versi車n + descripci車n
   var nombreHTML = '<h2 class="modal-title">' + (juego && juego.nombre ? juego.nombre : 'Sin nombre') + '</h2>';
   var versionHTML = (juego && juego.version) ? '<div class="modal-version">VERSI車N: ' + juego.version + '</div>' : '';
   var descripcionHTML = (juego && juego.descripcion) ? '<p class="modal-description">' + juego.descripcion + '</p>' : '';
@@ -68,7 +70,7 @@ export function abrirModal(juego, origenElemento) {
               : (juego && juego.contrasena ? juego.contrasena : '');
   var enlaceCompra = (juego && juego.comprar) ? juego.comprar : '';
 
-  // Botones (con iconitos)
+  // Botones (magenta llenos con iconos)
   var pieces = [];
   if (enlaceDescarga) {
     pieces.push('<a href="' + enlaceDescarga + '" target="_blank" rel="noopener">?? DESCARGAR</a>');
@@ -81,14 +83,14 @@ export function abrirModal(juego, origenElemento) {
   }
   var botonesHTML = pieces.length ? '<div class="modal-body-buttons">' + pieces.join('') + '</div>' : '';
 
-  // Etiqueta arriba-izquierda
+  // Etiqueta arriba-izquierda (mismo estilo que los filtros)
   var tagHTML = '<div class="modal-tag"><span class="modal-etiqueta tag-pill tag-' + etiqueta + '">' +
                 emote + ' ' + etiqueta.toUpperCase() + '</span></div>';
 
-  // Orden final
+  // Orden final: imagen ↙ t赤tulo ↙ versi車n ↙ descripci車n ↙ botones ↙ etiqueta
   modalBody.innerHTML = imagenHTML + nombreHTML + versionHTML + descripcionHTML + botonesHTML + tagHTML;
 
-  // Listener para copiar contrase?a (sin inline onclick)
+  // Copiar contrase?a (sin inline onclick)
   var copyBtn = modalBody.querySelector('.btn-copy');
   if (copyBtn) {
     copyBtn.addEventListener('click', function (e) {
