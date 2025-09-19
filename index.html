@@ -5,17 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>GhustiLoOL</title>
   <link rel="icon" href="Ghusti-Ico.ico" type="image/x-icon" />
+
   <!-- Estilos -->
-  <link rel="stylesheet" href="styles/main.css?v=62" />
-  <link rel="stylesheet" href="styles/modal.css?v=62" />
+  <link rel="stylesheet" href="styles/main.css?v=63" />
+  <link rel="stylesheet" href="styles/modal.css?v=63" />
+
   <!-- Fuente HONK (título) -->
   <link href="https://fonts.googleapis.com/css2?family=Honk&display=swap" rel="stylesheet">
 </head>
 <body>
-  <!-- Fondo -->
+  <!-- 🌌 Fondo -->
   <div id="neon-background"></div>
 
-  <!-- Título -->
+  <!-- 🧠 Título -->
   <header class="site-header">
     <div class="title-row">
       <span class="title-emoji" id="emoji-left" aria-hidden="true">☠️</span>
@@ -30,9 +32,9 @@
     </div>
   </header>
 
-  <!-- Barra superior: buscador (izq) + filtros (centrados) -->
+  <!-- 🔎 Buscador + Filtros -->
   <div class="toolbar">
-    <!-- Buscador -->
+    <!-- Izquierda: buscador -->
     <div class="search-chip">
       <label class="search-wrap" for="search-input" title="Buscar ( / )">
         <span class="search-icon" aria-hidden="true">🔎</span>
@@ -41,7 +43,7 @@
       </label>
     </div>
 
-    <!-- Filtros -->
+    <!-- Centro: filtros SIEMPRE centrados -->
     <div class="tag-filter-container" id="tag-filters">
       <button class="tag-button tag-button-all active" onclick="filtrarPorEtiqueta(null)" title="Inicio">🏠</button>
       <button class="tag-button tag-button-offline" onclick="filtrarPorEtiqueta('Offline')">🎮 OFFLINE</button>
@@ -49,14 +51,17 @@
       <button class="tag-button tag-button-online" onclick="filtrarPorEtiqueta('Online')">🌐 ONLINE</button>
       <button class="tag-button tag-button-adult" onclick="filtrarPorEtiqueta('Adult')">🔞 +18</button>
     </div>
+
+    <!-- Derecha: espaciador (no tocar) -->
+    <div class="toolbar-spacer"></div>
   </div>
 
-  <!-- Grilla -->
+  <!-- 🧩 Grilla -->
   <main>
     <div class="grid" id="publicaciones-todas"></div>
   </main>
 
-  <!-- Modal -->
+  <!-- 🪟 Modal -->
   <div id="modal-juego" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
     <div class="modal-content">
       <button class="modal-close" aria-label="Cerrar" title="Cerrar">&times;</button>
@@ -64,17 +69,63 @@
     </div>
   </div>
 
-  <!-- Footer -->
+  <!-- 🧾 Footer -->
   <footer>
     <p>&copy; 2025 GhustiLoOL. Todos los derechos reservados.</p>
   </footer>
 
-  <!-- Scripts -->
-  <script src="scripts/filtrarEtiquetas.js?v=62"></script>
-  <script type="module" src="scripts/modal.js?v=62"></script>
-  <script type="module" src="scripts/cargarPublicaciones.js?v=62"></script>
-  <script src="scripts/neonRain.js?v=62"></script>
-  <script src="scripts/title-anim.js?v=62"></script>
-  <script src="scripts/buscador.js?v=62"></script>
+  <!-- 🧠 Scripts YA existentes en tu repo -->
+  <script src="scripts/filtrarEtiquetas.js?v=63"></script>
+  <script type="module" src="scripts/modal.js?v=63"></script>
+  <script type="module" src="scripts/cargarPublicaciones.js?v=63"></script>
+  <script src="scripts/neonRain.js?v=63"></script>
+
+  <!-- 🔸 JS inline: emojis del título + buscador (sin archivos nuevos) -->
+  <script>
+    // ====== Emojis del título (cambia cada 1.2s con mini "shake") ======
+    (function(){
+      const left = document.getElementById('emoji-left');
+      const right = document.getElementById('emoji-right');
+      const pool = ['☠️','🧉','💾','🔑','🕹️','🧪','🛰️','💻'];
+      function shake(el){ el.classList.add('emoji-shake'); setTimeout(()=>el.classList.remove('emoji-shake'), 420); }
+      setInterval(()=>{
+        left.textContent = pool[Math.floor(Math.random()*pool.length)];
+        right.textContent = pool[Math.floor(Math.random()*pool.length)];
+        shake(left); shake(right);
+      },1200);
+    })();
+
+    // ====== Buscador: filtra .card por su título ======
+    (function(){
+      const input = document.getElementById('search-input');
+      const clearBtn = document.querySelector('.search-clear');
+      const wrap = document.querySelector('.search-wrap');
+
+      // Atajo "/"
+      window.addEventListener('keydown', (e)=>{
+        if (e.key === '/' && document.activeElement !== input){
+          e.preventDefault();
+          input.focus();
+        }
+      });
+
+      function applyFilter() {
+        const q = (input.value || '').trim().toLowerCase();
+        if (q.length) wrap.classList.add('has-value'); else wrap.classList.remove('has-value');
+
+        document.querySelectorAll('.grid .card').forEach(card=>{
+          const title = (card.querySelector('h3')?.textContent || '').toLowerCase();
+          if (!q || title.includes(q)) {
+            card.classList.remove('hidden-by-search');
+          } else {
+            card.classList.add('hidden-by-search');
+          }
+        });
+      }
+
+      input.addEventListener('input', applyFilter);
+      clearBtn.addEventListener('click', ()=>{ input.value=''; input.focus(); applyFilter(); });
+    })();
+  </script>
 </body>
 </html>
