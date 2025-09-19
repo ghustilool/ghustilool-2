@@ -162,3 +162,42 @@ footer {
 
 /* 📱 Móvil */
 @media (max-width: 480px){ .card{ height: 300px; } }
+
+/* ======= Header simple y a prueba de balas ======= */
+.site-header{
+  text-align: center;
+  padding: 34px 16px 14px;
+  position: relative;
+  z-index: 2;
+}
+.site-title{
+  /* si Titan One carga, genial; si no, Impact/Arial Black ~ similar */
+  font-family: "Titan One", Impact, "Arial Black", system-ui, sans-serif;
+  font-size: clamp(2.8rem, 9vw, 5.6rem);
+  letter-spacing: .02em;
+
+  /* color SIEMPRE visible (nunca negro) */
+  color: #9edbff;
+
+  /* bordecito + brillo suave estilo neón */
+  -webkit-text-stroke: 2px rgba(0,0,0,.55);
+          text-stroke: 2px rgba(0,0,0,.55);
+  text-shadow:
+    0 0  4px rgba(126, 249, 255, .6),
+    0 0 10px rgba( 70, 230, 255, .55),
+    0 0 18px rgba( 70, 230, 255, .35);
+
+  margin: 0;
+  line-height: .9;
+  user-select: none;
+}
+
+/* opcional: micro-animación al pasar (muy sutil) */
+.site-title:hover{
+  text-shadow:
+    0 0  6px rgba(126, 249, 255, .75),
+    0 0 14px rgba( 70, 230, 255, .65),
+    0 0 24px rgba( 70, 230, 255, .45);
+  transform: translateY(-1px);
+  transition: all .15s ease;
+}
