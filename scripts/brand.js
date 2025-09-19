@@ -1,6 +1,4 @@
-// Activa el degradado solo si el navegador lo soporta
-// y maneja el easter-egg de Bonzi en la "T"
-
+// Activa degradado si hay soporte y maneja Bonzi en la "T"
 document.addEventListener('DOMContentLoaded', () => {
   // 1) Soporte para background-clip:text
   const supportsGradient =
@@ -26,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (hideTimer) clearTimeout(hideTimer);
     hideTimer = setTimeout(() => {
       bonzi.classList.remove('show');
-    }, 1800); // visible ~1.8s
+    }, 1800); // ~1.8s visible
   };
 
   trigger.addEventListener('click', showBonzi);
