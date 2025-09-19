@@ -37,8 +37,8 @@
 
 /* Cerrar */
 .modal-close{
-  position:absolute; top:10px; right:14px; width:32px; height:32px;
-  line-height:28px; text-align:center; font-size:24px; color:#ff00cc;
+  position:absolute; top:10px; right:14px; width:36px; height:36px;
+  line-height:32px; text-align:center; font-size:20px; color:#ff00cc;
   cursor:pointer; background:transparent; border:0;
 }
 
@@ -56,40 +56,41 @@
   letter-spacing:.4px; text-transform:uppercase;
 }
 
-/* ===== Botones estilo "filtros" (transparentes con borde neón) ===== */
+/* ===== Botones estilo filtros (transparentes + borde neón) ===== */
 .modal-body-buttons{
   display:flex; gap:12px; justify-content:center; flex-wrap:wrap;
   margin-top:10px; padding:0 6px;
 }
 .modal-body-buttons .btn{
-  position:relative; overflow:hidden;
+  /* base */
   flex:1 1 200px; min-width:200px; text-align:center;
-
   display:inline-flex; align-items:center; justify-content:center; gap:10px;
   padding:12px 16px;
 
   font-family:'Orbitron', sans-serif; font-weight:800; letter-spacing:.3px;
   text-transform:uppercase; font-size:.92rem; text-decoration:none;
 
-  background:transparent;            /* <- igual que tus filtros */
+  background:transparent;
   color:var(--c); border:2px solid var(--c);
   border-radius:12px;
-  box-shadow:none;
+
+  /* sin overflow hidden → el halo no se “corta” */
+  overflow:visible;
+
+  /* brillo suave */
+  box-shadow:0 0 0 transparent;
   transition:transform .12s ease, box-shadow .2s ease, background-color .2s ease;
 }
 .modal-body-buttons .btn:hover{
   transform:translateY(-1px);
-  box-shadow:0 0 14px var(--c);
+  /* halo suave, sin “cortes” */
+  box-shadow:0 0 10px var(--c), 0 0 22px var(--c);
 }
-/* relleno suave por color al pasar */
-.btn--dl:hover   { background:rgba(0,255,255,.12); }
-.btn--pass:hover { background:rgba(255,239,0,.15); }
-.btn--buy:hover  { background:rgba(0,255,153,.12); }
 
 /* Colores de cada acción */
 .btn--dl   { --c:#00ffff; } /* Descargar */
-.btn--pass { --c:#ffef00; color:#111; } /* Contraseña: texto legible en hover */
-.btn--buy  { --c:#00ff99; }
+.btn--pass { --c:#ff9f0a; } /* Contraseña: naranja */
+.btn--buy  { --c:#00ff99; } /* Comprar */
 
 /* Accesibilidad */
 .modal-body-buttons .btn:focus-visible{
@@ -105,10 +106,10 @@
   padding:6px 12px; border-radius:12px; border:2px solid var(--ring);
   color:var(--ring);
 
-  /* mismo fondo que el modal para más contraste */
+  /* mismo fondo que el modal para contraste */
   background:#1a1a2e;
 
-  box-shadow: 0 0 10px var(--ring);
+  box-shadow:0 0 10px var(--ring);
 }
 .tag-offline{ --ring:#3399ff; }
 .tag-lan    { --ring:#00ff99; }
@@ -133,18 +134,28 @@
 .modal-content-adult  { --modal-borde:#ff0033; --modal-glow:rgba(255,0,51,.45); }
 .modal-content-default{ --modal-borde:#ff00cc; --modal-glow:rgba(255,0,204,.55); }
 
-/* ===== Aviso de copiado (más arriba para no chocar con la chapita) ===== */
+/* ===== Aviso de copiado (posicionado arriba del botón de contraseña) ===== */
 .copy-toast{
   position:absolute;
-  left:50%;
-  bottom:64px;                  /* <- subido */
-  transform:translate(-50%,16px);
+  /* top/left los setea JS según el botón; por defecto centrado */
+  left:50%; top:50%;
+  transform:translate(-50%,-8px);
+
   background:#0d0f14; color:#fff; padding:8px 12px; border-radius:12px;
-  font-weight:800; letter-spacing:.3px; border:2px solid var(--modal-borde,#ff00cc);
-  box-shadow:0 0 12px var(--modal-glow, rgba(255,0,204,.45));
-  opacity:0; pointer-events:none; transition:opacity .15s ease, transform .2s ease;
+  font-weight:800; letter-spacing:.3px;
+  border:2px solid #ff9f0a;                  /* naranja por defecto */
+  box-shadow:0 0 12px rgba(255,159,10,.45);
+
+  opacity:0; pointer-events:none;
+  transition:opacity .15s ease, transform .2s ease, border-color .2s ease, box-shadow .2s ease;
 }
-.copy-toast.show{ opacity:1; transform:translate(-50%,0); }
+.copy-toast.ok{
+  border-color:#ff9f0a; box-shadow:0 0 12px rgba(255,159,10,.45);
+}
+.copy-toast.err{
+  border-color:#ff3b30; box-shadow:0 0 12px rgba(255,59,48,.5);
+}
+.copy-toast.show{ opacity:1; transform:translate(-50%,-14px); }
 
 /* ===== Bloqueo body ===== */
 body.modal-open{ overflow:hidden; }
@@ -155,6 +166,5 @@ body.modal-open{ overflow:hidden; }
   #modal-body{ max-height:64vh; }
   .modal-content img{ max-height:180px; }
   .modal-body-buttons .btn{ flex:1 1 100%; min-width:unset; }
-  .copy-toast{ bottom:70px; }
   .modal-tag{ bottom:-20px; }
 }

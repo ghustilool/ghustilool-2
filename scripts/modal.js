@@ -1,6 +1,6 @@
-// Modal con: etiqueta centrada abajo (fuera del scroller), imagen,
-// t赤tulo, "VERSI車N" y botones estilo filtros (transparentes con borde ne車n).
-// Unicode escapado + ES6 b芍sico (sin optional chaining/nullish).
+// Modal: etiqueta centrada abajo (fuera del scroller), botones estilo filtros
+// (transparentes + borde ne車n), toast sobre el bot車n de contrase?a con borde
+// naranja/rojo y beep. Unicode escapado + ES6 b芍sico.
 
 var EMOTES = {
   offline: '\uD83C\uDFAE',  // ??
@@ -58,7 +58,7 @@ function beep(type){
   var o = _ctx.createOscillator();
   var g = _ctx.createGain();
   o.type = 'sine';
-  o.frequency.value = (type === 'ok') ? 880 : 240;
+  o.frequency.value = (type === 'ok') ? 880 : 300;  // ok agudo / error medio
   g.gain.setValueAtTime(0.0001, _ctx.currentTime);
   g.gain.exponentialRampToValueAtTime(0.08, _ctx.currentTime + 0.01);
   g.gain.exponentialRampToValueAtTime(0.0001, _ctx.currentTime + 0.15);
@@ -66,7 +66,7 @@ function beep(type){
   o.start(); o.stop(_ctx.currentTime + 0.18);
 }
 
-/* Copiado + Toast */
+/* Copiado + Toast anclado a un bot車n */
 function copyToClipboard(text){
   if(!text) return Promise.reject(new Error('empty'));
   if(navigator.clipboard && navigator.clipboard.writeText){
@@ -79,11 +79,27 @@ function copyToClipboard(text){
     return ok?Promise.resolve():Promise.reject(new Error('execCommand'));
   }catch(e){ return Promise.reject(e); }
 }
-function showToast(modalContent,msg){
+function showToastAt(modalContent, anchorEl, msg, kind){
   var toast=modalContent.querySelector('.copy-toast');
   if(!toast){ toast=document.createElement('div'); toast.className='copy-toast'; modalContent.appendChild(toast); }
-  toast.textContent=msg; toast.classList.remove('show'); void toast.offsetWidth; toast.classList.add('show');
-  clearTimeout(showToast._t); showToast._t=setTimeout(function(){ toast.classList.remove('show'); },1600);
+  toast.textContent=msg;
+  toast.classList.remove('ok','err','show');
+  toast.classList.add(kind === 'err' ? 'err' : 'ok');
+
+  // Posicionar arriba del bot車n (centro horizontal)
+  var mc = modalContent.getBoundingClientRect();
+  var a  = anchorEl.getBoundingClientRect();
+  var left = (a.left + a.width/2) - mc.left;
+  var top  = a.top - mc.top - 8;   // un poco arriba del bot車n
+
+  toast.style.left = left + 'px';
+  toast.style.top  = top  + 'px';
+
+  // reiniciar animaci車n
+  void toast.offsetWidth;
+  toast.classList.add('show');
+  clearTimeout(showToastAt._t);
+  showToastAt._t = setTimeout(function(){ toast.classList.remove('show'); }, 1600);
 }
 
 /* API */
@@ -132,15 +148,15 @@ export function abrirModal(juego, origenElemento){
   tagWrap.innerHTML = '<span class="modal-etiqueta tag-pill tag-'+etiqueta+'">'+emote+' '+etiqueta.toUpperCase()+'</span>';
   modalContent.appendChild(tagWrap);
 
-  /* Copiar contrase?a + toast + beep */
+  /* Copiar contrase?a + toast anclado + beep */
   var copyBtn=modalBody.querySelector('.btn-copy');
   if(copyBtn){
     copyBtn.addEventListener('click',function(e){
       e.preventDefault();
       var t = copyBtn.getAttribute('data-pass')||'';
       copyToClipboard(t)
-        .then(function(){ beep('ok');  showToast(modalContent,'Contrase\u00F1a copiada'); })
-        .catch(function(){ beep('err'); showToast(modalContent,'No se pudo copiar'); });
+        .then(function(){ beep('ok');  showToastAt(modalContent, copyBtn, 'Contrase\u00F1a copiada', 'ok'); })
+        .catch(function(){ beep('err'); showToastAt(modalContent, copyBtn, 'No se pudo copiar', 'err'); });
     });
   }
 
@@ -175,7 +191,12 @@ export function verificarFragmentoURL(){
 document.addEventListener('DOMContentLoaded',function(){
   var modal=document.getElementById('modal-juego');
   var closeBtn=modal?modal.querySelector('.modal-close'):null;
-  if(closeBtn) closeBtn.addEventListener('click',cerrarModal);
+  if(closeBtn){
+    // cambiar "x" por emoji ?
+    closeBtn.textContent = '?';
+    closeBtn.setAttribute('aria-label','Cerrar');
+    closeBtn.addEventListener('click',cerrarModal);
+  }
   window.addEventListener('click',function(e){ if(e.target===modal) cerrarModal(); });
   document.addEventListener('keydown',function(e){ if(e.key==='Escape') cerrarModal(); });
   window.addEventListener('hashchange',verificarFragmentoURL);
