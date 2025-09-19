@@ -1,6 +1,3 @@
-// Buscador neon: filtra .card por texto (título, meta, etc.)
-// Atajos: "/" enfoca, "Esc" limpia y desenfoca.
-
 document.addEventListener('DOMContentLoaded', () => {
   const input = document.getElementById('search-input');
   const wrap  = document.querySelector('.search-wrap');
@@ -16,7 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const applyFilter = () => {
     const q = norm(input.value.trim());
     wrap?.classList.toggle('has-value', !!q);
-
     const cards = grid.querySelectorAll('.card');
     cards.forEach(card => {
       const text = norm(card.textContent);
@@ -25,17 +21,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  // Filtra al escribir
   input.addEventListener('input', applyFilter);
 
-  // Botón limpiar
   clear?.addEventListener('click', () => {
     input.value = '';
     applyFilter();
     input.focus();
   });
 
-  // Atajos "/" para enfocar y "Esc" para limpiar
   document.addEventListener('keydown', (e) => {
     if (e.key === '/' && !e.target.closest('input, textarea')) {
       e.preventDefault();
@@ -49,10 +42,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Reaplicar si la grilla cambia (carga dinámica)
   const observer = new MutationObserver(applyFilter);
   observer.observe(grid, { childList: true });
 
-  // Primera pasada
   applyFilter();
 });
