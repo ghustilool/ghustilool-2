@@ -7,17 +7,17 @@
   <link rel="icon" href="Ghusti-Ico.ico" type="image/x-icon" />
 
   <!-- 🎨 Estilos -->
-  <link rel="stylesheet" href="styles/main.css?v=58" />
-  <link rel="stylesheet" href="styles/modal.css?v=58" />
+  <link rel="stylesheet" href="styles/main.css?v=59" />
+  <link rel="stylesheet" href="styles/modal.css?v=59" />
 
-  <!-- Fuente HONK -->
+  <!-- Fuente HONK (título) -->
   <link href="https://fonts.googleapis.com/css2?family=Honk&display=swap" rel="stylesheet">
 </head>
 <body>
   <!-- 🌌 Fondo animado -->
   <div id="neon-background"></div>
 
-  <!-- 🔥 Título con HONK + animación + emoji rotativo -->
+  <!-- 🔥 Título HONK + emojis rotativos -->
   <header class="site-header">
     <div class="title-row">
       <span class="title-emoji" id="emoji-left" aria-hidden="true">☠️</span>
@@ -35,9 +35,18 @@
           <span class="t-letter">L</span>
         </span>
       </h1>
-      <span class="title-emoji" id="emoji-right" aria-hidden="true">🇦🇷</span>
+      <span class="title-emoji" id="emoji-right" aria-hidden="true">🧉</span>
     </div>
   </header>
+
+  <!-- 🔎 Buscador -->
+  <div class="search-bar">
+    <label class="search-wrap" for="search-input">
+      <span class="search-icon">👁️</span>
+      <input id="search-input" type="search" placeholder="BUSCADOR" autocomplete="off" spellcheck="false" />
+      <button type="button" class="search-clear" aria-label="Limpiar" title="Limpiar">×</button>
+    </label>
+  </div>
 
   <!-- 🎮 Filtros por etiqueta -->
   <div class="tag-filter-container" id="tag-filters">
@@ -67,10 +76,11 @@
   </footer>
 
   <!-- 🧠 Scripts -->
-  <script src="scripts/filtrarEtiquetas.js?v=58"></script>
-  <script type="module" src="scripts/modal.js?v=58"></script>
-  <script type="module" src="scripts/cargarPublicaciones.js?v=58"></script>
-  <script src="scripts/neonRain.js?v=58"></script>
-  <script src="scripts/title-anim.js?v=58"></script> <!-- NUEVO -->
+  <script src="scripts/filtrarEtiquetas.js?v=59"></script>
+  <script type="module" src="scripts/modal.js?v=59"></script>
+  <script type="module" src="scripts/cargarPublicaciones.js?v=59"></script>
+  <script src="scripts/neonRain.js?v=59"></script>
+  <script src="scripts/title-anim.js?v=59"></script>
+  <script src="scripts/buscador.js?v=59"></script>
 </body>
 </html>
