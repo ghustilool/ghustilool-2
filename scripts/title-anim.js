@@ -1,19 +1,32 @@
-// Emoji rotativo a la izquierda y derecha del título
+// Emoji rotativo (más lento) + efecto de temblor al cambiar
 document.addEventListener('DOMContentLoaded', () => {
-  const left = document.getElementById('emoji-left');
+  const left  = document.getElementById('emoji-left');
   const right = document.getElementById('emoji-right');
   if (!left || !right) return;
 
-  const emojis = ['☠️', '🧉', '🇦🇷'];
+  // Emojis en la onda descarga/piratería/gaming (sin 🇦🇷)
+  const EMOJIS = ['☠️','🧉','⬇️','💾','🔑','🏴‍☠️','🎮','💻'];
+  const ROTATE_MS = 2500;  // <-- velocidad del cambio
+
   let i = 0;
 
+  const shake = el => {
+    el.classList.remove('emoji-shake'); // reinicia si estaba animando
+    // Forzar reflow para reiniciar la animación
+    // eslint-disable-next-line no-unused-expressions
+    el.offsetHeight;
+    el.classList.add('emoji-shake');
+  };
+
   const tick = () => {
-    const e = emojis[i % emojis.length];
-    left.textContent = e;
-    right.textContent = e;
+    const next = EMOJIS[i % EMOJIS.length];
+    left.textContent  = next;
+    right.textContent = next;
+    shake(left);
+    shake(right);
     i++;
   };
 
   tick();
-  setInterval(tick, 1000);
+  setInterval(tick, ROTATE_MS);
 });
