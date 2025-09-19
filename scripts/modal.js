@@ -1,6 +1,6 @@
-// Modal: etiqueta centrada abajo (fuera del scroller), botones estilo filtros
-// (transparentes + borde ne車n), toast sobre el bot車n de contrase?a con borde
-// naranja/rojo y beep. Unicode escapado + ES6 b芍sico.
+// Modal: etiqueta centrada abajo (fuera del scroller), botones estilo filtros,
+// toast que baja desde ARRIBA ("Contrase?a copiada ?"), x normal coloreada,
+// y beep. Unicode escapado + ES6 b芍sico.
 
 var EMOTES = {
   offline: '\uD83C\uDFAE',  // ??
@@ -66,40 +66,18 @@ function beep(type){
   o.start(); o.stop(_ctx.currentTime + 0.18);
 }
 
-/* Copiado + Toast anclado a un bot車n */
-function copyToClipboard(text){
-  if(!text) return Promise.reject(new Error('empty'));
-  if(navigator.clipboard && navigator.clipboard.writeText){
-    return navigator.clipboard.writeText(text);
-  }
-  try{
-    var ta=document.createElement('textarea'); ta.value=text;
-    ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta);
-    ta.focus(); ta.select(); var ok=document.execCommand('copy'); document.body.removeChild(ta);
-    return ok?Promise.resolve():Promise.reject(new Error('execCommand'));
-  }catch(e){ return Promise.reject(e); }
-}
-function showToastAt(modalContent, anchorEl, msg, kind){
+/* Toast arriba del modal */
+function showToastTop(modalContent, msg, kind){
   var toast=modalContent.querySelector('.copy-toast');
   if(!toast){ toast=document.createElement('div'); toast.className='copy-toast'; modalContent.appendChild(toast); }
   toast.textContent=msg;
   toast.classList.remove('ok','err','show');
-  toast.classList.add(kind === 'err' ? 'err' : 'ok');
-
-  // Posicionar arriba del bot車n (centro horizontal)
-  var mc = modalContent.getBoundingClientRect();
-  var a  = anchorEl.getBoundingClientRect();
-  var left = (a.left + a.width/2) - mc.left;
-  var top  = a.top - mc.top - 8;   // un poco arriba del bot車n
-
-  toast.style.left = left + 'px';
-  toast.style.top  = top  + 'px';
-
-  // reiniciar animaci車n
+  toast.classList.add(kind==='err'?'err':'ok');
+  // posici車n fija arriba/centro (la define el CSS); solo reiniciar animaci車n
   void toast.offsetWidth;
   toast.classList.add('show');
-  clearTimeout(showToastAt._t);
-  showToastAt._t = setTimeout(function(){ toast.classList.remove('show'); }, 1600);
+  clearTimeout(showToastTop._t);
+  showToastTop._t=setTimeout(function(){ toast.classList.remove('show'); },1600);
 }
 
 /* API */
@@ -148,15 +126,15 @@ export function abrirModal(juego, origenElemento){
   tagWrap.innerHTML = '<span class="modal-etiqueta tag-pill tag-'+etiqueta+'">'+emote+' '+etiqueta.toUpperCase()+'</span>';
   modalContent.appendChild(tagWrap);
 
-  /* Copiar contrase?a + toast anclado + beep */
+  /* Copiar contrase?a + toast arriba + beep */
   var copyBtn=modalBody.querySelector('.btn-copy');
   if(copyBtn){
     copyBtn.addEventListener('click',function(e){
       e.preventDefault();
       var t = copyBtn.getAttribute('data-pass')||'';
       copyToClipboard(t)
-        .then(function(){ beep('ok');  showToastAt(modalContent, copyBtn, 'Contrase\u00F1a copiada', 'ok'); })
-        .catch(function(){ beep('err'); showToastAt(modalContent, copyBtn, 'No se pudo copiar', 'err'); });
+        .then(function(){ beep('ok');  showToastTop(modalContent,'Contrase\u00F1a copiada \u2705','ok'); })
+        .catch(function(){ beep('err'); showToastTop(modalContent,'No se pudo copiar \u274C','err'); });
     });
   }
 
@@ -192,8 +170,8 @@ document.addEventListener('DOMContentLoaded',function(){
   var modal=document.getElementById('modal-juego');
   var closeBtn=modal?modal.querySelector('.modal-close'):null;
   if(closeBtn){
-    // cambiar "x" por emoji ?
-    closeBtn.textContent = '?';
+    /* volver a la x normal; color lo pone el CSS con --modal-borde */
+    closeBtn.textContent = '℅';
     closeBtn.setAttribute('aria-label','Cerrar');
     closeBtn.addEventListener('click',cerrarModal);
   }
