@@ -1,6 +1,7 @@
 // scripts/modal.js
-// Modal con etiqueta arriba-izquierda, versi¨®n encima de botones,
-// sin optional chaining ni nullish (compatibilidad total).
+// Modal con etiqueta arriba-izquierda, versi¨®n sobre botones,
+// botones con iconos y color por etiqueta.
+// Sin optional chaining ni nullish para m¨¢xima compatibilidad.
 
 var EMOTES = { offline: '??', lan: '??', online: '??', adult: '??', default: '??' };
 
@@ -53,7 +54,7 @@ export function abrirModal(juego, origenElemento) {
   modalBody.classList.add('modal-' + etiqueta);
   modalContent.classList.add('modal-content-' + etiqueta);
 
-  var imagenHTML = juego && juego.imagen
+  var imagenHTML = (juego && juego.imagen)
     ? '<img src="' + juego.imagen + '" alt="' + (juego.nombre ? escAttr(juego.nombre) : 'Juego') + '">'
     : '<div style="width:100%;height:200px;background:#222;color:#888;display:flex;align-items:center;justify-content:center;border-radius:6px;">Sin imagen</div>';
 
@@ -62,29 +63,32 @@ export function abrirModal(juego, origenElemento) {
   var descripcionHTML = (juego && juego.descripcion) ? '<p class="modal-description">' + juego.descripcion + '</p>' : '';
 
   // Datos de botones
-  var enlaceDescarga = juego && juego.descargar ? juego.descargar : '';
-  var passProp = (juego && Object.prototype.hasOwnProperty.call(juego, 'contrase?a')) ? juego['contrase?a'] : (juego && juego.contrasena ? juego.contrasena : '');
-  var enlaceCompra = juego && juego.comprar ? juego.comprar : '';
+  var enlaceDescarga = (juego && juego.descargar) ? juego.descargar : '';
+  var passProp = (juego && Object.prototype.hasOwnProperty.call(juego, 'contrase?a')) ? juego['contrase?a']
+              : (juego && juego.contrasena ? juego.contrasena : '');
+  var enlaceCompra = (juego && juego.comprar) ? juego.comprar : '';
 
+  // Botones (con iconitos)
   var pieces = [];
   if (enlaceDescarga) {
-    pieces.push('<a href="' + enlaceDescarga + '" target="_blank" rel="noopener">DESCARGAR</a>');
+    pieces.push('<a href="' + enlaceDescarga + '" target="_blank" rel="noopener">?? DESCARGAR</a>');
   }
   if (passProp) {
-    pieces.push('<a href="#" class="btn-copy" data-pass="' + escAttr(passProp) + '">CONTRASE?A</a>');
+    pieces.push('<a href="#" class="btn-copy" data-pass="' + escAttr(passProp) + '">?? CONTRASE?A</a>');
   }
   if (enlaceCompra) {
-    pieces.push('<a href="' + enlaceCompra + '" target="_blank" rel="noopener">COMPRAR</a>');
+    pieces.push('<a href="' + enlaceCompra + '" target="_blank" rel="noopener">?? COMPRAR</a>');
   }
   var botonesHTML = pieces.length ? '<div class="modal-body-buttons">' + pieces.join('') + '</div>' : '';
 
   // Etiqueta arriba-izquierda
-  var tagHTML = '<div class="modal-tag"><span class="modal-etiqueta tag-pill tag-' + etiqueta + '">' + emote + ' ' + etiqueta.toUpperCase() + '</span></div>';
+  var tagHTML = '<div class="modal-tag"><span class="modal-etiqueta tag-pill tag-' + etiqueta + '">' +
+                emote + ' ' + etiqueta.toUpperCase() + '</span></div>';
 
   // Orden final
   modalBody.innerHTML = imagenHTML + nombreHTML + versionHTML + descripcionHTML + botonesHTML + tagHTML;
 
-  // Listener seguro para copiar contrase?a
+  // Listener para copiar contrase?a (sin inline onclick)
   var copyBtn = modalBody.querySelector('.btn-copy');
   if (copyBtn) {
     copyBtn.addEventListener('click', function (e) {
@@ -116,7 +120,7 @@ function cerrarModal() {
   try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
 }
 
-/* Abre por hash */
+/* Abre por hash (#game-id) */
 export function verificarFragmentoURL() {
   var id = location.hash.replace('#', '');
   var lista = (window.__PUBLICACIONES__ && Array.isArray(window.__PUBLICACIONES__)) ? window.__PUBLICACIONES__ : [];
