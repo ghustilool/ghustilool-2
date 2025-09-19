@@ -1,29 +1,27 @@
 /* ==========================================================
-   GHUSTILOOL — Título estilo Super Mario 256 (bandera AR)
-   - Fuente SM256 (hosteada local)
-   - Relleno celeste–blanco–celeste
-   - Outline negro “gordito” + leve sombra
-   - Animación retro sutil (pixel-blink) cada tanto
-   - Easter-egg: BonziBuddy medio cuerpo al hover del centro
+   GHUSTILOOL — Título Super Mario 256 con bandera 🇦🇷
+   - SIN brillo blanco raro, SIN animación constante
+   - Relleno celeste–blanco–celeste (limpio)
+   - Outline negro sólido (SM64 vibe)
+   - Easter-egg BonziBuddy: aparece media figura al hover
    ========================================================== */
 
-/* 1) Fuente Super Mario 256
-   Colocá los archivos en /fonts/ (mejor .woff2 + .woff) */
+/* Fuente local (respeta tus nombres de archivo) */
 @font-face{
   font-family: "SuperMario256";
   src:
-    url("../fonts/super-mario-256.woff2") format("woff2"),
-    url("../fonts/super-mario-256.woff") format("woff");
+    url("../fonts/SuperMario256.woff2") format("woff2"),
+    url("../fonts/SuperMario256.woff")  format("woff");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 :root{
-  --ar-celeste:  #6dd8ff;
-  --ar-celeste2: #35b9ff;
-  --ar-white:    #ffffff;
-  --outline:     #000000;
+  --ar-c1: #6dd8ff;
+  --ar-c2: #35b9ff;
+  --ar-w : #ffffff;
+  --outline: #000;
 }
 
 /* ====== Header ====== */
@@ -52,55 +50,45 @@
   position: relative;
 }
 
+/* Relleno bandera, sin brillos raros */
 .brand-ar__logo > span{
-  /* Relleno de bandera argentina */
   background:
     linear-gradient(
       180deg,
-      var(--ar-celeste) 0%,
-      var(--ar-celeste2) 32%,
-      var(--ar-white)   50%,
-      var(--ar-celeste) 70%,
-      #2aa8ea          100%
+      var(--ar-c1) 0%,
+      var(--ar-c2) 28%,
+      var(--ar-w)  52%,
+      var(--ar-c1) 76%,
+      #2aa8ea      100%
     );
   -webkit-background-clip: text;
           background-clip: text;
+  -webkit-text-fill-color: transparent;  /* evita negro/blanco */
   color: transparent;
 
-  /* Outline negro cálido + leve extrusión */
+  /* Outline negro + leve sombra (extrusión corta) */
   -webkit-text-stroke: 3px var(--outline);
   text-shadow:
-    0  1px 0  var(--outline),
-    1px 2px 0  var(--outline),
-    2px 3px 0  var(--outline),
-    3px 4px 0  rgba(0,0,0,.8),
-    0  10px 14px rgba(0,0,0,.35);
+    0  1px 0 var(--outline),
+    1px 2px 0 var(--outline),
+    2px 3px 0 rgba(0,0,0,.85);
 }
 
-/* Brillo lacado arriba */
-.brand-ar__logo > span::after{
-  content:'';
-  position:absolute; inset:0;
-  background: linear-gradient(180deg, rgba(255,255,255,.45) 0%, rgba(255,255,255,0) 58%);
-  mix-blend-mode: screen;
-  border-radius: 3px;
-  pointer-events: none;
+/* 👇 sin capa de brillo: nada de ::after */
+
+/* ====== Micro efecto retro SOLO al hover (un parpadeo) ====== */
+@keyframes sm64-flick{
+  0%  { clip-path: inset(0 0 0 0); }
+  50% { clip-path: inset(42% 0 0 0); }
+  100%{ clip-path: inset(0 0 0 0); }
+}
+/* dispara 1 vez al pasar por arriba */
+.brand-ar__wrap:hover .brand-ar__logo > span{
+  animation: sm64-flick 120ms steps(1,end) both;
 }
 
-/* ====== Animación “retro pixel-blink” (sutil) ====== */
-@keyframes pixel-blink{
-  0%,96%,100% { clip-path: inset(0 0 0 0); transform: translateY(0); }
-  97%         { clip-path: inset(0 0 62% 0); transform: translateY(-1px); }
-  98%         { clip-path: inset(42% 0  0 0); transform: translateY( 1px); }
-  99%         { clip-path: inset(0 0  0 0); transform: translateY(0); }
-}
-.brand-ar__logo > span{
-  animation: pixel-blink 7.2s steps(1,end) infinite;
-}
-
-/* ====== Hotspot (centro) + BonziBuddy ======
-   - El hotspot es un botón invisible centrado sobre el texto
-   - Al pasar el mouse sobre el hotspot, Bonzi aparece (mitad superior) */
+/* ====== Hotspot + Bonzi ====== */
+/* hotspot: franja central invisible (también responde el título entero) */
 .brand-ar__hotspot{
   position:absolute;
   left:50%; top:50%;
@@ -110,23 +98,18 @@
   background: transparent;
   border: 0;
   cursor: pointer;
-  /* Para accesibilidad keyboard */
   outline: none;
 }
-.brand-ar__hotspot:focus-visible{
-  box-shadow: 0 0 0 2px rgba(109,216,255,.6);
-  border-radius: 6px;
-}
 
-/* Bonzi (usá /assets/bonzi.gif o el nombre que prefieras) */
+/* BonziBuddy medio cuerpo */
 .brand-ar__bonzi{
-  --bonzi: url("../assets/bonzi.gif"); /* ← ubicá tu GIF acá */
+  /* usa tu gif: /assets/bonzibuddy.gif */
+  --bonzi: url("../assets/bonzibuddy.gif");
   position: absolute;
   left:50%; top: 0;
   transform: translate(-50%, -10%) scale(.96);
   width: clamp(120px, 18vw, 220px);
-  height: auto;
-  aspect-ratio: 350 / 465;           /* aprox del GIF que pasaste */
+  aspect-ratio: 350 / 465;           /* aprox del gif */
   background-image: var(--bonzi);
   background-size: cover;
   background-repeat: no-repeat;
@@ -142,14 +125,14 @@
   z-index: 3;
 }
 
-/* Mostrar Bonzi cuando el mouse está sobre el hotspot */
+/* aparecer Bonzi: hover en hotspot o en todo el título */
 .brand-ar__hotspot:hover + .brand-ar__bonzi,
-.brand-ar__hotspot:focus + .brand-ar__bonzi{
+.brand-ar__wrap:hover .brand-ar__bonzi{
   opacity: 1;
-  transform: translate(-50%, -95%) scale(1); /* sale por arriba del título */
+  transform: translate(-50%, -95%) scale(1);
 }
 
-/* ====== Ajustes responsive ====== */
+/* ====== Responsive ====== */
 @media (max-width: 600px){
   .brand-ar{ padding: 22px 12px 8px; }
   .brand-ar__logo > span{ -webkit-text-stroke: 2px var(--outline); }
