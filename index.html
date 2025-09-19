@@ -5,19 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>GhustiLoOL</title>
   <link rel="icon" href="Ghusti-Ico.ico" type="image/x-icon" />
-
-  <!-- 🎨 Estilos -->
-  <link rel="stylesheet" href="styles/main.css?v=61" />
-  <link rel="stylesheet" href="styles/modal.css?v=61" />
-
+  <!-- Estilos -->
+  <link rel="stylesheet" href="styles/main.css?v=62" />
+  <link rel="stylesheet" href="styles/modal.css?v=62" />
   <!-- Fuente HONK (título) -->
   <link href="https://fonts.googleapis.com/css2?family=Honk&display=swap" rel="stylesheet">
 </head>
 <body>
-  <!-- 🌌 Fondo animado -->
+  <!-- Fondo -->
   <div id="neon-background"></div>
 
-  <!-- 🔥 Título HONK + emojis rotativos -->
+  <!-- Título -->
   <header class="site-header">
     <div class="title-row">
       <span class="title-emoji" id="emoji-left" aria-hidden="true">☠️</span>
@@ -32,25 +30,18 @@
     </div>
   </header>
 
-  <!-- 🔧 Barra superior: buscador (izquierda) + filtros (centrados) -->
+  <!-- Barra superior: buscador (izq) + filtros (centrados) -->
   <div class="toolbar">
-    <!-- 🔎 Buscador estilo botón (violeta) -->
+    <!-- Buscador -->
     <div class="search-chip">
-      <label class="search-wrap" for="search-input">
+      <label class="search-wrap" for="search-input" title="Buscar ( / )">
         <span class="search-icon" aria-hidden="true">🔎</span>
-        <input
-          id="search-input"
-          type="search"
-          placeholder="BUSCADOR"
-          autocomplete="off"
-          spellcheck="false"
-          aria-label="Buscar juegos"
-        />
-        <button type="button" class="search-clear" aria-label="Limpiar búsqueda" title="Limpiar">×</button>
+        <input id="search-input" type="search" placeholder="BUSCADOR" autocomplete="off" spellcheck="false" aria-label="Buscar juegos" />
+        <button type="button" class="search-clear" aria-label="Limpiar búsqueda">×</button>
       </label>
     </div>
 
-    <!-- 🎮 Filtros por etiqueta (centrados) -->
+    <!-- Filtros -->
     <div class="tag-filter-container" id="tag-filters">
       <button class="tag-button tag-button-all active" onclick="filtrarPorEtiqueta(null)" title="Inicio">🏠</button>
       <button class="tag-button tag-button-offline" onclick="filtrarPorEtiqueta('Offline')">🎮 OFFLINE</button>
@@ -60,12 +51,12 @@
     </div>
   </div>
 
-  <!-- 🧩 Grilla -->
+  <!-- Grilla -->
   <main>
     <div class="grid" id="publicaciones-todas"></div>
   </main>
 
-  <!-- 🪟 Modal -->
+  <!-- Modal -->
   <div id="modal-juego" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
     <div class="modal-content">
       <button class="modal-close" aria-label="Cerrar" title="Cerrar">&times;</button>
@@ -73,17 +64,17 @@
     </div>
   </div>
 
-  <!-- 🧾 Footer -->
+  <!-- Footer -->
   <footer>
     <p>&copy; 2025 GhustiLoOL. Todos los derechos reservados.</p>
   </footer>
 
-  <!-- 🧠 Scripts -->
-  <script src="scripts/filtrarEtiquetas.js?v=61"></script>
-  <script type="module" src="scripts/modal.js?v=61"></script>
-  <script type="module" src="scripts/cargarPublicaciones.js?v=61"></script>
-  <script src="scripts/neonRain.js?v=61"></script>
-  <script src="scripts/title-anim.js?v=61"></script>
-  <script src="scripts/buscador.js?v=61"></script>
+  <!-- Scripts -->
+  <script src="scripts/filtrarEtiquetas.js?v=62"></script>
+  <script type="module" src="scripts/modal.js?v=62"></script>
+  <script type="module" src="scripts/cargarPublicaciones.js?v=62"></script>
+  <script src="scripts/neonRain.js?v=62"></script>
+  <script src="scripts/title-anim.js?v=62"></script>
+  <script src="scripts/buscador.js?v=62"></script>
 </body>
 </html>
