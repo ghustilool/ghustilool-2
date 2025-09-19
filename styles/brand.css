@@ -1,179 +1,140 @@
-/* ================================
-   GhustiLoOL — Wordmark Neon
-   - sin calaveras
-   - animación sutil (glitch + scan)
-   - 3 esquemas: brand--cyan (default), brand--red, brand--ar
-   ================================= */
+/* ==============================================
+   GhustiLoOL — Wordmark Bandera (celeste / blanco / celeste)
+   - sin calaveras ni barra
+   - halo suave detrás + brillo diagonal animado
+   - flags laterales opcionales
+   ============================================== */
 
 :root{
-  /* Paleta base (cyan) */
-  --brand-main: #00f0ff;    /* acento principal */
-  --brand-sub : #9cfbff;    /* brillo interior */
-  --brand-dark: #0a0c11;    /* sombra interna */
-  --brand-glow: 0 0 22px rgba(0,255,255,.35), 0 0 44px rgba(0,255,255,.2);
+  --arg-celeste: #66d0ff;   /* celeste bandera */
+  --arg-celeste2:#35b9ff;
+  --arg-white:   #ffffff;
+  --arg-gold:    #ffd166;   /* guiño Sol de Mayo */
+  --brand-deep:  #0a0d14;   /* sombra/outline */
 }
 
-/* ===== Header container ===== */
+/* Contenedor */
 .brand{
-  position: relative;
+  position:relative;
   display:flex;
   align-items:center;
   justify-content:center;
-  padding: 34px 16px 12px;
+  gap:18px;
+  padding:32px 16px 8px;
   z-index:2;
 }
 
-/* ===== Wordmark ===== */
-.brand__logo{
-  --size: clamp(2.6rem, 7.5vw, 5rem);
-  position: relative;
-  font-family: 'Oxanium', 'Orbitron', system-ui, sans-serif;
-  font-weight: 800;
-  letter-spacing: .06em;
-  text-transform: uppercase;
-  font-size: var(--size);
-  line-height: 1;
-  margin: 0;
-  user-select: none;
-
-  /* relleno con degradé y “metal” */
-  color: transparent;
-  background:
-    linear-gradient(180deg, var(--brand-sub) 0%, var(--brand-main) 42%, #008b95 100%);
-  -webkit-background-clip: text;
-          background-clip: text;
-
-  /* borde interno + glow */
-  text-shadow:
-    0 1px 0 var(--brand-dark),
-    0 -1px 0 var(--brand-dark),
-    1px 0 0 var(--brand-dark),
-    -1px 0 0 var(--brand-dark),
-    var(--brand-glow);
-}
-
-/* cromatic aberration: cian/magenta en capas */
-.brand__logo::before,
-.brand__logo::after{
-  content: attr(data-text);
-  position:absolute; inset:0;
-  pointer-events:none; mix-blend-mode: screen;
-  opacity:.18; filter: blur(.6px);
-}
-.brand__logo::before{ color:#00ffff; transform: translate(2px, 0); }
-.brand__logo::after { color:#ff2aa8; transform: translate(-2px, 0); }
-
-/* capa real con antialiasing al máximo */
-.brand__logo > span{
-  position: relative;
-  display:inline-block;
-  -webkit-text-stroke: .5px rgba(10,12,17,.7);
-}
-
-/* scanline sutil sobre el texto */
-.brand__logo::marker{ content:''; } /* evitar warns raros */
-.brand::after{
-  content:'';
-  position:absolute; inset:0 0 auto 0;
-  height: 42%;
+/* Halo suave detrás del título (no barra) */
+.brand__halo{
+  position:absolute;
+  left:50%; top:50%;
+  width:min(900px,86vw); height:58%;
+  transform:translate(-50%,-40%);
   pointer-events:none;
   background:
-    repeating-linear-gradient(
-      to bottom,
-      rgba(255,255,255,.06) 0px,
-      rgba(255,255,255,.06) 1px,
-      transparent 2px,
-      transparent 4px
-    );
-  mask-image: linear-gradient(to bottom, transparent 0%, black 35%, transparent 100%);
-  animation: scanDown 7.5s linear infinite;
-  opacity:.45;
-}
-@keyframes scanDown{
-  0%   { transform: translateY(-20%); }
-  50%  { transform: translateY( 15%); }
-  100% { transform: translateY(-20%); }
+    radial-gradient(50% 60% at 50% 55%,
+      rgba(102,208,255,0.20) 0%,
+      rgba(102,208,255,0.12) 30%,
+      rgba(0,0,0,0) 70%);
+  filter: blur(2px);
+  opacity:.9;
 }
 
-/* glitch leve (no molesto) */
-.brand__logo{
-  animation: calmGlitch 4.2s steps(2,end) infinite;
+/* Píldoras de banderita (opcionales) */
+.brand__flag{
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  padding:6px 10px;
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:999px;
+  background:rgba(10,13,20,.55);
+  box-shadow:0 0 12px rgba(102,208,255,.25) inset, 0 0 8px rgba(102,208,255,.25);
+  transform: translateY(0);
+  animation: floaty 3.2s ease-in-out infinite;
 }
-@keyframes calmGlitch{
-  0%, 96%, 100% { transform: translate3d(0,0,0); }
-  97% { transform: translate3d(1px, 0, 0) skewX(.6deg); }
-  98% { transform: translate3d(-1px,0, 0) skewX(-.6deg); }
-  99% { transform: translate3d(0,0,0); }
+.brand__flag--left{ animation-delay: .2s; }
+.brand__flag--right{ animation-delay: .6s; }
+@keyframes floaty{
+  0%,100%{ transform:translateY(0); opacity:.95; }
+  50%    { transform:translateY(-3px); opacity:1; }
 }
 
-/* barra inferior “holográfica” */
-.brand__bar{
-  position:absolute; left:50%; bottom:4px; transform:translateX(-50%);
-  width:min(680px, 80vw); height:6px; border-radius:999px;
-  background: linear-gradient(90deg,
-    transparent 0%,
-    rgba(0,255,255,.35) 20%,
-    rgba(255,255,255,.65) 50%,
-    rgba(0,255,255,.35) 80%,
-    transparent 100%);
-  filter: blur(0.6px);
-  opacity:.75;
+/* Título */
+.brand__title{
+  --size: clamp(2.4rem, 8vw, 5rem);
+  position:relative;
+  margin:0;
+  font-family:'Audiowide', system-ui, sans-serif;
+  font-weight:800;
+  font-size:var(--size);
+  line-height:1;
+  letter-spacing:.05em;
+  user-select:none;
+
+  /* relleno bandera */
+  color:transparent;
+  background:
+    linear-gradient(180deg,
+      var(--arg-celeste) 0%,
+      var(--arg-celeste2) 22%,
+      var(--arg-white) 48%,
+      var(--arg-celeste) 78%,
+      #2ca8ea 100%);
+  -webkit-background-clip:text;
+          background-clip:text;
+
+  /* contorno + leve glow */
+  -webkit-text-stroke: 1px rgba(10,13,20,.85);
+  text-shadow:
+    0 0 10px rgba(102,208,255,.18),
+    0 0 22px rgba(102,208,255,.12);
 }
-.brand__bar::after{
+
+/* filete dorado muy sutil (Sol de Mayo) */
+.brand__title::after{
+  content: attr(data-text);
+  position:absolute; inset:0;
+  -webkit-text-stroke: 1px var(--arg-gold);
+  color: transparent;
+  opacity:.12;
+  pointer-events:none;
+}
+
+/* brillo diagonal que pasa cada tanto */
+.brand__title::before{
   content:'';
   position:absolute; inset:0;
-  background: linear-gradient(90deg, transparent, #fff, transparent);
-  width:30%; transform:translateX(-100%);
-  animation: shimmer 2.8s ease-in-out infinite;
-  opacity:.55; filter: blur(1px);
-}
-@keyframes shimmer{
-  0%{ transform:translateX(-100%); }
-  100%{ transform:translateX(300%); }
-}
-
-/* =========================
-   Paletas alternativas
-   ========================= */
-
-/* Rojo/Negro (tu marca) */
-.brand--red .brand__logo{
-  background: linear-gradient(180deg, #ff6262 0%, #ff1b3a 42%, #7a0010 100%);
-  text-shadow:
-    0 1px 0 #07080c, 0 -1px 0 #07080c, 1px 0 0 #07080c, -1px 0 0 #07080c,
-    0 0 22px rgba(255,32,64,.35), 0 0 44px rgba(255,32,64,.22);
-}
-.brand--red .brand__logo::before{ color:#ff2aa8; transform: translate(2px, 0); }
-.brand--red .brand__logo::after { color:#00ffff; transform: translate(-2px,0); }
-.brand--red .brand__bar{
-  background: linear-gradient(90deg,
-    transparent 0%,
-    rgba(255,48,72,.38) 20%,
+  background: linear-gradient(75deg,
+    rgba(255,255,255,0) 0%,
     rgba(255,255,255,.65) 50%,
-    rgba(255,48,72,.38) 80%,
-    transparent 100%);
+    rgba(255,255,255,0) 100%);
+  mix-blend-mode: screen;
+  transform: translateX(-120%) skewX(-12deg);
+  animation: sweep 6.5s ease-in-out infinite;
+  opacity:.35;
+  pointer-events:none;
+}
+@keyframes sweep{
+  0%   { transform:translateX(-120%) skewX(-12deg); }
+  8%   { transform:translateX(120%)  skewX(-12deg); }
+  100% { transform:translateX(120%)  skewX(-12deg); }
 }
 
-/* “AR” celeste-blanco-celeste (sutil homenaje 🇦🇷) */
-.brand--ar .brand__logo{
-  background: linear-gradient(180deg, #a8e8ff 0%, #6dd8ff 38%, #cde8ff 60%, #6dd8ff 100%);
-  text-shadow:
-    0 1px 0 #0a0c11, 0 -1px 0 #0a0c11, 1px 0 0 #0a0c11, -1px 0 0 #0a0c11,
-    0 0 22px rgba(160,230,255,.35), 0 0 44px rgba(160,230,255,.22);
+/* capa real del texto (mejor antialias) */
+.brand__title > span{
+  position:relative;
+  display:inline-block;
+  filter: drop-shadow(0 1px 0 rgba(10,13,20,.6));
 }
-.brand--ar .brand__logo::before{ color:#6dd8ff; transform: translate(2px, 0); }
-.brand--ar .brand__logo::after { color:#ffd166; transform: translate(-2px,0); } /* pequeño dorado */
-.brand--ar .brand__bar{
-  background: linear-gradient(90deg,
-    transparent 0%,
-    rgba(109,216,255,.38) 18%,
-    rgba(255,255,255,.75) 50%,
-    rgba(109,216,255,.38) 82%,
-    transparent 100%);
+
+/* Variante por si alguna vez querés rojo/negro rápido */
+.brand--red .brand__title{
+  background: linear-gradient(180deg, #ff5858 0%, #ff1f3e 45%, #7a0010 100%);
+  -webkit-text-stroke: 1px rgba(7,8,12,.9);
 }
+.brand--red .brand__title::after{ opacity:.10; }
 
 /* Responsive */
 @media (max-width:600px){
-  .brand{ padding-top:26px; }
-  .brand__bar{ width: 86vw; }
+  .brand{ padding:24px 12px 6px; gap:10px; }
+  .brand__halo{ width:92vw; }
 }
