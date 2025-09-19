@@ -7,37 +7,31 @@
   <link rel="icon" href="Ghusti-Ico.ico" type="image/x-icon" />
 
   <!-- 🎨 Estilos -->
-  <link rel="stylesheet" href="styles/main.css?v=46" />
-  <link rel="stylesheet" href="styles/modal.css?v=46" />
-  <link rel="stylesheet" href="styles/brand.css?v=46" />  <!-- NUEVO -->
+  <link rel="stylesheet" href="styles/main.css?v=47" />
+  <link rel="stylesheet" href="styles/modal.css?v=47" />
+  <link rel="stylesheet" href="styles/brand.css?v=47" />  <!-- NUEVO -->
 
-  <!-- 🧠 Fuentes -->
+  <!-- 🧠 Fuentes de apoyo (fallback si la SM256 tarda) -->
   <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet" />
-  <link href="https://fonts.cdnfonts.com/css/rovelink" rel="stylesheet" />
 </head>
 <body>
   <!-- 🌌 Fondo animado -->
   <div id="neon-background"></div>
 
-  <!-- ⚡ Encabezado estilo Mario 64 -->
-  <header class="brand64">
-    <h1 class="brand64__logo" aria-label="GhustiLoOL">
-      <!-- Colores SM64: rojo → amarillo → verde → azul (ciclo) -->
-      <span class="brand64__letter">G</span>
-      <span class="brand64__letter">H</span>
-      <span class="brand64__letter">U</span>
-      <span class="brand64__letter">S</span>
-      <span class="brand64__letter">T</span>
-      <span class="brand64__letter">I</span>
-      <span class="brand64__letter">L</span>
-      <span class="brand64__letter">O</span>
-      <span class="brand64__letter">O</span>
-      <span class="brand64__letter">L</span>
-    </h1>
+  <!-- 🏷️ Encabezado Mario256 + bandera AR + Bonzi easter-egg -->
+  <header class="brand-ar">
+    <div class="brand-ar__wrap">
+      <h1 class="brand-ar__logo" aria-label="GhustiLoOL">
+        <span>GhustiLoOL</span>
+      </h1>
+
+      <!-- hotspot centrado: al pasar el mouse, aparece Bonzi -->
+      <button class="brand-ar__hotspot" aria-label="Easter egg" title="👀"></button>
+      <div class="brand-ar__bonzi" role="img" aria-label="BonziBuddy"></div>
+    </div>
   </header>
 
-  <!-- 🎮 Filtros por etiqueta -->
+  <!-- 🎮 Filtros -->
   <div class="tag-filter-container" id="tag-filters">
     <button class="tag-button tag-button-all active" onclick="filtrarPorEtiqueta(null)" title="Inicio">🏠</button>
     <button class="tag-button tag-button-offline" onclick="filtrarPorEtiqueta('Offline')">🎮 OFFLINE</button>
@@ -65,9 +59,9 @@
   </footer>
 
   <!-- 🧠 Scripts -->
-  <script src="scripts/filtrarEtiquetas.js?v=46"></script>
-  <script type="module" src="scripts/modal.js?v=46"></script>
-  <script type="module" src="scripts/cargarPublicaciones.js?v=46"></script>
-  <script src="scripts/neonRain.js?v=46"></script>
+  <script src="scripts/filtrarEtiquetas.js?v=47"></script>
+  <script type="module" src="scripts/modal.js?v=47"></script>
+  <script type="module" src="scripts/cargarPublicaciones.js?v=47"></script>
+  <script src="scripts/neonRain.js?v=47"></script>
 </body>
 </html>
