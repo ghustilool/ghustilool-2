@@ -1,106 +1,76 @@
-/* ==============================================
-   GhustiLoOL — Wordmark Bandera (celeste / blanco / celeste)
-   - sin calaveras ni barra
-   - halo suave detrás + brillo diagonal animado
-   - flags laterales opcionales
-   ============================================== */
+/* ===========================================
+   GHUSTILOOL — Wordmark limpio con guiño 🇦🇷
+   - sin calaveras / sin barra
+   - dos líneas celeste-blanco-celeste detrás
+   - brillo diagonal MUY sutil
+   - mini “sol” al centro
+   =========================================== */
 
 :root{
-  --arg-celeste: #66d0ff;   /* celeste bandera */
-  --arg-celeste2:#35b9ff;
-  --arg-white:   #ffffff;
-  --arg-gold:    #ffd166;   /* guiño Sol de Mayo */
-  --brand-deep:  #0a0d14;   /* sombra/outline */
+  --ink: #0a0d14;
+
+  /* Argentina */
+  --ar-celeste:  #65c8ff;
+  --ar-celeste2: #2fb7ff;
+  --ar-gold:     #ffd166;
+
+  /* Rojo/negro opcional */
+  --red-main:    #ff2948;
+  --red-dark:    #17050a;
 }
 
-/* Contenedor */
+/* Contenedor del header */
 .brand{
-  position:relative;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:18px;
-  padding:32px 16px 8px;
-  z-index:2;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 16px 10px;
+  z-index: 2;
 }
 
-/* Halo suave detrás del título (no barra) */
-.brand__halo{
-  position:absolute;
-  left:50%; top:50%;
-  width:min(900px,86vw); height:58%;
-  transform:translate(-50%,-40%);
-  pointer-events:none;
-  background:
-    radial-gradient(50% 60% at 50% 55%,
-      rgba(102,208,255,0.20) 0%,
-      rgba(102,208,255,0.12) 30%,
-      rgba(0,0,0,0) 70%);
-  filter: blur(2px);
-  opacity:.9;
+/* Líneas bandera detrás del texto (no invaden el título) */
+.brand-flaglines{
+  position: absolute; inset: 0;
+  pointer-events: none;
+  opacity: .8;
 }
-
-/* Píldoras de banderita (opcionales) */
-.brand__flag{
-  font-size: clamp(1.1rem, 2vw, 1.4rem);
-  padding:6px 10px;
-  border:1px solid rgba(255,255,255,.18);
-  border-radius:999px;
-  background:rgba(10,13,20,.55);
-  box-shadow:0 0 12px rgba(102,208,255,.25) inset, 0 0 8px rgba(102,208,255,.25);
-  transform: translateY(0);
-  animation: floaty 3.2s ease-in-out infinite;
+.brand-flaglines::before,
+.brand-flaglines::after{
+  content: '';
+  position: absolute;
+  left: 6vw; right: 6vw;
+  height: 4px; border-radius: 4px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    var(--ar-celeste) 15%,
+    #fff 50%,
+    var(--ar-celeste2) 85%,
+    transparent 100%);
+  filter: blur(.2px);
 }
-.brand__flag--left{ animation-delay: .2s; }
-.brand__flag--right{ animation-delay: .6s; }
-@keyframes floaty{
-  0%,100%{ transform:translateY(0); opacity:.95; }
-  50%    { transform:translateY(-3px); opacity:1; }
-}
+.brand-flaglines::before{ top: 38%; }
+.brand-flaglines::after { top: 62%; }
 
 /* Título */
-.brand__title{
-  --size: clamp(2.4rem, 8vw, 5rem);
-  position:relative;
-  margin:0;
-  font-family:'Audiowide', system-ui, sans-serif;
-  font-weight:800;
-  font-size:var(--size);
-  line-height:1;
-  letter-spacing:.05em;
-  user-select:none;
-
-  /* relleno bandera */
-  color:transparent;
-  background:
-    linear-gradient(180deg,
-      var(--arg-celeste) 0%,
-      var(--arg-celeste2) 22%,
-      var(--arg-white) 48%,
-      var(--arg-celeste) 78%,
-      #2ca8ea 100%);
-  -webkit-background-clip:text;
-          background-clip:text;
-
-  /* contorno + leve glow */
+.brand-title{
+  margin: 0;
+  position: relative;
+  font-family: 'Saira Stencil One', system-ui, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  font-size: clamp(2.6rem, 8vw, 5rem);
+  color: #eaf6ff;                           /* blanco frío */
   -webkit-text-stroke: 1px rgba(10,13,20,.85);
   text-shadow:
-    0 0 10px rgba(102,208,255,.18),
-    0 0 22px rgba(102,208,255,.12);
+    0 1px 0 rgba(10,13,20,.6),
+    0 0 14px rgba(101,200,255,.16);
+  user-select: none;
+  padding: 0 .08em;
 }
 
-/* filete dorado muy sutil (Sol de Mayo) */
-.brand__title::after{
-  content: attr(data-text);
-  position:absolute; inset:0;
-  -webkit-text-stroke: 1px var(--arg-gold);
-  color: transparent;
-  opacity:.12;
-  pointer-events:none;
-}
-
-/* brillo diagonal que pasa cada tanto */
-.brand__title::before{
+/* brillo diagonal muy suave que pasa cada tanto */
+.brand-title::after{
   content:'';
   position:absolute; inset:0;
   background: linear-gradient(75deg,
@@ -109,32 +79,57 @@
     rgba(255,255,255,0) 100%);
   mix-blend-mode: screen;
   transform: translateX(-120%) skewX(-12deg);
-  animation: sweep 6.5s ease-in-out infinite;
-  opacity:.35;
+  animation: titleSweep 7s ease-in-out infinite;
+  opacity:.25;
   pointer-events:none;
 }
-@keyframes sweep{
-  0%   { transform:translateX(-120%) skewX(-12deg); }
-  8%   { transform:translateX(120%)  skewX(-12deg); }
-  100% { transform:translateX(120%)  skewX(-12deg); }
+@keyframes titleSweep{
+  0%   { transform: translateX(-120%) skewX(-12deg); }
+  8%   { transform: translateX(120%)  skewX(-12deg); }
+  100% { transform: translateX(120%)  skewX(-12deg); }
 }
 
-/* capa real del texto (mejor antialias) */
-.brand__title > span{
-  position:relative;
-  display:inline-block;
-  filter: drop-shadow(0 1px 0 rgba(10,13,20,.6));
+/* Mini “sol” al centro (detalle dorado) */
+.brand-sun{
+  position:absolute;
+  left:50%; bottom: 8px;
+  transform: translateX(-50%);
+  width: 10px; height: 10px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fff8c4 0, var(--ar-gold) 55%, #caa03a 100%);
+  box-shadow:
+    0 0 10px rgba(255,209,102,.55),
+    0 0 24px rgba(255,209,102,.25);
+  animation: sunPulse 3.4s ease-in-out infinite;
+  pointer-events: none;
+  opacity: .9;
+}
+@keyframes sunPulse{
+  0%,100%{ transform: translateX(-50%) scale(1);   opacity:.9; }
+  50%    { transform: translateX(-50%) scale(1.08); opacity:1;  }
 }
 
-/* Variante por si alguna vez querés rojo/negro rápido */
-.brand--red .brand__title{
-  background: linear-gradient(180deg, #ff5858 0%, #ff1f3e 45%, #7a0010 100%);
-  -webkit-text-stroke: 1px rgba(7,8,12,.9);
+/* ===== Esquema rojo/negro opcional ===== */
+.brand--red .brand-flaglines::before,
+.brand--red .brand-flaglines::after{
+  background: linear-gradient(90deg,
+    transparent 0%,
+    #ff8596 15%,
+    #fff 50%,
+    #ff2948 85%,
+    transparent 100%);
 }
-.brand--red .brand__title::after{ opacity:.10; }
+.brand--red .brand-title{
+  color:#ffe6ea;
+  -webkit-text-stroke:1px rgba(23,5,10,.9);
+  text-shadow:
+    0 1px 0 rgba(23,5,10,.7),
+    0 0 14px rgba(255,41,72,.18);
+}
+.brand--red .brand-sun{ background: radial-gradient(circle at 35% 35%, #ffd0d6 0, #ff7487 55%, #dd2341 100%); }
 
 /* Responsive */
-@media (max-width:600px){
-  .brand{ padding:24px 12px 6px; gap:10px; }
-  .brand__halo{ width:92vw; }
+@media (max-width: 600px){
+  .brand{ padding: 24px 12px 6px; }
+  .brand-flaglines::before,
+  .brand-flaglines::after{ left: 4vw; right: 4vw; }
 }
