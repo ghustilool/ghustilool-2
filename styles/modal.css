@@ -26,18 +26,16 @@
 .modal.fade-in .modal-content{ transform:scale(1); opacity:1; }
 .modal.fade-out .modal-content{ transform:scale(.95); opacity:0; }
 
-/* El interior scrollea sin afectar la chapita */
-#modal-body{
-  max-height:70vh;
-  overflow-y:auto;
-}
+/* Interior scrollea sin afectar la chapita */
+#modal-body{ max-height:70vh; overflow-y:auto; }
 
-/* Cerrar (color hereda del tipo) */
+/* Cerrar (color depende de etiqueta) */
 .modal-close{
   position:absolute; top:10px; right:14px; width:36px; height:36px;
   line-height:32px; text-align:center; font-size:20px;
   color:var(--modal-borde,#ff00cc);
   cursor:pointer; background:transparent; border:0;
+  user-select:none;
 }
 
 /* Imagen */
@@ -54,50 +52,37 @@
   letter-spacing:.4px; text-transform:uppercase;
 }
 
-/* ===== Botones estilo filtros (transparentes + borde neón) ===== */
+/* ===== Botones tipo filtros (transparente + borde neón) ===== */
 .modal-body-buttons{
   display:flex; gap:12px; justify-content:center; flex-wrap:wrap;
   margin-top:10px; padding:0 6px;
 }
 .modal-body-buttons .btn{
-  flex:1 1 200px; min-width:200px; text-align:center;
+  flex:1 1 200px; min-width:200px;
   display:inline-flex; align-items:center; justify-content:center; gap:10px;
-  padding:12px 16px;
-
-  font-family:'Orbitron', sans-serif; font-weight:800; letter-spacing:.3px;
-  text-transform:uppercase; font-size:.92rem; text-decoration:none;
-
-  background:transparent;
-  color:var(--c); border:2px solid var(--c);
-  border-radius:12px;
-
-  /* sin glow cortado */
-  overflow:visible;
-  box-shadow:none;
-  transition:transform .12s ease;
+  padding:12px 16px; text-decoration:none; text-transform:uppercase;
+  font-family:'Orbitron', sans-serif; font-weight:800; letter-spacing:.3px; font-size:.92rem;
+  background:transparent; color:var(--c); border:2px solid var(--c);
+  border-radius:12px; overflow:visible; box-shadow:none;
+  transition:transform .12s ease;           /* ← solo zoom */
 }
 .modal-body-buttons .btn:hover{ transform:translateY(-1px); }
 
 /* Colores de cada acción */
 .btn--dl   { --c:#00ffff; } /* Descargar */
-.btn--pass { --c:#ff9f0a; } /* Contraseña (naranja) */
+.btn--pass { --c:#ff9f0a; } /* Contraseña */
 .btn--buy  { --c:#00ff99; } /* Comprar */
 
-/* Accesibilidad */
-.modal-body-buttons .btn:focus-visible{
-  outline:2px solid #fff; outline-offset:3px;
-}
+.modal-body-buttons .btn:focus-visible{ outline:2px solid #fff; outline-offset:3px; }
 
-/* ===== Etiqueta (chapita) – centrada abajo, sólida como el modal ===== */
+/* ===== Chapita etiqueta – centrada abajo, sólido modal ===== */
 .tag-pill{
   --ring: currentColor;
   display:inline-flex; align-items:center; gap:8px;
   font-family:'Orbitron', sans-serif; font-weight:800; letter-spacing:.3px;
   text-transform:uppercase; font-size:.78rem;
   padding:6px 12px; border-radius:12px; border:2px solid var(--ring);
-  color:var(--ring);
-  background:#1a1a2e; /* mismo fondo del modal */
-  box-shadow:0 0 10px var(--ring);
+  color:var(--ring); background:#1a1a2e; box-shadow:0 0 10px var(--ring);
 }
 .tag-offline{ --ring:#3399ff; }
 .tag-lan    { --ring:#00ff99; }
@@ -105,43 +90,28 @@
 .tag-adult  { --ring:#ff0033; }
 .tag-default{ --ring:#ff00cc; }
 
-/* centrada abajo – fuera del borde del contenido, nunca requiere scroll */
 .modal-tag{
-  position:absolute;
-  left:50%;
-  bottom:-22px;
-  transform:translateX(-50%);
-  z-index:6;
-  pointer-events:none;
+  position:absolute; left:50%; bottom:-22px; transform:translateX(-50%);
+  z-index:6; pointer-events:none;
 }
 
-/* ===== Colores por etiqueta (borde + glow) ===== */
+/* Paleta por etiqueta para borde + glow del modal */
 .modal-content-offline{ --modal-borde:#3399ff; --modal-glow:rgba(51,153,255,.45); }
 .modal-content-lan    { --modal-borde:#00ff99; --modal-glow:rgba(0,255,153,.45); }
 .modal-content-online { --modal-borde:#00ffff; --modal-glow:rgba(0,255,255,.45); }
 .modal-content-adult  { --modal-borde:#ff0033; --modal-glow:rgba(255,0,51,.45); }
 .modal-content-default{ --modal-borde:#ff00cc; --modal-glow:rgba(255,0,204,.55); }
 
-/* ===== Toast (desde ARRIBA del modal) ===== */
+/* ===== Toast DESDE ARRIBA ===== */
 .copy-toast{
-  position:absolute;
-  left:50%; top:10px;
-  transform:translate(-50%,-18px);
-  background:#0d0f14; color:#fff;
-  padding:8px 12px; border-radius:12px;
-  font-weight:800; letter-spacing:.3px;
-  border:2px solid #ff9f0a;             /* ok: naranja */
-  box-shadow:0 0 12px rgba(255,159,10,.45);
-  opacity:0; pointer-events:none;
-  z-index:7;
-  transition:opacity .15s ease, transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+  position:absolute; left:50%; top:10px; transform:translate(-50%,-22px);
+  background:#0d0f14; color:#fff; padding:8px 12px; border-radius:12px;
+  font-weight:800; letter-spacing:.3px; z-index:1001;
+  border:2px solid #ff9f0a; box-shadow:0 0 12px rgba(255,159,10,.45);
+  opacity:0; pointer-events:none; transition:opacity .15s ease, transform .2s ease;
 }
-.copy-toast.ok{
-  border-color:#ff9f0a; box-shadow:0 0 12px rgba(255,159,10,.45);
-}
-.copy-toast.err{
-  border-color:#ff3b30; box-shadow:0 0 12px rgba(255,59,48,.5);
-}
+.copy-toast.ok{ border-color:#ff9f0a; box-shadow:0 0 12px rgba(255,159,10,.45); }
+.copy-toast.err{ border-color:#ff3b30; box-shadow:0 0 12px rgba(255,59,48,.5); }
 .copy-toast.show{ opacity:1; transform:translate(-50%,0); }
 
 /* ===== Bloqueo body ===== */
@@ -149,7 +119,7 @@ body.modal-open{ overflow:hidden; }
 
 /* ===== Responsive ===== */
 @media (max-width:600px){
-  .modal-content{ width:92vw; max-width:92vw; padding:16px 16px 42px; }
+  .modal-content{ width:92vw; padding:16px 16px 42px; }
   #modal-body{ max-height:64vh; }
   .modal-content img{ max-height:180px; }
   .modal-body-buttons .btn{ flex:1 1 100%; min-width:unset; }

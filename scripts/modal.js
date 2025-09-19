@@ -1,6 +1,6 @@
-// Modal: etiqueta centrada abajo (fuera del scroller), botones estilo filtros,
-// toast que baja desde ARRIBA ("Contrase?a copiada ?"), x normal coloreada,
-// y beep. Unicode escapado + ES6 b¨¢sico.
+// Modal: etiqueta centrada abajo, botones tipo filtros (sin glow),
+// toast que baja desde ARRIBA ("Contrase?a copiada ?"), x normal con color
+// por etiqueta, y beep. Unicode escapado + ES6 b¨¢sico.
 
 var EMOTES = {
   offline: '\uD83C\uDFAE',  // ??
@@ -66,14 +66,13 @@ function beep(type){
   o.start(); o.stop(_ctx.currentTime + 0.18);
 }
 
-/* Toast arriba del modal */
+/* Toast desde arriba del modal (centrado) */
 function showToastTop(modalContent, msg, kind){
   var toast=modalContent.querySelector('.copy-toast');
   if(!toast){ toast=document.createElement('div'); toast.className='copy-toast'; modalContent.appendChild(toast); }
   toast.textContent=msg;
   toast.classList.remove('ok','err','show');
   toast.classList.add(kind==='err'?'err':'ok');
-  // posici¨®n fija arriba/centro (la define el CSS); solo reiniciar animaci¨®n
   void toast.offsetWidth;
   toast.classList.add('show');
   clearTimeout(showToastTop._t);
@@ -96,7 +95,7 @@ export function abrirModal(juego, origenElemento){
   modalBody.classList.add('modal-'+etiqueta);
   modalContent.classList.add('modal-content-'+etiqueta);
 
-  /* construir contenido SCROLLEABLE dentro de #modal-body */
+  /* contenido scrolleable dentro de #modal-body */
   var imagenHTML=(juego && juego.imagen)
     ? '<img src="'+juego.imagen+'" alt="'+(juego.nombre?escAttr(juego.nombre):'Juego')+'">'
     : '<div style="width:100%;height:200px;background:#222;color:#888;display:flex;align-items:center;justify-content:center;border-radius:6px;">Sin imagen</div>';
@@ -115,10 +114,9 @@ export function abrirModal(juego, origenElemento){
   if(enlaceCompra){   pieces.push('<a class="btn btn--buy" href="'+enlaceCompra+'" target="_blank" rel="noopener">\uD83D\uDED2 COMPRAR</a>'); }
   var botonesHTML = pieces.length?'<div class="modal-body-buttons">'+pieces.join('')+'</div>':'';
 
-  /* PINTAR SOLO EL CONTENIDO en #modal-body (sin la chapita) */
   modalBody.innerHTML = imagenHTML + nombreHTML + versionHTML + descripcionHTML + botonesHTML;
 
-  /* Agregar/actualizar la CHAPITA como HERMANA de #modal-body (no se scrollea) */
+  /* chapita */
   var oldTag = modalContent.querySelector('.modal-tag');
   if (oldTag) oldTag.remove();
   var tagWrap = document.createElement('div');
@@ -126,19 +124,27 @@ export function abrirModal(juego, origenElemento){
   tagWrap.innerHTML = '<span class="modal-etiqueta tag-pill tag-'+etiqueta+'">'+emote+' '+etiqueta.toUpperCase()+'</span>';
   modalContent.appendChild(tagWrap);
 
-  /* Copiar contrase?a + toast arriba + beep */
-  var copyBtn=modalBody.querySelector('.btn-copy');
-  if(copyBtn){
-    copyBtn.addEventListener('click',function(e){
-      e.preventDefault();
-      var t = copyBtn.getAttribute('data-pass')||'';
-      copyToClipboard(t)
-        .then(function(){ beep('ok');  showToastTop(modalContent,'Contrase\u00F1a copiada \u2705','ok'); })
-        .catch(function(){ beep('err'); showToastTop(modalContent,'No se pudo copiar \u274C','err'); });
+  /* Delegaci¨®n: cualquier click dentro del modal-body que caiga en .btn-copy */
+  modalBody.addEventListener('click', function onClick(e){
+    var btn = e.target.closest('.btn-copy');
+    if(!btn) return;
+    e.preventDefault();
+    var t = btn.getAttribute('data-pass')||'';
+    if(!t){
+      beep('err'); showToastTop(modalContent,'No hay contrase\u00F1a \u274C','err');
+      return;
+    }
+    (navigator.clipboard && navigator.clipboard.writeText
+      ? navigator.clipboard.writeText(t)
+      : (function(){ var ta=document.createElement('textarea'); ta.value=t; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.focus(); ta.select(); var ok=document.execCommand('copy'); document.body.removeChild(ta); return ok?Promise.resolve():Promise.reject(); })()
+    ).then(function(){
+      beep('ok'); showToastTop(modalContent,'Contrase\u00F1a copiada \u2705','ok');
+    }).catch(function(){
+      beep('err'); showToastTop(modalContent,'No se pudo copiar \u274C','err');
     });
-  }
+  }, { once:true }); // se vuelve a registrar al abrir de nuevo
 
-  /* Origen est¨¦tico del zoom */
+  /* Origen del zoom */
   modalContent.style.transformOrigin='50% 50%';
   if(origenElemento && origenElemento.getBoundingClientRect){
     var r=origenElemento.getBoundingClientRect();
@@ -170,8 +176,8 @@ document.addEventListener('DOMContentLoaded',function(){
   var modal=document.getElementById('modal-juego');
   var closeBtn=modal?modal.querySelector('.modal-close'):null;
   if(closeBtn){
-    /* volver a la x normal; color lo pone el CSS con --modal-borde */
-    closeBtn.textContent = '¡Á';
+    /* usar entidad HTML para evitar ¡°??¡± */
+    closeBtn.innerHTML = '&times;';
     closeBtn.setAttribute('aria-label','Cerrar');
     closeBtn.addEventListener('click',cerrarModal);
   }
