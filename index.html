@@ -7,8 +7,8 @@
   <link rel="icon" href="Ghusti-Ico.ico" type="image/x-icon" />
 
   <!-- 🎨 Estilos -->
-  <link rel="stylesheet" href="styles/main.css?v=56" />
-  <link rel="stylesheet" href="styles/modal.css?v=56" />
+  <link rel="stylesheet" href="styles/main.css?v=57" />
+  <link rel="stylesheet" href="styles/modal.css?v=57" />
 
   <!-- Fuente HONK -->
   <link href="https://fonts.googleapis.com/css2?family=Honk&display=swap" rel="stylesheet">
@@ -17,18 +17,26 @@
   <!-- 🌌 Fondo animado -->
   <div id="neon-background"></div>
 
-  <!-- 🔥 Título con HONK + Bonzi en la 't' -->
+  <!-- 🔥 Título con HONK + animación + emoji rotativo -->
   <header class="site-header">
-    <h1 class="site-title">
-      Ghus
-      <span id="bonziTrigger" class="title-bonzi">
-        t
-        <span class="bonzi-pop">
-          <img src="assets/bonzibuddy.gif" alt="BonziBuddy" loading="lazy">
+    <div class="title-row">
+      <span class="title-emoji" id="emoji-left" aria-hidden="true">☠️</span>
+      <h1 class="site-title" aria-label="GhustiLoOL">
+        <span class="title-word" id="title-word">
+          <span class="t-letter">G</span>
+          <span class="t-letter">h</span>
+          <span class="t-letter">u</span>
+          <span class="t-letter">s</span>
+          <span class="t-letter">t</span>
+          <span class="t-letter">i</span>
+          <span class="t-letter">L</span>
+          <span class="t-letter">o</span>
+          <span class="t-letter">O</span>
+          <span class="t-letter">L</span>
         </span>
-      </span>
-      iLoOL
-    </h1>
+      </h1>
+      <span class="title-emoji" id="emoji-right" aria-hidden="true">🇦🇷</span>
+    </div>
   </header>
 
   <!-- 🎮 Filtros por etiqueta -->
@@ -59,10 +67,10 @@
   </footer>
 
   <!-- 🧠 Scripts -->
-  <script src="scripts/filtrarEtiquetas.js?v=56"></script>
-  <script type="module" src="scripts/modal.js?v=56"></script>
-  <script type="module" src="scripts/cargarPublicaciones.js?v=56"></script>
-  <script src="scripts/neonRain.js?v=56"></script>
-  <script src="scripts/bonzi.js?v=56"></script>
+  <script src="scripts/filtrarEtiquetas.js?v=57"></script>
+  <script type="module" src="scripts/modal.js?v=57"></script>
+  <script type="module" src="scripts/cargarPublicaciones.js?v=57"></script>
+  <script src="scripts/neonRain.js?v=57"></script>
+  <script src="scripts/title-anim.js?v=57"></script> <!-- NUEVO -->
 </body>
 </html>
