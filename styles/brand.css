@@ -1,12 +1,11 @@
 /* ==========================================================
    GHUSTILOOL — Título Super Mario 256 con bandera 🇦🇷
-   - SIN brillo blanco raro, SIN animación constante
-   - Relleno celeste–blanco–celeste (limpio)
-   - Outline negro sólido (SM64 vibe)
-   - Easter-egg BonziBuddy: aparece media figura al hover
+   - sin brillos raros ni animación pesada
+   - colores celeste–blanco–celeste
+   - BonziBuddy medio cuerpo sobre la T (click)
    ========================================================== */
 
-/* Fuente local (respeta tus nombres de archivo) */
+/* Fuente local */
 @font-face{
   font-family: "SuperMario256";
   src:
@@ -24,7 +23,6 @@
   --outline: #000;
 }
 
-/* ====== Header ====== */
 .brand-ar{
   position: relative;
   z-index: 2;
@@ -33,12 +31,8 @@
   align-items: center;
   justify-content: center;
 }
-.brand-ar__wrap{
-  position: relative;
-  display: inline-block;
-}
+.brand-ar__wrap{ position: relative; display: inline-block; }
 
-/* ====== Logo ====== */
 .brand-ar__logo{
   margin: 0;
   line-height: .9;
@@ -47,26 +41,16 @@
   text-transform: uppercase;
   letter-spacing: .03em;
   user-select: none;
-  position: relative;
 }
+.brand-word{ display: inline-flex; gap: clamp(2px, .6vw, 8px); }
 
-/* Relleno bandera, sin brillos raros */
-.brand-ar__logo > span{
-  background:
-    linear-gradient(
-      180deg,
-      var(--ar-c1) 0%,
-      var(--ar-c2) 28%,
-      var(--ar-w)  52%,
-      var(--ar-c1) 76%,
-      #2aa8ea      100%
-    );
-  -webkit-background-clip: text;
-          background-clip: text;
-  -webkit-text-fill-color: transparent;  /* evita negro/blanco */
-  color: transparent;
+/* ===== Letras ===== */
+.brand-letter{
+  position: relative;
+  display: inline-block;
 
-  /* Outline negro + leve sombra (extrusión corta) */
+  /* fallback por si el navegador no soporta gradient-clip */
+  color: #9edbff;
   -webkit-text-stroke: 3px var(--outline);
   text-shadow:
     0  1px 0 var(--outline),
@@ -74,67 +58,65 @@
     2px 3px 0 rgba(0,0,0,.85);
 }
 
-/* 👇 sin capa de brillo: nada de ::after */
-
-/* ====== Micro efecto retro SOLO al hover (un parpadeo) ====== */
-@keyframes sm64-flick{
-  0%  { clip-path: inset(0 0 0 0); }
-  50% { clip-path: inset(42% 0 0 0); }
-  100%{ clip-path: inset(0 0 0 0); }
+/* gradient dentro del texto (cuando está soportado) */
+@supports (-webkit-background-clip: text) {
+  .brand-letter{
+    background-image:
+      linear-gradient(180deg,
+        var(--ar-c1) 0%,
+        var(--ar-c2) 28%,
+        var(--ar-w)  52%,
+        var(--ar-c1) 76%,
+        #2aa8ea      100%);
+    -webkit-background-clip: text;
+            background-clip: text;
+    -webkit-text-fill-color: transparent;
+             color: transparent;
+  }
 }
-/* dispara 1 vez al pasar por arriba */
-.brand-ar__wrap:hover .brand-ar__logo > span{
-  animation: sm64-flick 120ms steps(1,end) both;
+@supports (background-clip: text) {
+  .brand-letter{
+    background-image:
+      linear-gradient(180deg,
+        var(--ar-c1) 0%,
+        var(--ar-c2) 28%,
+        var(--ar-w)  52%,
+        var(--ar-c1) 76%,
+        #2aa8ea      100%);
+    background-clip: text;
+  }
 }
 
-/* ====== Hotspot + Bonzi ====== */
-/* hotspot: franja central invisible (también responde el título entero) */
-.brand-ar__hotspot{
-  position:absolute;
-  left:50%; top:50%;
-  transform: translate(-50%,-50%);
-  width: clamp(160px, 36vw, 360px);
-  height: clamp(24px, 5vw, 48px);
-  background: transparent;
-  border: 0;
-  cursor: pointer;
-  outline: none;
-}
-
-/* BonziBuddy medio cuerpo */
-.brand-ar__bonzi{
-  /* usa tu gif: /assets/bonzibuddy.gif */
+/* ===== Bonzi sobre la T ===== */
+.brand-letter--T{ position: relative; }
+.brand-letter--T .brand-bonzi{
   --bonzi: url("../assets/bonzibuddy.gif");
   position: absolute;
-  left:50%; top: 0;
-  transform: translate(-50%, -10%) scale(.96);
-  width: clamp(120px, 18vw, 220px);
-  aspect-ratio: 350 / 465;           /* aprox del gif */
+  left: 50%;
+  bottom: 100%;               /* justo arriba de la T */
+  transform: translate(-50%, 6px) scale(.9); /* ajusta tamaño */
+  width: clamp(90px, 12vw, 160px);
+  aspect-ratio: 350 / 465;
   background-image: var(--bonzi);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center top;
 
-  /* mostrar solo la mitad superior */
-  clip-path: inset(0 0 50% 0);
+  /* media figura (superior) */
+  clip-path: inset(0 0 48% 0);
 
   opacity: 0;
   filter: drop-shadow(0 8px 14px rgba(0,0,0,.45));
-  transition: transform .35s cubic-bezier(.2,.75,.2,1.2), opacity .25s ease-out;
-  pointer-events: none;
+  transition: opacity .25s ease-out, transform .25s ease-out;
+  pointer-events: none;  /* que no tape clics */
   z-index: 3;
 }
-
-/* aparecer Bonzi: hover en hotspot o en todo el título */
-.brand-ar__hotspot:hover + .brand-ar__bonzi,
-.brand-ar__wrap:hover .brand-ar__bonzi{
+.brand-letter--T .brand-bonzi.show{
   opacity: 1;
-  transform: translate(-50%, -95%) scale(1);
+  transform: translate(-50%, -4px) scale(.95);
 }
 
-/* ====== Responsive ====== */
+/* responsive: outlines más finos */
 @media (max-width: 600px){
-  .brand-ar{ padding: 22px 12px 8px; }
-  .brand-ar__logo > span{ -webkit-text-stroke: 2px var(--outline); }
-  .brand-ar__hotspot{ width: 60vw; }
+  .brand-letter{ -webkit-text-stroke: 2px var(--outline); }
 }

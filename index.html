@@ -7,27 +7,38 @@
   <link rel="icon" href="Ghusti-Ico.ico" type="image/x-icon" />
 
   <!-- 🎨 Estilos -->
-  <link rel="stylesheet" href="styles/main.css?v=48" />
-  <link rel="stylesheet" href="styles/modal.css?v=48" />
-  <link rel="stylesheet" href="styles/brand.css?v=48" />  <!-- NUEVO -->
+  <link rel="stylesheet" href="styles/main.css?v=49" />
+  <link rel="stylesheet" href="styles/modal.css?v=49" />
+  <link rel="stylesheet" href="styles/brand.css?v=49" />  <!-- NUEVO -->
 
-  <!-- (fallback por si tarda la SM256) -->
+  <!-- Fallback por si la SM256 tarda -->
   <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet" />
 </head>
 <body>
   <!-- 🌌 Fondo animado -->
   <div id="neon-background"></div>
 
-  <!-- 🏷️ Encabezado Mario256 + bandera AR + Bonzi -->
+  <!-- 🏷️ Encabezado: SM256 + bandera AR + Bonzi en la “T” -->
   <header class="brand-ar">
     <div class="brand-ar__wrap">
       <h1 class="brand-ar__logo" aria-label="GhustiLoOL">
-        <span>GhustiLoOL</span>
+        <span class="brand-word">
+          <span class="brand-letter">G</span>
+          <span class="brand-letter">H</span>
+          <span class="brand-letter">U</span>
+          <span class="brand-letter">S</span>
+          <span class="brand-letter brand-letter--T" id="bonziTrigger">
+            T
+            <!-- Bonzi adentro de la T -->
+            <span class="brand-bonzi" role="img" aria-label="BonziBuddy"></span>
+          </span>
+          <span class="brand-letter">I</span>
+          <span class="brand-letter">L</span>
+          <span class="brand-letter">O</span>
+          <span class="brand-letter">O</span>
+          <span class="brand-letter">L</span>
+        </span>
       </h1>
-
-      <!-- hotspot centrado (también funciona al pasar por el título entero) -->
-      <button class="brand-ar__hotspot" aria-label="Easter egg" title="👀"></button>
-      <div class="brand-ar__bonzi" role="img" aria-label="BonziBuddy"></div>
     </div>
   </header>
 
@@ -59,9 +70,10 @@
   </footer>
 
   <!-- 🧠 Scripts -->
-  <script src="scripts/filtrarEtiquetas.js?v=48"></script>
-  <script type="module" src="scripts/modal.js?v=48"></script>
-  <script type="module" src="scripts/cargarPublicaciones.js?v=48"></script>
-  <script src="scripts/neonRain.js?v=48"></script>
+  <script src="scripts/filtrarEtiquetas.js?v=49"></script>
+  <script type="module" src="scripts/modal.js?v=49"></script>
+  <script type="module" src="scripts/cargarPublicaciones.js?v=49"></script>
+  <script src="scripts/neonRain.js?v=49"></script>
+  <script src="scripts/brand.js?v=49"></script>  <!-- NUEVO -->
 </body>
 </html>
