@@ -1,160 +1,182 @@
-/* ===== Overlay ===== */
-.modal{
-  position:fixed; inset:0; width:100%; height:100%;
-  background:rgba(0,0,0,.85);
-  display:none; align-items:center; justify-content:center;
-  z-index:999; opacity:0; transition:opacity .3s ease-in-out;
+// Modal con: etiqueta centrada abajo (fuera del scroller), imagen,
+// t赤tulo, "VERSI車N" y botones estilo filtros (transparentes con borde ne車n).
+// Unicode escapado + ES6 b芍sico (sin optional chaining/nullish).
+
+var EMOTES = {
+  offline: '\uD83C\uDFAE',  // ??
+  lan:     '\uD83D\uDD0C',  // ??
+  online:  '\uD83C\uDF10',  // ??
+  adult:   '\uD83D\uDD1E',  // ??
+  default: '\uD83C\uDFE0'   // ??
+};
+var ICON_DL   = '\uD83D\uDCE5'; // ??
+var ICON_KEY  = '\uD83D\uDD11'; // ??
+var ICON_CART = '\uD83D\uDED2'; // ??
+
+function normalizarEtiqueta(tags){
+  var raw=''; if (tags && tags.length) raw=String(tags[0]).toLowerCase().trim();
+  var compact=raw.replace(/\s+/g,'');
+  if (/(\+?18|adult|adulto|18\+|mayores)/.test(compact)) return 'adult';
+  if (compact.indexOf('lan')!==-1) return 'lan';
+  if (compact.indexOf('online')!==-1) return 'online';
+  if (compact.indexOf('offline')!==-1 || raw.indexOf('sin internet')!==-1) return 'offline';
+  return 'default';
 }
-.modal.fade-in{ display:flex; opacity:1; }
-.modal.fade-out{ display:flex; opacity:0; }
-
-/* ===== Contenido ===== */
-.modal-content{
-  position:relative;
-  background:#1a1a2e; color:#e0e0e0; font-family:'Roboto Mono', monospace;
-  padding:18px 18px 36px;            /* aire abajo para la chapita */
-  width:min(720px,92vw);
-  border-radius:12px; border:1px solid var(--modal-borde,#ff00cc);
-
-  /* NO recorta, as赤 la chapita por fuera queda visible */
-  overflow:visible;
-
-  box-shadow:none; transform:scale(.95); opacity:0;
-  transition:transform .3s ease-out, opacity .3s ease-out, box-shadow .25s ease;
+function showModal(m){ m.style.display='flex'; m.classList.remove('fade-out'); m.classList.add('fade-in'); document.body.classList.add('modal-open'); }
+function hideModal(m){
+  m.classList.remove('fade-in'); m.classList.add('fade-out');
+  var onEnd=function(){ m.style.display='none'; m.removeEventListener('transitionend',onEnd); document.body.classList.remove('modal-open'); };
+  m.addEventListener('transitionend',onEnd);
 }
-.modal-content:hover,
-.modal-content:focus-within{
-  box-shadow:0 0 18px var(--modal-glow,transparent);
-}
-.modal.fade-in .modal-content{ transform:scale(1); opacity:1; }
-.modal.fade-out .modal-content{ transform:scale(.95); opacity:0; }
+function escAttr(s){ return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
 
-/* El interior scrollea sin afectar la chapita */
-#modal-body{
-  max-height:70vh;
-  overflow-y:auto;
-}
-
-/* Cerrar */
-.modal-close{
-  position:absolute; top:10px; right:14px; width:32px; height:32px;
-  line-height:28px; text-align:center; font-size:24px; color:#ff00cc;
-  cursor:pointer; background:transparent; border:0;
-}
-
-/* Imagen */
-.modal-content img{
-  max-width:100%; height:auto; max-height:240px; object-fit:contain;
-  border-radius:8px; display:block; margin:0 auto 12px auto;
+function buscarPassword(j){
+  if(!j) return '';
+  if (Object.prototype.hasOwnProperty.call(j,'contrase?a')) return j['contrase?a']||'';
+  if (Object.prototype.hasOwnProperty.call(j,'contrasena')) return j['contrasena']||'';
+  try{
+    for (var k in j){
+      if(!Object.prototype.hasOwnProperty.call(j,k)) continue;
+      var nk=k.toLowerCase();
+      var nk2=(nk.normalize?nk.normalize('NFD').replace(/[\u0300-\u036f]/g,''):nk);
+      if (nk.indexOf('contrase')!==-1 || nk2.indexOf('contrasena')!==-1) return j[k]||'';
+    }
+  }catch(e){}
+  return '';
 }
 
-/* T赤tulo / Descripci車n / Versi車n */
-.modal-title{ text-align:center; margin:6px 0 6px; font-size:1.4rem; line-height:1.2; }
-.modal-description{ text-align:center; margin:6px 0 8px; }
-.modal-version{
-  margin:6px 0 10px; font-size:.82rem; color:#aeb3c0; text-align:center;
-  letter-spacing:.4px; text-transform:uppercase;
+/* ===== Soniditos (WebAudio) ===== */
+var _ctx = null;
+function _ensureCtx(){
+  if(!_ctx){
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (AC) _ctx = new AC();
+  }
+}
+function beep(type){
+  _ensureCtx(); if(!_ctx) return;
+  var o = _ctx.createOscillator();
+  var g = _ctx.createGain();
+  o.type = 'sine';
+  o.frequency.value = (type === 'ok') ? 880 : 240;
+  g.gain.setValueAtTime(0.0001, _ctx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.08, _ctx.currentTime + 0.01);
+  g.gain.exponentialRampToValueAtTime(0.0001, _ctx.currentTime + 0.15);
+  o.connect(g); g.connect(_ctx.destination);
+  o.start(); o.stop(_ctx.currentTime + 0.18);
 }
 
-/* ===== Botones estilo "filtros" (transparentes con borde ne車n) ===== */
-.modal-body-buttons{
-  display:flex; gap:12px; justify-content:center; flex-wrap:wrap;
-  margin-top:10px; padding:0 6px;
+/* Copiado + Toast */
+function copyToClipboard(text){
+  if(!text) return Promise.reject(new Error('empty'));
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    return navigator.clipboard.writeText(text);
+  }
+  try{
+    var ta=document.createElement('textarea'); ta.value=text;
+    ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta);
+    ta.focus(); ta.select(); var ok=document.execCommand('copy'); document.body.removeChild(ta);
+    return ok?Promise.resolve():Promise.reject(new Error('execCommand'));
+  }catch(e){ return Promise.reject(e); }
 }
-.modal-body-buttons .btn{
-  position:relative; overflow:hidden;
-  flex:1 1 200px; min-width:200px; text-align:center;
-
-  display:inline-flex; align-items:center; justify-content:center; gap:10px;
-  padding:12px 16px;
-
-  font-family:'Orbitron', sans-serif; font-weight:800; letter-spacing:.3px;
-  text-transform:uppercase; font-size:.92rem; text-decoration:none;
-
-  background:transparent;            /* <- igual que tus filtros */
-  color:var(--c); border:2px solid var(--c);
-  border-radius:12px;
-  box-shadow:none;
-  transition:transform .12s ease, box-shadow .2s ease, background-color .2s ease;
-}
-.modal-body-buttons .btn:hover{
-  transform:translateY(-1px);
-  box-shadow:0 0 14px var(--c);
-}
-/* relleno suave por color al pasar */
-.btn--dl:hover   { background:rgba(0,255,255,.12); }
-.btn--pass:hover { background:rgba(255,239,0,.15); }
-.btn--buy:hover  { background:rgba(0,255,153,.12); }
-
-/* Colores de cada acci車n */
-.btn--dl   { --c:#00ffff; } /* Descargar */
-.btn--pass { --c:#ffef00; color:#111; } /* Contrase?a: texto legible en hover */
-.btn--buy  { --c:#00ff99; }
-
-/* Accesibilidad */
-.modal-body-buttons .btn:focus-visible{
-  outline:2px solid #fff; outline-offset:3px;
+function showToast(modalContent,msg){
+  var toast=modalContent.querySelector('.copy-toast');
+  if(!toast){ toast=document.createElement('div'); toast.className='copy-toast'; modalContent.appendChild(toast); }
+  toast.textContent=msg; toast.classList.remove('show'); void toast.offsetWidth; toast.classList.add('show');
+  clearTimeout(showToast._t); showToast._t=setTimeout(function(){ toast.classList.remove('show'); },1600);
 }
 
-/* ===== Etiqueta (chapita) 每 centrada abajo, s車lida como el modal ===== */
-.tag-pill{
-  --ring: currentColor;
-  display:inline-flex; align-items:center; gap:8px;
-  font-family:'Orbitron', sans-serif; font-weight:800; letter-spacing:.3px;
-  text-transform:uppercase; font-size:.78rem;
-  padding:6px 12px; border-radius:12px; border:2px solid var(--ring);
-  color:var(--ring);
+/* API */
+export function abrirModal(juego, origenElemento){
+  var modal=document.getElementById('modal-juego');
+  var modalBody=document.getElementById('modal-body');
+  var modalContent=modal?modal.querySelector('.modal-content'):null;
+  if(!modal||!modalBody||!modalContent) return;
 
-  /* mismo fondo que el modal para m芍s contraste */
-  background:#1a1a2e;
+  var etiqueta=normalizarEtiqueta(juego && juego.tags ? juego.tags : []);
+  var emote=EMOTES[etiqueta]||EMOTES.default;
 
-  box-shadow: 0 0 10px var(--ring);
+  /* reset + clases por tipo */
+  modalBody.className='modal-body';
+  modalContent.className='modal-content';
+  modalBody.classList.add('modal-'+etiqueta);
+  modalContent.classList.add('modal-content-'+etiqueta);
+
+  /* construir contenido SCROLLEABLE dentro de #modal-body */
+  var imagenHTML=(juego && juego.imagen)
+    ? '<img src="'+juego.imagen+'" alt="'+(juego.nombre?escAttr(juego.nombre):'Juego')+'">'
+    : '<div style="width:100%;height:200px;background:#222;color:#888;display:flex;align-items:center;justify-content:center;border-radius:6px;">Sin imagen</div>';
+
+  var nombreHTML   = '<h2 class="modal-title">'+(juego && juego.nombre?juego.nombre:'Sin nombre')+'</h2>';
+  var versionHTML  = (juego && juego.version)?'<div class="modal-version">VERSI\u00D3N: '+juego.version+'</div>':'';
+  var descripcionHTML = (juego && juego.descripcion)?'<p class="modal-description">'+juego.descripcion+'</p>':'';
+
+  var enlaceDescarga=(juego && juego.descargar)?juego.descargar:'';
+  var passProp=buscarPassword(juego);
+  var enlaceCompra=(juego && juego.comprar)?juego.comprar:'';
+
+  var pieces=[];
+  if(enlaceDescarga){ pieces.push('<a class="btn btn--dl" href="'+enlaceDescarga+'" target="_blank" rel="noopener">\uD83D\uDCE5 DESCARGAR</a>'); }
+  if(passProp){       pieces.push('<a class="btn btn--pass btn-copy" href="#" data-pass="'+escAttr(passProp)+'">\uD83D\uDD11 CONTRASE\u00D1A</a>'); }
+  if(enlaceCompra){   pieces.push('<a class="btn btn--buy" href="'+enlaceCompra+'" target="_blank" rel="noopener">\uD83D\uDED2 COMPRAR</a>'); }
+  var botonesHTML = pieces.length?'<div class="modal-body-buttons">'+pieces.join('')+'</div>':'';
+
+  /* PINTAR SOLO EL CONTENIDO en #modal-body (sin la chapita) */
+  modalBody.innerHTML = imagenHTML + nombreHTML + versionHTML + descripcionHTML + botonesHTML;
+
+  /* Agregar/actualizar la CHAPITA como HERMANA de #modal-body (no se scrollea) */
+  var oldTag = modalContent.querySelector('.modal-tag');
+  if (oldTag) oldTag.remove();
+  var tagWrap = document.createElement('div');
+  tagWrap.className = 'modal-tag';
+  tagWrap.innerHTML = '<span class="modal-etiqueta tag-pill tag-'+etiqueta+'">'+emote+' '+etiqueta.toUpperCase()+'</span>';
+  modalContent.appendChild(tagWrap);
+
+  /* Copiar contrase?a + toast + beep */
+  var copyBtn=modalBody.querySelector('.btn-copy');
+  if(copyBtn){
+    copyBtn.addEventListener('click',function(e){
+      e.preventDefault();
+      var t = copyBtn.getAttribute('data-pass')||'';
+      copyToClipboard(t)
+        .then(function(){ beep('ok');  showToast(modalContent,'Contrase\u00F1a copiada'); })
+        .catch(function(){ beep('err'); showToast(modalContent,'No se pudo copiar'); });
+    });
+  }
+
+  /* Origen est谷tico del zoom */
+  modalContent.style.transformOrigin='50% 50%';
+  if(origenElemento && origenElemento.getBoundingClientRect){
+    var r=origenElemento.getBoundingClientRect();
+    modalContent.style.transformOrigin=(r.left+r.width/2)+'px '+(r.top+r.height/2)+'px';
+  }
+
+  showModal(modal);
+  if(juego && juego.id){ try{ history.replaceState(null,'','#'+juego.id); }catch(e){} }
 }
-.tag-offline{ --ring:#3399ff; }
-.tag-lan    { --ring:#00ff99; }
-.tag-online { --ring:#00ffff; }
-.tag-adult  { --ring:#ff0033; }
-.tag-default{ --ring:#ff00cc; }
 
-/* centrada abajo 每 fuera del borde del contenido, nunca requiere scroll */
-.modal-tag{
-  position:absolute;
-  left:50%;
-  bottom:-22px;
-  transform:translateX(-50%);
-  z-index:6;
-  pointer-events:none;
+function cerrarModal(){
+  var modal=document.getElementById('modal-juego');
+  if(!modal) return;
+  hideModal(modal);
+  try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){}
 }
 
-/* ===== Colores por etiqueta (borde + glow) ===== */
-.modal-content-offline{ --modal-borde:#3399ff; --modal-glow:rgba(51,153,255,.45); }
-.modal-content-lan    { --modal-borde:#00ff99; --modal-glow:rgba(0,255,153,.45); }
-.modal-content-online { --modal-borde:#00ffff; --modal-glow:rgba(0,255,255,.45); }
-.modal-content-adult  { --modal-borde:#ff0033; --modal-glow:rgba(255,0,51,.45); }
-.modal-content-default{ --modal-borde:#ff00cc; --modal-glow:rgba(255,0,204,.55); }
-
-/* ===== Aviso de copiado (m芍s arriba para no chocar con la chapita) ===== */
-.copy-toast{
-  position:absolute;
-  left:50%;
-  bottom:64px;                  /* <- subido */
-  transform:translate(-50%,16px);
-  background:#0d0f14; color:#fff; padding:8px 12px; border-radius:12px;
-  font-weight:800; letter-spacing:.3px; border:2px solid var(--modal-borde,#ff00cc);
-  box-shadow:0 0 12px var(--modal-glow, rgba(255,0,204,.45));
-  opacity:0; pointer-events:none; transition:opacity .15s ease, transform .2s ease;
+/* Abre por hash */
+export function verificarFragmentoURL(){
+  var id=location.hash.replace('#','');
+  var lista=(window.__PUBLICACIONES__ && Array.isArray(window.__PUBLICACIONES__))?window.__PUBLICACIONES__:[];
+  if(!id||!lista.length) return;
+  var juego=null; for(var i=0;i<lista.length;i++){ var j=lista[i]; if((j.id||'')===id){ juego=j; break; } }
+  if(juego) abrirModal(juego);
 }
-.copy-toast.show{ opacity:1; transform:translate(-50%,0); }
 
-/* ===== Bloqueo body ===== */
-body.modal-open{ overflow:hidden; }
-
-/* ===== Responsive ===== */
-@media (max-width:600px){
-  .modal-content{ width:92vw; max-width:92vw; padding:16px 16px 42px; }
-  #modal-body{ max-height:64vh; }
-  .modal-content img{ max-height:180px; }
-  .modal-body-buttons .btn{ flex:1 1 100%; min-width:unset; }
-  .copy-toast{ bottom:70px; }
-  .modal-tag{ bottom:-20px; }
-}
+/* Listeners globales */
+document.addEventListener('DOMContentLoaded',function(){
+  var modal=document.getElementById('modal-juego');
+  var closeBtn=modal?modal.querySelector('.modal-close'):null;
+  if(closeBtn) closeBtn.addEventListener('click',cerrarModal);
+  window.addEventListener('click',function(e){ if(e.target===modal) cerrarModal(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') cerrarModal(); });
+  window.addEventListener('hashchange',verificarFragmentoURL);
+});
