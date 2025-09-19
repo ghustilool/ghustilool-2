@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Si la grilla se actualiza dinámicamente, re-aplicar filtro
+  // Reaplicar si la grilla cambia (carga dinámica)
   const observer = new MutationObserver(applyFilter);
   observer.observe(grid, { childList: true });
 

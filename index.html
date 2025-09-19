@@ -7,8 +7,8 @@
   <link rel="icon" href="Ghusti-Ico.ico" type="image/x-icon" />
 
   <!-- 🎨 Estilos -->
-  <link rel="stylesheet" href="styles/main.css?v=59" />
-  <link rel="stylesheet" href="styles/modal.css?v=59" />
+  <link rel="stylesheet" href="styles/main.css?v=60" />
+  <link rel="stylesheet" href="styles/modal.css?v=60" />
 
   <!-- Fuente HONK (título) -->
   <link href="https://fonts.googleapis.com/css2?family=Honk&display=swap" rel="stylesheet">
@@ -39,22 +39,32 @@
     </div>
   </header>
 
-  <!-- 🔎 Buscador -->
-  <div class="search-bar">
-    <label class="search-wrap" for="search-input">
-      <span class="search-icon">👁️</span>
-      <input id="search-input" type="search" placeholder="BUSCADOR" autocomplete="off" spellcheck="false" />
-      <button type="button" class="search-clear" aria-label="Limpiar" title="Limpiar">×</button>
-    </label>
-  </div>
+  <!-- 🔧 Barra superior: buscador (izquierda) + filtros (derecha) -->
+  <div class="toolbar">
+    <!-- 🔎 Buscador estilo botón -->
+    <div class="search-chip">
+      <label class="search-wrap" for="search-input">
+        <span class="search-icon" aria-hidden="true">🔎</span>
+        <input
+          id="search-input"
+          type="search"
+          placeholder="BUSCADOR"
+          autocomplete="off"
+          spellcheck="false"
+          aria-label="Buscar juegos"
+        />
+        <button type="button" class="search-clear" aria-label="Limpiar búsqueda" title="Limpiar">×</button>
+      </label>
+    </div>
 
-  <!-- 🎮 Filtros por etiqueta -->
-  <div class="tag-filter-container" id="tag-filters">
-    <button class="tag-button tag-button-all active" onclick="filtrarPorEtiqueta(null)" title="Inicio">🏠</button>
-    <button class="tag-button tag-button-offline" onclick="filtrarPorEtiqueta('Offline')">🎮 OFFLINE</button>
-    <button class="tag-button tag-button-lan" onclick="filtrarPorEtiqueta('LAN')">🔌 LAN</button>
-    <button class="tag-button tag-button-online" onclick="filtrarPorEtiqueta('Online')">🌐 ONLINE</button>
-    <button class="tag-button tag-button-adult" onclick="filtrarPorEtiqueta('Adult')">🔞 +18</button>
+    <!-- 🎮 Filtros por etiqueta -->
+    <div class="tag-filter-container" id="tag-filters">
+      <button class="tag-button tag-button-all active" onclick="filtrarPorEtiqueta(null)" title="Inicio">🏠</button>
+      <button class="tag-button tag-button-offline" onclick="filtrarPorEtiqueta('Offline')">🎮 OFFLINE</button>
+      <button class="tag-button tag-button-lan" onclick="filtrarPorEtiqueta('LAN')">🔌 LAN</button>
+      <button class="tag-button tag-button-online" onclick="filtrarPorEtiqueta('Online')">🌐 ONLINE</button>
+      <button class="tag-button tag-button-adult" onclick="filtrarPorEtiqueta('Adult')">🔞 +18</button>
+    </div>
   </div>
 
   <!-- 🧩 Grilla -->
@@ -76,11 +86,11 @@
   </footer>
 
   <!-- 🧠 Scripts -->
-  <script src="scripts/filtrarEtiquetas.js?v=59"></script>
-  <script type="module" src="scripts/modal.js?v=59"></script>
-  <script type="module" src="scripts/cargarPublicaciones.js?v=59"></script>
-  <script src="scripts/neonRain.js?v=59"></script>
-  <script src="scripts/title-anim.js?v=59"></script>
-  <script src="scripts/buscador.js?v=59"></script>
+  <script src="scripts/filtrarEtiquetas.js?v=60"></script>
+  <script type="module" src="scripts/modal.js?v=60"></script>
+  <script type="module" src="scripts/cargarPublicaciones.js?v=60"></script>
+  <script src="scripts/neonRain.js?v=60"></script>
+  <script src="scripts/title-anim.js?v=60"></script>
+  <script src="scripts/buscador.js?v=60"></script>
 </body>
 </html>
