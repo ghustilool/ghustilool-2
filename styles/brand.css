@@ -1,0 +1,90 @@
+/* ===================== *
+ *  BRAND / WORD-MARK    *
+ * ===================== */
+:root{
+  --brand-red: #ff1133;      /* rojo principal */
+  --brand-dark: #07080c;     /* casi negro para sombras internas */
+  --brand-cyan: #00f0ff;     /* glow cian para cyber */
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:18px;
+  padding: 32px 20px 14px;
+  position: relative;
+  z-index: 2;
+}
+
+.brand__skull{
+  font-size: clamp(1.6rem, 2vw, 2.2rem);
+  color: var(--brand-cyan);
+  filter: drop-shadow(0 0 6px rgba(0,255,255,.45));
+  animation: skullPulse 2.8s ease-in-out infinite;
+}
+@keyframes skullPulse{
+  0%,100%{ transform: translateY(0) rotate(-4deg); opacity:.95; }
+  50%   { transform: translateY(-2px) rotate(4deg);  opacity:1;   }
+}
+
+.brand__word{
+  position: relative;
+  font-family: 'Rovelink', 'Orbitron', system-ui, sans-serif;
+  font-weight: 900;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  line-height: 1;
+  font-size: clamp(2.4rem, 7vw, 4.6rem);
+
+  color: transparent;
+  background: linear-gradient(180deg, #ff3a3a 0%, var(--brand-red) 55%, #a40016 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+
+  text-shadow:
+    0 1px 0 var(--brand-dark),
+    0 -1px 0 var(--brand-dark),
+    1px 0 0 var(--brand-dark),
+    -1px 0 0 var(--brand-dark),
+    0 0 14px rgba(255,0,64,.35),      /* glow rojo */
+    0 0 24px rgba(0,255,255,.18);     /* glow cian suave */
+}
+
+/* aberración cromática sutil */
+.brand__word::after{
+  content: attr(data-text);
+  position:absolute; inset:0;
+  color:#00ffff;
+  opacity:.22;
+  transform: translate(2px, 0);
+  filter: blur(.5px);
+  pointer-events:none;
+  mix-blend-mode: screen;
+}
+
+/* scanlines */
+.brand__scan{
+  position:absolute; inset:0;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.06) 0px,
+    rgba(255,255,255,0.06) 1px,
+    transparent 2px,
+    transparent 4px
+  );
+  mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+  pointer-events: none;
+  animation: scanMove 8s linear infinite;
+}
+@keyframes scanMove{
+  0%   { transform: translateY(-10%); opacity:.6; }
+  50%  { transform: translateY(10%);  opacity:.3; }
+  100% { transform: translateY(-10%); opacity:.6; }
+}
+
+/* responsive */
+@media (max-width: 600px){
+  .brand{ padding-top: 26px; }
+  .brand__skull{ display:none; }
+}
