@@ -1,9 +1,20 @@
 // scripts/modal.js
-// Layout del modal como en tu captura: etiqueta arriba-izquierda,
-// imagen grande, t赤tulo, "VERSI車N" y 3 botones magenta.
+// Modal como en tu captura: etiqueta superpuesta, imagen grande,
+// t赤tulo centrado, "VERSI車N" (UTF-8 seguro) y 3 botones magenta.
 // ES6 b芍sico (sin optional chaining ni nullish) para evitar errores de sintaxis.
 
-var EMOTES = { offline: '??', lan: '??', online: '??', adult: '??', default: '??' };
+// Emojis en secuencias Unicode (evita "??")
+var EMOTES = {
+  offline: '\uD83C\uDFAE',  // ??
+  lan:     '\uD83D\uDD0C',  // ??
+  online:  '\uD83C\uDF10',  // ??
+  adult:   '\uD83D\uDD1E',  // ??
+  default: '\uD83C\uDFE0'   // ??
+};
+// Iconos para los botones (Unicode seguro)
+var ICON_DL  = '\uD83D\uDCE5'; // ??
+var ICON_KEY = '\uD83D\uDD11'; // ??
+var ICON_CART= '\uD83D\uDED2'; // ??
 
 function normalizarEtiqueta(tags) {
   var raw = '';
@@ -38,6 +49,26 @@ function escAttr(s) {
   return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 }
 
+function buscarPassword(juego) {
+  if (!juego) return '';
+  // 1) clave exacta con ?
+  if (Object.prototype.hasOwnProperty.call(juego, 'contrase?a')) return juego['contrase?a'] || '';
+  // 2) variante sin ?
+  if (Object.prototype.hasOwnProperty.call(juego, 'contrasena')) return juego['contrasena'] || '';
+  // 3) fallback por si el archivo qued車 mal decodificado (contrase?㊣a) u otras variantes
+  try {
+    for (var k in juego) {
+      if (!Object.prototype.hasOwnProperty.call(juego, k)) continue;
+      var nk = k.toLowerCase();
+      var nk2 = (nk.normalize ? nk.normalize('NFD').replace(/[\u0300-\u036f]/g,'') : nk);
+      if (nk.indexOf('contrase') !== -1 || nk2.indexOf('contrasena') !== -1) {
+        return juego[k] || '';
+      }
+    }
+  } catch(e){}
+  return '';
+}
+
 /* ---------- API ---------- */
 export function abrirModal(juego, origenElemento) {
   var modal = document.getElementById('modal-juego');
@@ -59,31 +90,30 @@ export function abrirModal(juego, origenElemento) {
     ? '<img src="' + juego.imagen + '" alt="' + (juego.nombre ? escAttr(juego.nombre) : 'Juego') + '">'
     : '<div style="width:100%;height:200px;background:#222;color:#888;display:flex;align-items:center;justify-content:center;border-radius:6px;">Sin imagen</div>';
 
-  // T赤tulo + versi車n + descripci車n
+  // T赤tulo + versi車n + descripci車n (VERSI車N con escape)
   var nombreHTML = '<h2 class="modal-title">' + (juego && juego.nombre ? juego.nombre : 'Sin nombre') + '</h2>';
-  var versionHTML = (juego && juego.version) ? '<div class="modal-version">VERSI車N: ' + juego.version + '</div>' : '';
+  var versionHTML = (juego && juego.version) ? '<div class="modal-version">VERSI\u00D3N: ' + juego.version + '</div>' : '';
   var descripcionHTML = (juego && juego.descripcion) ? '<p class="modal-description">' + juego.descripcion + '</p>' : '';
 
   // Datos de botones
   var enlaceDescarga = (juego && juego.descargar) ? juego.descargar : '';
-  var passProp = (juego && Object.prototype.hasOwnProperty.call(juego, 'contrase?a')) ? juego['contrase?a']
-              : (juego && juego.contrasena ? juego.contrasena : '');
+  var passProp = buscarPassword(juego);
   var enlaceCompra = (juego && juego.comprar) ? juego.comprar : '';
 
   // Botones (magenta llenos con iconos)
   var pieces = [];
   if (enlaceDescarga) {
-    pieces.push('<a href="' + enlaceDescarga + '" target="_blank" rel="noopener">?? DESCARGAR</a>');
+    pieces.push('<a href="' + enlaceDescarga + '" target="_blank" rel="noopener">' + ICON_DL + ' DESCARGAR</a>');
   }
   if (passProp) {
-    pieces.push('<a href="#" class="btn-copy" data-pass="' + escAttr(passProp) + '">?? CONTRASE?A</a>');
+    pieces.push('<a href="#" class="btn-copy" data-pass="' + escAttr(passProp) + '">' + ICON_KEY + ' CONTRASE\u00D1A</a>');
   }
   if (enlaceCompra) {
-    pieces.push('<a href="' + enlaceCompra + '" target="_blank" rel="noopener">?? COMPRAR</a>');
+    pieces.push('<a href="' + enlaceCompra + '" target="_blank" rel="noopener">' + ICON_CART + ' COMPRAR</a>');
   }
   var botonesHTML = pieces.length ? '<div class="modal-body-buttons">' + pieces.join('') + '</div>' : '';
 
-  // Etiqueta arriba-izquierda (mismo estilo que los filtros)
+  // Etiqueta superpuesta (arriba-izquierda)
   var tagHTML = '<div class="modal-tag"><span class="modal-etiqueta tag-pill tag-' + etiqueta + '">' +
                 emote + ' ' + etiqueta.toUpperCase() + '</span></div>';
 

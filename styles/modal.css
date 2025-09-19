@@ -29,7 +29,7 @@
   overflow-y: auto;
   border-radius: 12px;
   border: 1px solid var(--modal-borde, #ff00cc);
-  box-shadow: none;                     /* sin glow por defecto */
+  box-shadow: none; /* sin glow por defecto */
 
   transform: scale(.95);
   opacity: 0;
@@ -40,7 +40,6 @@
 .modal-content:focus-within {
   box-shadow: 0 0 18px var(--modal-glow, transparent);
 }
-
 .modal.fade-in .modal-content { transform: scale(1); opacity: 1; }
 .modal.fade-out .modal-content { transform: scale(.95); opacity: 0; }
 
@@ -124,7 +123,7 @@
   outline-offset:3px;
 }
 
-/* ===== Etiqueta igual a los botones (arriba-izquierda) ===== */
+/* ===== Etiqueta: mismo estilo que filtros, superpuesta a la imagen ===== */
 .tag-pill{
   --ring: currentColor;
   display:inline-flex; align-items:center; gap:8px;
@@ -148,11 +147,12 @@
 .tag-adult  { --ring:#ff0033; background: rgba(255,0,51,.08); }
 .tag-default{ --ring:#ff00cc; background: rgba(255,0,204,.08); }
 
+/* Superpuesta dentro del área de la imagen */
 .modal-tag{
   position: absolute;
   left: 14px;
-  top: 14px;
-  z-index: 2;
+  top: 26px;      /* cae sobre la imagen */
+  z-index: 5;
   pointer-events: none;
 }
 
@@ -171,5 +171,5 @@ body.modal-open { overflow: hidden; }
   .modal-content { width: 92vw; max-width: 92vw; padding: 16px 16px 24px; }
   .modal-content img { max-height: 180px; }
   .modal-body-buttons a{ flex:1 1 100%; min-width:unset; }
-  .modal-tag{ left: 10px; top: 10px; }
+  .modal-tag{ left: 10px; top: 20px; }
 }
