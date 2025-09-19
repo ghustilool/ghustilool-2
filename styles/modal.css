@@ -16,7 +16,7 @@
   width:min(720px,92vw);
   border-radius:12px; border:1px solid var(--modal-borde,#ff00cc);
 
-  /* NO recorta, para que la chapita por fuera sea visible */
+  /* NO recorta, así la chapita por fuera queda visible */
   overflow:visible;
 
   box-shadow:none; transform:scale(.95); opacity:0;
@@ -29,7 +29,7 @@
 .modal.fade-in .modal-content{ transform:scale(1); opacity:1; }
 .modal.fade-out .modal-content{ transform:scale(.95); opacity:0; }
 
-/* El contenido interno SÍ scrollea */
+/* El interior scrollea sin afectar la chapita */
 #modal-body{
   max-height:70vh;
   overflow-y:auto;
@@ -56,7 +56,7 @@
   letter-spacing:.4px; text-transform:uppercase;
 }
 
-/* ===== Botones por acción (neón) ===== */
+/* ===== Botones estilo "filtros" (transparentes con borde neón) ===== */
 .modal-body-buttons{
   display:flex; gap:12px; justify-content:center; flex-wrap:wrap;
   margin-top:10px; padding:0 6px;
@@ -64,55 +64,57 @@
 .modal-body-buttons .btn{
   position:relative; overflow:hidden;
   flex:1 1 200px; min-width:200px; text-align:center;
+
   display:inline-flex; align-items:center; justify-content:center; gap:10px;
   padding:12px 16px;
+
   font-family:'Orbitron', sans-serif; font-weight:800; letter-spacing:.3px;
   text-transform:uppercase; font-size:.92rem; text-decoration:none;
-  border-radius:12px; border:2px solid var(--c); color:#000;
-  background:var(--c);
-  box-shadow:inset 0 0 10px rgba(255,255,255,.05);
-  transition:transform .12s ease, box-shadow .2s ease, filter .2s ease;
+
+  background:transparent;            /* <- igual que tus filtros */
+  color:var(--c); border:2px solid var(--c);
+  border-radius:12px;
+  box-shadow:none;
+  transition:transform .12s ease, box-shadow .2s ease, background-color .2s ease;
 }
 .modal-body-buttons .btn:hover{
   transform:translateY(-1px);
-  box-shadow:0 0 18px var(--c), inset 0 0 10px rgba(255,255,255,.06);
-  filter:saturate(1.1);
+  box-shadow:0 0 14px var(--c);
 }
-/* brillo que cruza */
-.modal-body-buttons .btn::after{
-  content:""; position:absolute; inset:-20%;
-  background:
-    radial-gradient(60% 60% at 10% 10%, rgba(255,255,255,.35), transparent 60%),
-    linear-gradient(120deg, transparent 0%, rgba(255,255,255,.28) 35%, transparent 70%);
-  transform:translateX(-120%); transition:transform .45s ease; mix-blend-mode:screen;
-}
-.modal-body-buttons .btn:hover::after{ transform:translateX(120%); }
+/* relleno suave por color al pasar */
+.btn--dl:hover   { background:rgba(0,255,255,.12); }
+.btn--pass:hover { background:rgba(255,239,0,.15); }
+.btn--buy:hover  { background:rgba(0,255,153,.12); }
 
 /* Colores de cada acción */
 .btn--dl   { --c:#00ffff; } /* Descargar */
-.btn--pass { --c:#ffef00; } /* Contraseña */
-.btn--buy  { --c:#00ff99; } /* Comprar */
+.btn--pass { --c:#ffef00; color:#111; } /* Contraseña: texto legible en hover */
+.btn--buy  { --c:#00ff99; }
 
 /* Accesibilidad */
 .modal-body-buttons .btn:focus-visible{
   outline:2px solid #fff; outline-offset:3px;
 }
 
-/* ===== Etiqueta (chapita) – centrada abajo, superpuesta AL MODAL (no al scroller) ===== */
+/* ===== Etiqueta (chapita) – centrada abajo, sólida como el modal ===== */
 .tag-pill{
   --ring: currentColor;
   display:inline-flex; align-items:center; gap:8px;
   font-family:'Orbitron', sans-serif; font-weight:800; letter-spacing:.3px;
   text-transform:uppercase; font-size:.78rem;
   padding:6px 12px; border-radius:12px; border:2px solid var(--ring);
-  color:var(--ring); background:rgba(0,0,0,.25);
-  box-shadow: inset 0 0 12px rgba(255,255,255,.05), 0 0 10px var(--ring);
+  color:var(--ring);
+
+  /* mismo fondo que el modal para más contraste */
+  background:#1a1a2e;
+
+  box-shadow: 0 0 10px var(--ring);
 }
-.tag-offline{ --ring:#3399ff; background: rgba(51,153,255,.08); }
-.tag-lan    { --ring:#00ff99; background: rgba(0,255,153,.08); }
-.tag-online { --ring:#00ffff; background: rgba(0,255,255,.08); }
-.tag-adult  { --ring:#ff0033; background: rgba(255,0,51,.08); }
-.tag-default{ --ring:#ff00cc; background: rgba(255,0,204,.08); }
+.tag-offline{ --ring:#3399ff; }
+.tag-lan    { --ring:#00ff99; }
+.tag-online { --ring:#00ffff; }
+.tag-adult  { --ring:#ff0033; }
+.tag-default{ --ring:#ff00cc; }
 
 /* centrada abajo – fuera del borde del contenido, nunca requiere scroll */
 .modal-tag{
@@ -131,9 +133,12 @@
 .modal-content-adult  { --modal-borde:#ff0033; --modal-glow:rgba(255,0,51,.45); }
 .modal-content-default{ --modal-borde:#ff00cc; --modal-glow:rgba(255,0,204,.55); }
 
-/* ===== Aviso de copiado ===== */
+/* ===== Aviso de copiado (más arriba para no chocar con la chapita) ===== */
 .copy-toast{
-  position:absolute; left:50%; bottom:12px; transform:translate(-50%,16px);
+  position:absolute;
+  left:50%;
+  bottom:64px;                  /* <- subido */
+  transform:translate(-50%,16px);
   background:#0d0f14; color:#fff; padding:8px 12px; border-radius:12px;
   font-weight:800; letter-spacing:.3px; border:2px solid var(--modal-borde,#ff00cc);
   box-shadow:0 0 12px var(--modal-glow, rgba(255,0,204,.45));
@@ -150,5 +155,6 @@ body.modal-open{ overflow:hidden; }
   #modal-body{ max-height:64vh; }
   .modal-content img{ max-height:180px; }
   .modal-body-buttons .btn{ flex:1 1 100%; min-width:unset; }
+  .copy-toast{ bottom:70px; }
   .modal-tag{ bottom:-20px; }
 }
