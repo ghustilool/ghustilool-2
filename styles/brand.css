@@ -1,124 +1,130 @@
-/* ==================================================
-   GHUSTILOOL — Wordmark Cyberpunk con Glitch Real
-   - sin calaveras ni barras
-   - capas cian/magenta desplazadas
-   - glitch suave (idle) y fuerte en hover
-   - 3 esquemas: brand--neon (default), brand--red, brand--ar
-   ================================================== */
+/* =========================================================
+   GHUSTILOOL — Wordmark estilo Super Mario 64
+   - Fuente gordita arcade (Luckiest Guy)
+   - Colores por letra (rojo → amarillo → verde → azul)
+   - Pseudo-3D con extrusión y outline negro
+   - Glitch retro cortito (falla de “pixel”) cada tanto
+   ========================================================= */
 
-.brand{
-  /* colores por defecto (neón synthwave) */
-  --c-base:  #eaf6ff;   /* texto principal */
-  --c1:      #00eaff;  /* cian */
-  --c2:      #ff00cc;  /* magenta */
-  --shadow:  rgba(8,10,16,.9);
+:root{
+  /* paleta SM64 aproximada */
+  --sm64-red:    #ff2b2b;
+  --sm64-red-d:  #8e0f0f;
 
-  position: relative;
+  --sm64-yellow: #ffd200;
+  --sm64-yellow-d:#8a6800;
+
+  --sm64-green:  #00c853;
+  --sm64-green-d:#006b2d;
+
+  --sm64-blue:   #2b6cff;
+  --sm64-blue-d: #0b2e96;
+
+  --outline: #000000;   /* borde negro gordito */
+}
+
+/* contenedor header */
+.brand64{
   display:flex;
   align-items:center;
   justify-content:center;
   padding: 30px 16px 12px;
-  z-index:2;
-}
-
-.brand__wrap{
-  display:flex;
-  align-items:baseline;
-  gap: 12px;
-}
-
-/* brackets tipo HUD */
-.brand__bracket{
-  font-family: 'Roboto Mono', monospace;
-  font-weight: 700;
-  font-size: clamp(1rem, 2.2vw, 1.4rem);
-  color: var(--c1);
-  text-shadow:
-    0 0 10px var(--c1),
-    0 0 20px color-mix(in oklab, var(--c1) 65%, transparent);
-  opacity:.85;
-}
-.brand__bracket--right{ color: var(--c2); text-shadow: 0 0 10px var(--c2), 0 0 20px color-mix(in oklab, var(--c2) 65%, transparent); }
-
-/* palabra GHUSTILOOL */
-.brand__logo{
   position: relative;
+  z-index: 2;
+}
+
+/* logo */
+.brand64__logo{
+  display:flex;
+  align-items:flex-end;
+  gap: clamp(2px, .6vw, 8px);
   margin: 0;
-  font-family: 'Russo One', system-ui, sans-serif;
-  font-weight: 800;
-  letter-spacing: .08em;
+  line-height: .9;
+  font-family: 'Luckiest Guy', system-ui, sans-serif;
+  font-size: clamp(2.8rem, 8.6vw, 5.4rem);
   text-transform: uppercase;
-  font-size: clamp(2.6rem, 8vw, 5rem);
-  line-height: 1;
-  color: var(--c-base);
+  user-select: none;
+}
 
-  /* “neon” sobrio */
-  -webkit-text-stroke: 1px var(--shadow);
+/* letra base */
+.brand64__letter{
+  position: relative;
+  display:inline-block;
+  padding: 0 .02em;
+  /* outline negro potente */
+  -webkit-text-stroke: 3px var(--outline);
+
+  /* extrusión (apilado de sombras) */
   text-shadow:
-    0 1px 0 var(--shadow),
-    0 -1px 0 var(--shadow),
-    0 0 14px color-mix(in oklab, var(--c1) 36%, transparent),
-    0 0 24px color-mix(in oklab, var(--c2) 24%, transparent);
+    0  1px 0  var(--outline),
+    1px 2px 0  var(--outline),
+    2px 3px 0  var(--outline),
+    3px 4px 0  var(--outline),
+    4px 5px 0  var(--outline),
+    5px 6px 0  var(--outline),
+    6px 7px 0  rgba(0,0,0,.75),
+    8px 10px 12px rgba(0,0,0,.45);
+
+  transform: translateZ(0); /* mejora render */
 }
 
-/* capas de glitch: cian y magenta */
-.brand__logo::before,
-.brand__logo::after{
-  content: attr(data-text);
+/* brillo superior como “laca” */
+.brand64__letter::after{
+  content:'';
   position:absolute; inset:0;
-  pointer-events:none;
+  background: linear-gradient(180deg, rgba(255,255,255,.38) 0%, rgba(255,255,255,0) 55%);
   mix-blend-mode: screen;
-}
-.brand__logo::before{ color: var(--c1); opacity:.55; animation: glitchSlice1 3.2s steps(12,end) infinite; }
-.brand__logo::after { color: var(--c2); opacity:.50; animation: glitchSlice2 3.2s steps(12,end) infinite; }
-
-/* al pasar el mouse, glitch más intenso */
-.brand__wrap:hover .brand__logo::before{ animation-duration: 1.4s; opacity:.75; }
-.brand__wrap:hover .brand__logo::after { animation-duration: 1.4s; opacity:.72; }
-
-/* Slices con clip-path (no barra, no scan) */
-@keyframes glitchSlice1{
-  0%   { clip-path: inset(0 0 78% 0); transform: translate(-1px,-1px); }
-  10%  { clip-path: inset(12% 0 60% 0); transform: translate(1px, 1px);  }
-  20%  { clip-path: inset(28% 0 46% 0); transform: translate(-2px,0);   }
-  30%  { clip-path: inset(40% 0 34% 0); transform: translate(2px,-1px); }
-  40%  { clip-path: inset(58% 0 20% 0); transform: translate(-1px,1px); }
-  50%  { clip-path: inset(70% 0 12% 0); transform: translate(1px,0);    }
-  60%  { clip-path: inset(8% 0 70% 0);  transform: translate(-1px,-1px); }
-  70%  { clip-path: inset(46% 0 30% 0); transform: translate(1px,1px);   }
-  80%  { clip-path: inset(20% 0 52% 0); transform: translate(-2px,0);    }
-  90%  { clip-path: inset(64% 0 10% 0); transform: translate(2px,-1px);  }
-  100% { clip-path: inset(0 0 78% 0);  transform: translate(0,0);       }
-}
-@keyframes glitchSlice2{
-  0%   { clip-path: inset(72% 0 0 0);  transform: translate(1px,0);     }
-  10%  { clip-path: inset(54% 0 10% 0); transform: translate(-1px,1px); }
-  20%  { clip-path: inset(40% 0 26% 0); transform: translate(2px,0);   }
-  30%  { clip-path: inset(30% 0 36% 0); transform: translate(-1px,-1px);}
-  40%  { clip-path: inset(18% 0 48% 0); transform: translate(1px,0);   }
-  50%  { clip-path: inset(10% 0 56% 0); transform: translate(-2px,1px); }
-  60%  { clip-path: inset(64% 0 8% 0);  transform: translate(1px,0);   }
-  70%  { clip-path: inset(34% 0 32% 0); transform: translate(-1px,0);  }
-  80%  { clip-path: inset(22% 0 44% 0); transform: translate(2px,-1px);}
-  90%  { clip-path: inset(6% 0 60% 0);  transform: translate(-1px,1px);}
-  100% { clip-path: inset(72% 0 0 0);  transform: translate(0,0);      }
+  pointer-events:none;
+  border-radius: 4px;
+  transform: translateY(-1px);
+  opacity:.8;
 }
 
-/* =========================
-   Temas de color
-   ========================= */
+/* color por letra con ciclo Red → Yellow → Green → Blue */
+.brand64__letter:nth-child(4n+1){ color: var(--sm64-red);    --edge: var(--sm64-red-d); }
+.brand64__letter:nth-child(4n+2){ color: var(--sm64-yellow); --edge: var(--sm64-yellow-d); }
+.brand64__letter:nth-child(4n+3){ color: var(--sm64-green);  --edge: var(--sm64-green-d); }
+.brand64__letter:nth-child(4n+4){ color: var(--sm64-blue);   --edge: var(--sm64-blue-d); }
 
-/* Synthwave (default) */
-.brand--neon{ --c1:#00eaff; --c2:#ff00cc; --c-base:#eaf6ff; }
+/* pequeña inclinación alternada (cartoon) */
+.brand64__letter:nth-child(odd){ transform: rotate(-1.2deg); }
+.brand64__letter:nth-child(even){ transform: rotate( .8deg); }
 
-/* Rojo/negro (si querés marcar tu marca) */
-.brand--red{ --c1:#ff2948; --c2:#ff9100; --c-base:#ffe9ee; }
+/* ===== Glitch retro muy breve (falla de “pixel”) ===== */
+@keyframes pixelGlitchA{
+  0%,96%,100% { clip-path: inset(0 0 0 0); transform: translate(0,0) rotate(var(--rot,0deg)); }
+  97%         { clip-path: inset(0 0 60% 0); transform: translate(-1px,0) rotate(var(--rot,0deg)); }
+  98%         { clip-path: inset(42% 0 0 0); transform: translate( 1px,0) rotate(var(--rot,0deg)); }
+  99%         { clip-path: inset(0 0 0 0); transform: translate(0,0) rotate(var(--rot,0deg)); }
+}
+@keyframes pixelGlitchB{
+  0%,96%,100% { clip-path: inset(0 0 0 0); transform: translate(0,0) rotate(var(--rot,0deg)); }
+  97%         { clip-path: inset(12% 0 70% 0); transform: translate(1px,0) rotate(var(--rot,0deg)); }
+  98%         { clip-path: inset(64% 0  6% 0); transform: translate(-1px,0) rotate(var(--rot,0deg)); }
+  99%         { clip-path: inset(0 0 0 0); transform: translate(0,0) rotate(var(--rot,0deg)); }
+}
 
-/* Celeste/dorado sutil (guiño AR, sin banderitas) */
-.brand--ar{ --c1:#6dd8ff; --c2:#ffd166; --c-base:#f4fbff; }
+/* aplicamos con delays distintos para que no “salte” todo igual */
+.brand64__letter{
+  --rot: 0deg;
+  animation: pixelGlitchA 6.6s steps(1,end) infinite;
+}
+.brand64__letter:nth-child(2){ animation: pixelGlitchB 6.6s steps(1,end) infinite .6s; }
+.brand64__letter:nth-child(3){ animation: pixelGlitchA 6.6s steps(1,end) infinite 1.1s; }
+.brand64__letter:nth-child(4){ animation: pixelGlitchB 6.6s steps(1,end) infinite 1.7s; }
+.brand64__letter:nth-child(5){ animation: pixelGlitchA 6.6s steps(1,end) infinite 2.3s; }
+.brand64__letter:nth-child(6){ animation: pixelGlitchB 6.6s steps(1,end) infinite 2.9s; }
+.brand64__letter:nth-child(7){ animation: pixelGlitchA 6.6s steps(1,end) infinite 3.5s; }
+.brand64__letter:nth-child(8){ animation: pixelGlitchB 6.6s steps(1,end) infinite 4.1s; }
+.brand64__letter:nth-child(9){ animation: pixelGlitchA 6.6s steps(1,end) infinite 4.7s; }
+.brand64__letter:nth-child(10){animation: pixelGlitchB 6.6s steps(1,end) infinite 5.3s; }
 
-/* Responsive */
+/* Hover: un poquito de “pop” arcade */
+.brand64__logo:hover .brand64__letter{
+  transform: translateY(-1px) rotate(var(--rot,0deg)) scale(1.02);
+}
+
+/* Responsive: afinar outline en pantallas pequeñas */
 @media (max-width:600px){
-  .brand{ padding:24px 12px 8px; }
-  .brand__bracket{ display:none; } /* más limpio en móvil */
+  .brand64__letter{ -webkit-text-stroke: 2px var(--outline); }
 }
