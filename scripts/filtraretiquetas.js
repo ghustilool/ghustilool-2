@@ -24,9 +24,7 @@
   }
   function matchEtiqueta(card, key){
     if (key === null) return true;
-    // 1) por clase (card-offline/lan/online/adult/default)
     if (card.classList.contains('card-' + key)) return true;
-    // 2) por pill interna (tag-offline/lan/online/adult/default)
     const pill = card.querySelector('.tag-pill');
     if (pill && pill.classList.contains('tag-' + key)) return true;
     return false;
@@ -47,11 +45,10 @@
       card.style.display = (okTag && okTexto) ? '' : 'none';
     });
 
-    // reajustar alto de títulos si lo tenés
     if (window.fitTitles) try { window.fitTitles(); } catch(_){}
   }
 
-  // Público (para que otros scripts puedan forzar el re-aplicado)
+  // Público (para los botones del HTML)
   window.filtrarPorEtiqueta = function(tag){
     etiquetaActual = tagToKey(tag);
     // activar visualmente el botón correcto
@@ -78,7 +75,7 @@
     btn.addEventListener('click',   () => filtrarPorTexto(input.value));
   }
 
-  // Exponer por si algún otro script quiere re-aplicar búsqueda después de cargar
+  // Exponer por si otro script quiere re-aplicar
   window.__aplicarFiltroTexto__ = () => aplicarFiltros();
 
 })();
