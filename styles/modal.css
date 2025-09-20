@@ -75,25 +75,28 @@
 
 .modal-body-buttons .btn:focus-visible{ outline:2px solid #fff; outline-offset:3px; }
 
-/* ===== Chapita etiqueta – centrada abajo, sólido modal ===== */
-.tag-pill{
-  --ring: currentColor;
-  display:inline-flex; align-items:center; gap:8px;
-  font-family:'Orbitron', sans-serif; font-weight:800; letter-spacing:.3px;
-  text-transform:uppercase; font-size:.78rem;
-  padding:6px 12px; border-radius:12px; border:2px solid var(--ring);
-  color:var(--ring); background:#1a1a2e; box-shadow:0 0 10px var(--ring);
-}
-.tag-offline{ --ring:#3399ff; }
-.tag-lan    { --ring:#00ff99; }
-.tag-online { --ring:#00ffff; }
-.tag-adult  { --ring:#ff0033; }
-.tag-default{ --ring:#ff00cc; }
-
+/* ===== Chapita como BOTÓN principal (idéntico a filtros) ===== */
+/* Usamos .tag-button + variantes de color que ya tenés en main.css */
 .modal-tag{
-  position:absolute; left:50%; bottom:-22px; transform:translateX(-50%);
-  z-index:6; pointer-events:none;
+  position:absolute;
+  left:50%;
+  bottom:-22px;
+  transform:translateX(-50%);
+  z-index:6;
+  pointer-events:none;             /* el contenedor no recibe clicks */
 }
+.modal-tag .tag-button{
+  pointer-events:none;             /* visual solamente */
+  background:rgba(0,0,0,.25);      /* coherente con filtros */
+  box-shadow:0 0 12px currentColor;/* glow leve como active */
+}
+.modal-tag-button{
+  padding:6px 14px;
+  font-size:.78rem;
+  border-width:2px;
+  border-radius:10px;
+}
+.modal-tag .tag-button:hover{ transform:none; }
 
 /* Paleta por etiqueta para borde + glow del modal */
 .modal-content-offline{ --modal-borde:#3399ff; --modal-glow:rgba(51,153,255,.45); }

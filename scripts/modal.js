@@ -1,6 +1,5 @@
-// Modal: etiqueta centrada abajo, botones tipo filtros (sin glow),
-// toast que baja desde ARRIBA ("Contrase?a copiada ?"), x normal con color
-// por etiqueta, y beep. Unicode escapado + ES6 b¨¢sico.
+// Modal: etiqueta centrada abajo con MISMO estilo que los botones principales,
+// toast que baja desde arriba, y beep. Unicode escapado + ES6 básico.
 
 var EMOTES = {
   offline: '\uD83C\uDFAE',  // ??
@@ -32,7 +31,7 @@ function escAttr(s){ return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;
 
 function buscarPassword(j){
   if(!j) return '';
-  if (Object.prototype.hasOwnProperty.call(j,'contrase?a')) return j['contrase?a']||'';
+  if (Object.prototype.hasOwnProperty.call(j,'contraseña')) return j['contraseña']||'';
   if (Object.prototype.hasOwnProperty.call(j,'contrasena')) return j['contrasena']||'';
   try{
     for (var k in j){
@@ -101,7 +100,7 @@ export function abrirModal(juego, origenElemento){
     : '<div style="width:100%;height:200px;background:#222;color:#888;display:flex;align-items:center;justify-content:center;border-radius:6px;">Sin imagen</div>';
 
   var nombreHTML   = '<h2 class="modal-title">'+(juego && juego.nombre?juego.nombre:'Sin nombre')+'</h2>';
-  var versionHTML  = (juego && juego.version)?'<div class="modal-version">VERSI\u00D3N: '+juego.version+'</div>':'';
+  var versionHTML  = (juego && juego.version)?'<div class="modal-version">VERSIÓN: '+juego.version+'</div>':'';
   var descripcionHTML = (juego && juego.descripcion)?'<p class="modal-description">'+juego.descripcion+'</p>':'';
 
   var enlaceDescarga=(juego && juego.descargar)?juego.descargar:'';
@@ -110,18 +109,21 @@ export function abrirModal(juego, origenElemento){
 
   var pieces=[];
   if(enlaceDescarga){ pieces.push('<a class="btn btn--dl" href="'+enlaceDescarga+'" target="_blank" rel="noopener">\uD83D\uDCE5 DESCARGAR</a>'); }
-  if(passProp){       pieces.push('<a class="btn btn--pass btn-copy" href="#" data-pass="'+escAttr(passProp)+'">\uD83D\uDD11 CONTRASE\u00D1A</a>'); }
+  if(passProp){       pieces.push('<a class="btn btn--pass btn-copy" href="#" data-pass="'+escAttr(passProp)+'">\uD83D\uDD11 CONTRASEÑA</a>'); }
   if(enlaceCompra){   pieces.push('<a class="btn btn--buy" href="'+enlaceCompra+'" target="_blank" rel="noopener">\uD83D\uDED2 COMPRAR</a>'); }
   var botonesHTML = pieces.length?'<div class="modal-body-buttons">'+pieces.join('')+'</div>':'';
 
   modalBody.innerHTML = imagenHTML + nombreHTML + versionHTML + descripcionHTML + botonesHTML;
 
-  /* chapita */
+  /* === Chapita ahora usa el MISMO estilo que los botones principales (.tag-button) === */
   var oldTag = modalContent.querySelector('.modal-tag');
   if (oldTag) oldTag.remove();
   var tagWrap = document.createElement('div');
   tagWrap.className = 'modal-tag';
-  tagWrap.innerHTML = '<span class="modal-etiqueta tag-pill tag-'+etiqueta+'">'+emote+' '+etiqueta.toUpperCase()+'</span>';
+  tagWrap.innerHTML =
+    '<button class="tag-button tag-button-' + etiqueta + ' modal-tag-button" disabled>' +
+      emote + ' ' + etiqueta.toUpperCase() +
+    '</button>';
   modalContent.appendChild(tagWrap);
 
   /* Origen del zoom */
@@ -156,7 +158,6 @@ document.addEventListener('DOMContentLoaded',function(){
   var modal=document.getElementById('modal-juego');
   var closeBtn=modal?modal.querySelector('.modal-close'):null;
   if(closeBtn){
-    // s¨ªmbolo seguro para evitar "??"
     closeBtn.innerHTML = '&times;';
     closeBtn.setAttribute('aria-label','Cerrar');
     closeBtn.addEventListener('click',cerrarModal);
@@ -165,7 +166,7 @@ document.addEventListener('DOMContentLoaded',function(){
   document.addEventListener('keydown',function(e){ if(e.key==='Escape') cerrarModal(); });
   window.addEventListener('hashchange',verificarFragmentoURL);
 
-  // === Delegaci¨®n permanente para el bot¨®n CONTRASE?A ===
+  // Delegación para el botón CONTRASEÑA
   var modalBody=document.getElementById('modal-body');
   if(modalBody && !modalBody.dataset.copyBound){
     modalBody.addEventListener('click',function(e){
@@ -177,14 +178,14 @@ document.addEventListener('DOMContentLoaded',function(){
       var modalContent = modalBody.closest('.modal-content') ||
                          document.querySelector('#modal-juego .modal-content');
 
-      if(!t){ beep('err'); showToastTop(modalContent,'No hay contrase\u00F1a \u274C','err'); return; }
+      if(!t){ beep('err'); showToastTop(modalContent,'No hay contraseña ?','err'); return; }
 
       var p = (navigator.clipboard && navigator.clipboard.writeText)
         ? navigator.clipboard.writeText(t)
         : (function(){ var ta=document.createElement('textarea'); ta.value=t; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.focus(); ta.select(); var ok=document.execCommand('copy'); document.body.removeChild(ta); return ok?Promise.resolve():Promise.reject(); })();
 
-      p.then(function(){ beep('ok');  showToastTop(modalContent,'Contrase\u00F1a copiada \u2705','ok'); })
-       .catch(function(){ beep('err'); showToastTop(modalContent,'No se pudo copiar \u274C','err'); });
+      p.then(function(){ beep('ok');  showToastTop(modalContent,'Contraseña copiada ?','ok'); })
+       .catch(function(){ beep('err'); showToastTop(modalContent,'No se pudo copiar ?','err'); });
     });
     modalBody.dataset.copyBound='1';
   }
