@@ -23,16 +23,10 @@
       <span class="title-emoji" id="emoji-left" aria-hidden="true">☠️</span>
       <h1 class="site-title" aria-label="GhustiLoOL">
         <span class="title-word" id="title-word">
-          <span class="t-letter">G</span>
-          <span class="t-letter">h</span>
-          <span class="t-letter">u</span>
-          <span class="t-letter">s</span>
-          <span class="t-letter">t</span>
-          <span class="t-letter">i</span>
-          <span class="t-letter">L</span>
-          <span class="t-letter">o</span>
-          <span class="t-letter">O</span>
-          <span class="t-letter">L</span>
+          <span class="t-letter">G</span><span class="t-letter">h</span><span class="t-letter">u</span>
+          <span class="t-letter">s</span><span class="t-letter">t</span><span class="t-letter">i</span>
+          <span class="t-letter">L</span><span class="t-letter">o</span>
+          <span class="t-letter">O</span><span class="t-letter">L</span>
         </span>
       </h1>
       <span class="title-emoji" id="emoji-right" aria-hidden="true">🇦🇷</span>
@@ -41,7 +35,6 @@
 
   <!-- 🎮 Filtros centrados + 🔎 Buscador flotante a la derecha -->
   <div class="filters-bar">
-    <!-- Botones PRINCIPALES (centrados) -->
     <div class="tag-filter-container" id="tag-filters">
       <button class="tag-button tag-button-all active" onclick="filtrarPorEtiqueta(null)" title="Inicio">🏠</button>
       <button class="tag-button tag-button-offline" onclick="filtrarPorEtiqueta('Offline')">🎮 OFFLINE</button>
@@ -70,7 +63,7 @@
     <div class="grid" id="publicaciones-todas"></div>
   </main>
 
-  <!-- 🪟 Modal -->
+  <!-- 🪟 Modal de juegos (ya existente) -->
   <div id="modal-juego" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
     <div class="modal-content">
       <button class="modal-close" aria-label="Cerrar" title="Cerrar">&times;</button>
@@ -78,16 +71,30 @@
     </div>
   </div>
 
+  <!-- 🪟 Modal DMCA (nuevo, con tema amarillo) -->
+  <div id="modal-dmca" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-content modal-content-dmca">
+      <button class="modal-close" aria-label="Cerrar DMCA" title="Cerrar">&times;</button>
+      <div id="modal-dmca-body" class="modal-dmca-body">
+        <!-- el HTML se carga vía fetch('dmca.html') -->
+      </div>
+    </div>
+  </div>
+
   <!-- 🧾 Footer -->
-  <footer>
-    <p>&copy; 2025 GhustiLoOL. Todos los derechos reservados.</p>
+  <footer class="site-footer">
+    <p class="copy">&copy; 2025 GhustiLoOL. Todos los derechos reservados.</p>
+    <a href="#" class="dmca-link" id="open-dmca" aria-label="Abrir política DMCA">DMCA</a>
   </footer>
 
   <!-- 🧠 Scripts -->
   <script src="scripts/filtraretiquetas.js?v=59"></script>
-  <!-- modal.js se importa dentro de cargarpublicaciones.js -->
+  <!-- modal.js de juegos se importa dentro de cargarpublicaciones.js -->
   <script type="module" src="scripts/cargarpublicaciones.js?v=59"></script>
   <script src="scripts/neonrain.js?v=59"></script>
   <script src="scripts/title-anim.js?v=59"></script>
+
+  <!-- Nuevo: controlador del modal DMCA -->
+  <script src="scripts/dmca-modal.js?v=59"></script>
 </body>
 </html>

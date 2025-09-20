@@ -127,3 +127,60 @@ body.modal-open{ overflow:hidden; }
   .modal-body-buttons .btn{ flex:1 1 100%; min-width:unset; }
   .modal-tag{ bottom:-20px; }
 }
+
+/* ====== DMCA Modal (tema amarillo) ====== */
+.modal-content-dmca{
+  --modal-borde:#ffef00;
+  --modal-glow:rgba(255,239,0,.50);
+  border-color: var(--modal-borde);
+}
+.modal-content-dmca:hover,
+.modal-content-dmca:focus-within{
+  box-shadow:0 0 18px var(--modal-glow);
+}
+
+/* Cuerpo scrollable interno específico del DMCA */
+.modal-dmca-body{
+  max-height: 70vh;
+  overflow-y: auto;
+  padding-right: 4px; /* espacio para scrollbar */
+}
+.modal-dmca-body h2, .modal-dmca-body h3{
+  margin: 8px 0 6px;
+}
+.modal-dmca-body p, .modal-dmca-body li{
+  line-height: 1.5;
+}
+.modal-dmca-body a{
+  color:#ffef00;
+  text-decoration: underline;
+}
+
+/* Footer con link DMCA abajo a la derecha */
+.site-footer{
+  position: relative;
+  text-align: center;
+  padding: 20px;
+  border-top: 1px solid #333;
+  color:#888;
+  font-family:'Roboto Mono', monospace;
+  font-size:.9rem;
+  z-index:2;
+}
+.site-footer .dmca-link{
+  position: absolute;
+  right: 10px; bottom: 12px;
+  padding: 6px 10px;
+  border: 1px solid #ffef00;
+  border-radius: 10px;
+  color:#ffef00;
+  text-decoration: none;
+  background: rgba(0,0,0,.35);
+  box-shadow: 0 0 10px rgba(255,239,0,.45);
+  font-weight: 700;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.site-footer .dmca-link:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 0 14px rgba(255,239,0,.6);
+}
