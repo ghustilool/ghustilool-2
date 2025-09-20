@@ -19,7 +19,7 @@ body {
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center;        /* mantiene los botones centrados */
   gap: 12px;
   max-width: 1200px;
   margin: 18px auto 6px;
@@ -27,14 +27,14 @@ body {
   z-index: 2;
 }
 
-/* 🎮 Filtros por etiqueta */
+/* 🎮 Botones centrados */
 .tag-filter-container {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center;        /* <— CENTRADOS */
   flex-wrap: wrap; gap: 12px;
-  z-index: 2; position: relative;
-  flex: 1 1 auto;     /* permite que el buscador se ubique al final */
+  position: relative;
+  z-index: 2;
 }
 .tag-button {
   display: inline-flex; align-items: center; gap: 8px;
@@ -50,39 +50,45 @@ body {
 .tag-button-online { border-color:#00ffff;color:#00ffff; }
 .tag-button-adult { border-color:#ff0033;color:#ff0033; }
 
-/* === Buscador como “último botón” === */
+/* === Buscador flotante a la derecha (no afecta el centrado) === */
+.search-float{
+  position: absolute;
+  right: 10px; top: 50%;
+  transform: translateY(-50%);
+  display: flex; align-items: center;
+}
 .search-input-wrap{
   position: relative;
-  display: inline-flex;
-  align-items: center;
-  margin-left: auto; /* queda pegado a la punta derecha de la fila */
+  display: inline-flex; align-items: center;
   border-radius: 10px;
-  /* Glow violeta permanente como en tu boceto */
-  box-shadow: 0 0 14px rgba(178,0,255,.55);
+  box-shadow: 0 0 14px rgba(178,0,255,.55); /* glow violeta permanente */
 }
+/* Prefijo fijo “🔎|” (no desaparece al escribir) */
 .search-input-wrap::before{
-  content: "🔎";
+  content: "🔎|";
   position: absolute;
   left: 12px; top: 50%; transform: translateY(-50%);
-  color: #19d3ff;              /* celeste del ícono */
+  color: #b200ff;
   font-size: 1rem;
   pointer-events: none;
   filter: drop-shadow(0 0 2px rgba(0,0,0,.85));
 }
+
 .search-input{
-  padding: 8px 12px 8px 40px;  /* espacio para el ícono fijo */
+  padding: 8px 12px 8px 40px;  /* deja lugar para 🔎| */
   font-size: 0.95rem;
   font-weight: 700;
   font-family: 'Orbitron', sans-serif;
-  border: 2px solid #b200ff;  /* violeta */
+  border: 2px solid #b200ff;
   border-radius: 10px;
   color: #eae0ff;
-  background: #1a1a2e;        /* sólido (sin transparencia) */
+  background: #1a1a2e;
   outline: none;
-  min-width: 230px;
+  width: 210px;                /* más corto como pediste */
   transition: box-shadow .2s ease, transform .2s ease, border-color .2s ease;
 }
-.search-input::placeholder{ color: #bfa8ff; opacity: .9; }
+/* sin placeholder: el prefijo lo dibuja ::before */
+.search-input::placeholder{ color: transparent; }
 .search-input:hover,
 .search-input:focus{
   box-shadow: 0 0 12px #b200ff;
@@ -196,6 +202,8 @@ footer {
 /* 📱 Responsive */
 @media (max-width: 900px){
   .filters-bar{ flex-direction: column; gap: 10px; }
-  .search-input-wrap{ margin-left: 0; } /* baja debajo en mobile */
+  .search-float{
+    position: static; transform: none; margin-top: 6px; /* buscador baja debajo en mobile */
+  }
 }
 @media (max-width: 480px){ .card{ height: 300px; } }

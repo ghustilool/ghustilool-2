@@ -33,22 +33,24 @@
     </div>
   </header>
 
-  <!-- 🎮 Filtros + 🔎 Buscador (buscador como último “botón” a la derecha) -->
+  <!-- 🎮 Filtros centrados + 🔎 Buscador flotante a la derecha -->
   <div class="filters-bar">
+    <!-- Botones PRINCIPALES (centrados) -->
     <div class="tag-filter-container" id="tag-filters">
       <button class="tag-button tag-button-all active" onclick="filtrarPorEtiqueta(null)" title="Inicio">🏠</button>
       <button class="tag-button tag-button-offline" onclick="filtrarPorEtiqueta('Offline')">🎮 OFFLINE</button>
       <button class="tag-button tag-button-lan" onclick="filtrarPorEtiqueta('LAN')">🔌 LAN</button>
       <button class="tag-button tag-button-online" onclick="filtrarPorEtiqueta('Online')">🌐 ONLINE</button>
       <button class="tag-button tag-button-adult" onclick="filtrarPorEtiqueta('Adult')">🔞 +18</button>
+    </div>
 
-      <!-- Buscador como “botón” -->
-      <div class="search-input-wrap">
+    <!-- Buscador (no mueve los botones; queda a la derecha) -->
+    <div class="search-float">
+      <div class="search-input-wrap" aria-hidden="false">
         <input
           id="search-input"
           class="search-input"
           type="text"
-          placeholder="duckgame..."
           autocomplete="off"
           aria-label="Buscar juego"
         />
