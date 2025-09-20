@@ -25,34 +25,34 @@
         <span class="title-word" id="title-word">
           <span class="t-letter">G</span><span class="t-letter">h</span><span class="t-letter">u</span>
           <span class="t-letter">s</span><span class="t-letter">t</span><span class="t-letter">i</span>
-          <span class="t-letter">L</span><span class="t-letter">o</span><span class="t-letter">O</span><span class="t-letter">L</span>
+          <span class="t-letter">L</span><span class="t-letter">o</span>
+          <span class="t-letter">O</span><span class="t-letter">L</span>
         </span>
       </h1>
       <span class="title-emoji" id="emoji-right" aria-hidden="true">🇦🇷</span>
     </div>
   </header>
 
-  <!-- 🎮 Filtros + 🔎 Buscador (misma línea, dentro del mismo ancho que la grilla) -->
+  <!-- 🎮 Filtros + 🔎 Buscador (misma línea, buscador como último “botón”) -->
   <div class="filters-bar">
-    <!-- Botones centrados -->
     <div class="tag-filter-container" id="tag-filters">
       <button class="tag-button tag-button-all active" onclick="filtrarPorEtiqueta(null)" title="Inicio">🏠</button>
       <button class="tag-button tag-button-offline" onclick="filtrarPorEtiqueta('Offline')">🎮 OFFLINE</button>
       <button class="tag-button tag-button-lan" onclick="filtrarPorEtiqueta('LAN')">🔌 LAN</button>
       <button class="tag-button tag-button-online" onclick="filtrarPorEtiqueta('Online')">🌐 ONLINE</button>
       <button class="tag-button tag-button-adult" onclick="filtrarPorEtiqueta('Adult')">🔞 +18</button>
-    </div>
 
-    <!-- Buscador minimal a la derecha -->
-    <div id="search-form" class="search-form">
-      <input
-        id="search-input"
-        class="search-input"
-        type="text"
-        placeholder="🔎| "
-        autocomplete="off"
-        aria-label="Buscar juego"
-      />
+      <!-- Buscador como “botón” (wrap con ::before para el prefijo 🔎|) -->
+      <div class="search-input-wrap">
+        <input
+          id="search-input"
+          class="search-input"
+          type="text"
+          placeholder="duckgame..."
+          autocomplete="off"
+          aria-label="Buscar juego"
+        />
+      </div>
     </div>
   </div>
 
