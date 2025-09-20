@@ -23,10 +23,16 @@
       <span class="title-emoji" id="emoji-left" aria-hidden="true">☠️</span>
       <h1 class="site-title" aria-label="GhustiLoOL">
         <span class="title-word" id="title-word">
-          <span class="t-letter">G</span><span class="t-letter">h</span><span class="t-letter">u</span>
-          <span class="t-letter">s</span><span class="t-letter">t</span><span class="t-letter">i</span>
-          <span class="t-letter">L</span><span class="t-letter">o</span>
-          <span class="t-letter">O</span><span class="t-letter">L</span>
+          <span class="t-letter">G</span>
+          <span class="t-letter">h</span>
+          <span class="t-letter">u</span>
+          <span class="t-letter">s</span>
+          <span class="t-letter">t</span>
+          <span class="t-letter">i</span>
+          <span class="t-letter">L</span>
+          <span class="t-letter">o</span>
+          <span class="t-letter">O</span>
+          <span class="t-letter">L</span>
         </span>
       </h1>
       <span class="title-emoji" id="emoji-right" aria-hidden="true">🇦🇷</span>
@@ -47,13 +53,7 @@
     <div class="search-float">
       <div class="search-input-wrap">
         <span class="search-prefix" aria-hidden="true">🔎|</span>
-        <input
-          id="search-input"
-          class="search-input"
-          type="text"
-          autocomplete="off"
-          aria-label="Buscar juego"
-        />
+        <input id="search-input" class="search-input" type="text" autocomplete="off" aria-label="Buscar juego" />
       </div>
     </div>
   </div>
@@ -71,17 +71,15 @@
     </div>
   </div>
 
-  <!-- 🪟 Modal DMCA (mismo look + neón amarillo + scroll interno) -->
+  <!-- 🪟 Modal DMCA (tema amarillo + scroll interno mejorado) -->
   <div id="modal-dmca" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
     <div class="modal-content modal-content-dmca">
       <button class="modal-close" aria-label="Cerrar DMCA" title="Cerrar">&times;</button>
 
-      <!-- Cabecera DMCA con el estilo del sitio -->
       <div class="dmca-header">
-        <h2 class="dmca-title">📜 DMCA</h2>
+        <h2 class="dmca-title">📜 DMCA 📜</h2>
       </div>
 
-      <!-- Cuerpo scrolleable -->
       <div id="modal-dmca-body" class="modal-dmca-body dmca-article">
         <!-- Se inyecta dmca.html por fetch -->
       </div>
@@ -91,10 +89,9 @@
   <!-- 🧾 Footer -->
   <footer class="site-footer">
     <p class="copy">&copy; 2025 GhustiLoOL. Todos los derechos reservados.</p>
+    <!-- Botón DMCA DISCRETO en la punta derecha del footer (NO fixed) -->
+    <a href="#" class="dmca-link" id="open-dmca" aria-label="Abrir política DMCA">DMCA</a>
   </footer>
-
-  <!-- Botón DMCA FIJO (no se mueve al scrollear) -->
-  <a href="#" class="dmca-link dmca-fixed" id="open-dmca" aria-label="Abrir política DMCA">DMCA</a>
 
   <!-- 🧠 Scripts -->
   <script src="scripts/filtraretiquetas.js?v=59"></script>
@@ -102,7 +99,6 @@
   <script type="module" src="scripts/cargarpublicaciones.js?v=59"></script>
   <script src="scripts/neonrain.js?v=59"></script>
   <script src="scripts/title-anim.js?v=59"></script>
-  <!-- Controlador del modal DMCA -->
   <script src="scripts/dmca-modal.js?v=59"></script>
 </body>
 </html>
