@@ -1,81 +1,84 @@
-// scripts/filtrarEtiquetas.js
-// Filtra las cards por etiqueta sin romper el layout (cards usan display:flex)
-// y re-ajusta los títulos si está disponible window.fitTitles (mantiene alturas iguales).
+// Filtrado por etiquetas + búsqueda por texto (combinados)
 
-(function () {
-  // Mapeo botón → selector (para marcar "active")
-  const SELECTOR_POR_ETIQUETA = {
-    all: '.tag-button-all',
-    offline: '.tag-button-offline',
-    lan: '.tag-button-lan',
-    online: '.tag-button-online',
-    adult: '.tag-button-adult',
-  };
+(function(){
+  const grid = document.getElementById('publicaciones-todas');
+  const filters = document.getElementById('tag-filters');
+  const input  = document.getElementById('search-input');
+  const btn    = document.getElementById('search-btn');
 
-  // Activa/desactiva el estado visual de los botones del header
-  function activarBoton(etiqueta) {
-    document.querySelectorAll('.tag-button').forEach((b) => b.classList.remove('active'));
+  if (!grid || !filters) return;
 
-    if (etiqueta === null) {
-      document.querySelector(SELECTOR_POR_ETIQUETA.all)?.classList.add('active');
-      return;
-    }
+  // estado actual
+  let etiquetaActual = null;   // null = todas
+  let textoActual    = '';     // ''  = sin búsqueda
 
-    const key = (etiqueta || '').toString().toLowerCase().trim();
-    const mapKey = key === 'sin internet' ? 'offline' : key; // sinónimo
-    const selector = SELECTOR_POR_ETIQUETA[mapKey];
-    if (selector) document.querySelector(selector)?.classList.add('active');
+  // Helpers
+  function tagToKey(tag){
+    if (!tag) return null;
+    const t = String(tag).toLowerCase();
+    if (t.includes('adult'))  return 'adult';
+    if (t.includes('lan'))    return 'lan';
+    if (t.includes('online')) return 'online';
+    if (t.includes('offline'))return 'offline';
+    return 'default';
+  }
+  function matchEtiqueta(card, key){
+    if (key === null) return true;
+    // 1) por clase (card-offline/lan/online/adult/default)
+    if (card.classList.contains('card-' + key)) return true;
+    // 2) por pill interna (tag-offline/lan/online/adult/default)
+    const pill = card.querySelector('.tag-pill');
+    if (pill && pill.classList.contains('tag-' + key)) return true;
+    return false;
+  }
+  function matchTexto(card, q){
+    if (!q) return true;
+    const titulo = (card.querySelector('h3')?.textContent || '').toLowerCase();
+    return titulo.includes(q);
   }
 
-  // Normaliza y compara la etiqueta del filtro con los data-tags de cada card
-  function coincide(card, etiqueta) {
-    if (etiqueta === null) return true;
+  function aplicarFiltros(){
+    const q = (textoActual || '').toLowerCase();
+    const cards = grid.querySelectorAll('.card');
 
-    const tagsAttr = (card.getAttribute('data-tags') || '')
-      .split(',')
-      .map((s) => s.trim().toLowerCase());
-
-    // Normalizamos: "on line" -> "online", "off line" -> "offline"
-    const normalized = (etiqueta || '').toString().toLowerCase().trim();
-    const compact = normalized.replace(/\s+/g, '');
-
-    // Soportar sinónimos: +18 / 18+ / adult / "sin internet"
-    const candidates = new Set([compact]);
-    if (compact === '18+' || compact === '+18') candidates.add('adult');
-    if (normalized === 'sin internet') candidates.add('offline');
-
-    return tagsAttr.some((t) => {
-      const tt = t.replace(/\s+/g, '');
-      return (
-        candidates.has(tt) ||
-        (candidates.has('adult') && (tt.includes('18') || tt === 'adult'))
-      );
+    cards.forEach(card => {
+      const okTag   = matchEtiqueta(card, etiquetaActual);
+      const okTexto = matchTexto(card, q);
+      card.style.display = (okTag && okTexto) ? '' : 'none';
     });
+
+    // reajustar alto de títulos si lo tenés
+    if (window.fitTitles) try { window.fitTitles(); } catch(_){}
   }
 
-  // API global usada por los botones del header: filtrarPorEtiqueta('Offline' | 'LAN' | 'Online' | 'Adult' | null)
-  window.filtrarPorEtiqueta = function (etiqueta = null) {
-    activarBoton(etiqueta);
-
-    const cards = document.querySelectorAll('.card');
-    let visibles = 0;
-
-    cards.forEach((card) => {
-      const show = coincide(card, etiqueta);
-
-      // IMPORTANTE: no usar 'block' (rompe el layout). '' restaura el valor del CSS (flex).
-      card.style.display = show ? '' : 'none';
-      if (show) visibles++;
-    });
-
-    // Reajusta títulos después del filtrado para mantener alturas iguales
-    if (typeof window.fitTitles === 'function') {
-      // Esperar al próximo frame para que el layout ya esté aplicado
-      requestAnimationFrame(() => window.fitTitles());
+  // Público (para que otros scripts puedan forzar el re-aplicado)
+  window.filtrarPorEtiqueta = function(tag){
+    etiquetaActual = tagToKey(tag);
+    // activar visualmente el botón correcto
+    const allBtns = filters.querySelectorAll('.tag-button');
+    allBtns.forEach(b=>b.classList.remove('active'));
+    if (etiquetaActual === null) {
+      const b = filters.querySelector('.tag-button-all');
+      if (b) b.classList.add('active');
+    } else {
+      const b = filters.querySelector('.tag-button-' + etiquetaActual);
+      if (b) b.classList.add('active');
     }
-
-    // Si no hay resultados, podés mostrar un mensajito (opcional):
-    // const grid = document.getElementById('publicaciones-todas');
-    // grid.dataset.empty = visibles === 0 ? '1' : '0';
+    aplicarFiltros();
   };
+
+  // Búsqueda por texto
+  function filtrarPorTexto(q){
+    textoActual = (q || '').trim();
+    aplicarFiltros();
+  }
+
+  if (input && btn) {
+    input.addEventListener('input', () => filtrarPorTexto(input.value));
+    btn.addEventListener('click',   () => filtrarPorTexto(input.value));
+  }
+
+  // Exponer por si algún otro script quiere re-aplicar búsqueda después de cargar
+  window.__aplicarFiltroTexto__ = () => aplicarFiltros();
+
 })();

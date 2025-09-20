@@ -39,13 +39,29 @@
     </div>
   </header>
 
-  <!-- 🎮 Filtros por etiqueta -->
-  <div class="tag-filter-container" id="tag-filters">
-    <button class="tag-button tag-button-all active" onclick="filtrarPorEtiqueta(null)" title="Inicio">🏠</button>
-    <button class="tag-button tag-button-offline" onclick="filtrarPorEtiqueta('Offline')">🎮 OFFLINE</button>
-    <button class="tag-button tag-button-lan" onclick="filtrarPorEtiqueta('LAN')">🔌 LAN</button>
-    <button class="tag-button tag-button-online" onclick="filtrarPorEtiqueta('Online')">🌐 ONLINE</button>
-    <button class="tag-button tag-button-adult" onclick="filtrarPorEtiqueta('Adult')">🔞 +18</button>
+  <!-- 🎮 Filtros + 🔎 Buscador (misma línea) -->
+  <div class="filters-bar">
+    <!-- Botones de etiqueta (centrados) -->
+    <div class="tag-filter-container" id="tag-filters">
+      <button class="tag-button tag-button-all active" onclick="filtrarPorEtiqueta(null)" title="Inicio">🏠</button>
+      <button class="tag-button tag-button-offline" onclick="filtrarPorEtiqueta('Offline')">🎮 OFFLINE</button>
+      <button class="tag-button tag-button-lan" onclick="filtrarPorEtiqueta('LAN')">🔌 LAN</button>
+      <button class="tag-button tag-button-online" onclick="filtrarPorEtiqueta('Online')">🌐 ONLINE</button>
+      <button class="tag-button tag-button-adult" onclick="filtrarPorEtiqueta('Adult')">🔞 +18</button>
+    </div>
+
+    <!-- Buscador violeta (alineado a la derecha) -->
+    <form id="search-form" class="search-form" onsubmit="return false;">
+      <input
+        id="search-input"
+        class="search-input"
+        type="text"
+        placeholder="Buscar juego…"
+        autocomplete="off"
+        aria-label="Buscar juego"
+      />
+      <button id="search-btn" class="tag-button tag-button-search" type="button">🔎 BUSCAR</button>
+    </form>
   </div>
 
   <!-- 🧩 Grilla -->
@@ -68,7 +84,7 @@
 
   <!-- 🧠 Scripts -->
   <script src="scripts/filtraretiquetas.js?v=59"></script>
-  <!-- OJO: modal.js se importa dentro de cargarpublicaciones.js -->
+  <!-- modal.js se importa dentro de cargarpublicaciones.js -->
   <script type="module" src="scripts/cargarpublicaciones.js?v=59"></script>
   <script src="scripts/neonrain.js?v=59"></script>
   <script src="scripts/title-anim.js?v=59"></script>

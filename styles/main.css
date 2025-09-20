@@ -14,12 +14,23 @@ body {
 /* 🌌 Fondo animado */
 #neon-background { position: fixed; inset: 0; z-index: 0; background:#0a0a0f; }
 
-/* 🎮 Filtros por etiqueta */
-.tag-filter-container { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin: 28px 0; z-index: 2; position: relative; }
+/* === Barra de filtros + buscador (misma línea) === */
+.filters-bar{
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* botones centrados */
+  gap: 12px;
+  margin: 28px 0;
+  z-index: 2;
+}
+
+/* 🎮 Filtros por etiqueta (ya lo usabas) */
+.tag-filter-container { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; z-index: 2; position: relative; }
 .tag-button {
   display: inline-flex; align-items: center; gap: 8px;
   padding: 8px 14px; font-size: 0.95rem; font-weight: 700; font-family: 'Orbitron', sans-serif;
-  background: rgba(0,0,0,0.4); border: 1px solid; border-radius: 6px; color: #fff; text-shadow: 0 0 2px #000;
+  background: rgba(0,0,0,0.4); border: 1px solid; border-radius: 10px; color: #fff; text-shadow: 0 0 2px #000;
   cursor: pointer; transition: all .2s ease;
 }
 .tag-button:hover { background: rgba(0,0,0,0.6); box-shadow: 0 0 10px currentColor; transform: translateY(-2px); }
@@ -29,6 +40,41 @@ body {
 .tag-button-lan { border-color:#00ff99;color:#00ff99; }
 .tag-button-online { border-color:#00ffff;color:#00ffff; }
 .tag-button-adult { border-color:#ff0033;color:#ff0033; }
+
+/* Derecha: formulario del buscador */
+.search-form{
+  position: absolute;
+  right: 0;               /* lo “pegamos” a la derecha de la barra */
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Input con el MISMO look que los botones (violeta) */
+.search-input{
+  padding: 8px 12px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  font-family: 'Orbitron', sans-serif;
+  border: 2px solid #b200ff;      /* violeta */
+  border-radius: 10px;
+  color: #eae0ff;
+  background: #1a1a2e;            /* sólido (no transparente) */
+  outline: none;
+  min-width: 210px;
+  transition: box-shadow .2s ease, transform .2s ease, border-color .2s ease;
+}
+.search-input::placeholder{ color: #bfa8ff; opacity: .8; }
+.search-input:focus{
+  box-shadow: 0 0 12px #b200ff;
+  transform: translateY(-1px);
+}
+
+/* Botón “BUSCAR” con el mismo estilo de los principales */
+.tag-button-search{
+  border-color:#b200ff;
+  color:#b200ff;
+}
 
 /* ====== Layout general ====== */
 main { padding-bottom: 60px; }
@@ -104,7 +150,6 @@ main { padding-bottom: 60px; }
   border: 2px solid var(--ring);
   color: var(--ring);
   background: rgba(0,0,0,.25);
-  /* el glow de la etiqueta es visual, no afecta a la card */
   box-shadow:
     inset 0 0 12px rgba(255,255,255,.05),
     0 0 10px var(--ring);
@@ -122,9 +167,6 @@ main { padding-bottom: 60px; }
 .card-adult:hover   { box-shadow: 0 0 16px rgba(255,0,51,.45); }
 .card-default:hover { box-shadow: 0 0 16px rgba(255,0,204,.55); }
 
-/* Conservamos selector por compatibilidad */
-.card-etiqueta{}
-
 /* 🧾 Footer global */
 footer {
   text-align: center;
@@ -136,9 +178,6 @@ footer {
   position: relative;
   z-index: 2;
 }
-
-/* 📱 Móvil */
-@media (max-width: 480px){ .card{ height: 300px; } }
 
 /* ======= Header con HONK + animación ======= */
 .site-header{
@@ -163,13 +202,13 @@ footer {
   line-height: .9;
   user-select: none;
   text-align: center;
-  color: #fff; /* fallback si HONK no pinta */
+  color: #fff;
   filter:
     drop-shadow(0 2px 0 rgba(0,0,0,.45))
     drop-shadow(0 10px 18px rgba(0,255,255,.06));
 }
 
-/* Animación por letra (pop/swing sutil con delays escalonados) */
+/* Animación por letra */
 .title-word{ display:inline-block; white-space: nowrap; }
 .t-letter{
   display:inline-block;
@@ -192,15 +231,12 @@ footer {
   60%      { transform: translateY(1px)  rotate(1deg)  scale(0.99); }
 }
 
-/* Hover: un pelín más de “pop” */
-.site-title:hover .t-letter{
-  animation-duration: 1.8s;
-}
+/* Hover: sutil */
+.site-title:hover .t-letter{ animation-duration: 1.8s; }
 
 /* === Shake para los emojis del título === */
 .title-emoji { display: inline-block; }
 .emoji-shake { animation: emojiShake 420ms ease; }
-
 @keyframes emojiShake {
   0%   { transform: translate(0,0) rotate(0); }
   20%  { transform: translate(1px,-1px) rotate(-2deg); }
@@ -209,3 +245,15 @@ footer {
   80%  { transform: translate(-1px,0) rotate(1deg); }
   100% { transform: translate(0,0) rotate(0); }
 }
+
+/* 📱 Móvil */
+@media (max-width: 900px){
+  .filters-bar{
+    flex-direction: column;
+    gap: 10px;
+  }
+  .search-form{
+    position: static;   /* deja de ser absoluto (baja debajo) */
+  }
+}
+@media (max-width: 480px){ .card{ height: 300px; } }
