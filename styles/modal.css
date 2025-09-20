@@ -8,43 +8,38 @@
 .modal.fade-in{ display:flex; opacity:1; }
 .modal.fade-out{ display:flex; opacity:0; }
 
-/* ===== Contenido ===== */
+/* ===== Contenido base (mismo look que tu sitio) ===== */
 .modal-content{
   position:relative;
   background:#1a1a2e; color:#e0e0e0; font-family:'Roboto Mono', monospace;
-  padding:18px 18px 36px; /* aire abajo para la chapita */
-  width:min(720px,92vw);
+  padding:18px 18px 36px;
+  width:min(820px,92vw);
   border-radius:12px; border:1px solid var(--modal-borde,#ff00cc);
-  overflow:visible; /* la chapita vive fuera del scroller */
+  overflow:visible;
   box-shadow:none; transform:scale(.95); opacity:0;
   transition:transform .3s ease-out, opacity .3s ease-out, box-shadow .25s ease;
 }
 .modal-content:hover,
-.modal-content:focus-within{
-  box-shadow:0 0 18px var(--modal-glow,transparent);
-}
+.modal-content:focus-within{ box-shadow:0 0 18px var(--modal-glow,transparent); }
 .modal.fade-in .modal-content{ transform:scale(1); opacity:1; }
 .modal.fade-out .modal-content{ transform:scale(.95); opacity:0; }
 
-/* Interior scrollea sin afectar la chapita */
-#modal-body{ max-height:70vh; overflow-y:auto; }
+/* Interior scrollea sin mover la chapita */
+#modal-body, .modal-dmca-body{ max-height:70vh; overflow-y:auto; }
 
-/* Cerrar (color depende de etiqueta) */
+/* Cerrar (usa el color del tema activo) */
 .modal-close{
   position:absolute; top:10px; right:14px; width:36px; height:36px;
   line-height:32px; text-align:center; font-size:20px;
   color:var(--modal-borde,#ff00cc);
-  cursor:pointer; background:transparent; border:0;
-  user-select:none;
+  cursor:pointer; background:transparent; border:0; user-select:none;
 }
 
-/* Imagen */
+/* ======= (modal juegos) ======= */
 .modal-content img{
   max-width:100%; height:auto; max-height:240px; object-fit:contain;
   border-radius:8px; display:block; margin:0 auto 12px auto;
 }
-
-/* Título / Descripción / Versión */
 .modal-title{ text-align:center; margin:6px 0 6px; font-size:1.4rem; line-height:1.2; }
 .modal-description{ text-align:center; margin:6px 0 8px; }
 .modal-version{
@@ -52,7 +47,6 @@
   letter-spacing:.4px; text-transform:uppercase;
 }
 
-/* ===== Botones tipo filtros (transparente + borde neón) ===== */
 .modal-body-buttons{
   display:flex; gap:12px; justify-content:center; flex-wrap:wrap;
   margin-top:10px; padding:0 6px;
@@ -64,40 +58,29 @@
   font-family:'Orbitron', sans-serif; font-weight:800; letter-spacing:.3px; font-size:.92rem;
   background:transparent; color:var(--c); border:2px solid var(--c);
   border-radius:12px; overflow:visible; box-shadow:none;
-  transition:transform .12s ease;           /* ← solo zoom */
+  transition:transform .12s ease;
 }
 .modal-body-buttons .btn:hover{ transform:translateY(-1px); }
-
-/* Colores de cada acción */
 .btn--dl   { --c:#00ffff; } /* Descargar */
 .btn--pass { --c:#ff9f0a; } /* Contraseña */
 .btn--buy  { --c:#00ff99; } /* Comprar */
-
 .modal-body-buttons .btn:focus-visible{ outline:2px solid #fff; outline-offset:3px; }
 
-/* ===== Chapita como BOTÓN principal (idéntico a filtros) ===== */
-.modal-tag{
-  position:absolute;
-  left:50%;
-  bottom:-22px;
-  transform:translateX(-50%);
-  z-index:6;
-  pointer-events:none;             /* el contenedor no recibe clicks */
+/* ===== Chapita etiqueta – centrada abajo ===== */
+.tag-pill{
+  --ring: currentColor;
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:'Orbitron', sans-serif; font-weight:800; letter-spacing:.3px;
+  text-transform:uppercase; font-size:.78rem;
+  padding:6px 12px; border-radius:12px; border:2px solid var(--ring);
+  color:var(--ring); background:#1a1a2e; box-shadow:0 0 10px var(--ring);
 }
-.modal-tag .tag-button{
-  pointer-events:none;             /* visual solamente */
-  background:#1a1a2e;              /* ← fondo sólido igual al modal (sin transparencia) */
-  box-shadow:0 0 12px currentColor;/* glow leve como active */
-}
-.modal-tag-button{
-  padding:6px 14px;
-  font-size:.78rem;
-  border-width:2px;
-  border-radius:10px;
-}
-.modal-tag .tag-button:hover{ transform:none; }
+.tag-offline{ --ring:#3399ff; } .tag-lan{ --ring:#00ff99; }
+.tag-online{ --ring:#00ffff; } .tag-adult{ --ring:#ff0033; }
+.tag-default{ --ring:#ff00cc; }
+.modal-tag{ position:absolute; left:50%; bottom:-22px; transform:translateX(-50%); z-index:6; pointer-events:none; }
 
-/* Paleta por etiqueta para borde + glow del modal */
+/* Paletas por etiqueta (modal juegos) */
 .modal-content-offline{ --modal-borde:#3399ff; --modal-glow:rgba(51,153,255,.45); }
 .modal-content-lan    { --modal-borde:#00ff99; --modal-glow:rgba(0,255,153,.45); }
 .modal-content-online { --modal-borde:#00ffff; --modal-glow:rgba(0,255,255,.45); }
@@ -128,59 +111,58 @@ body.modal-open{ overflow:hidden; }
   .modal-tag{ bottom:-20px; }
 }
 
-/* ====== DMCA Modal (tema amarillo) ====== */
+/* === Buscador: prefijo fijo === */
+.search-prefix{
+  position:absolute; left:12px; top:50%; transform:translateY(-50%);
+  color:#b200ff; font-size:1rem; pointer-events:none; user-select:none; z-index:2;
+}
+
+/* ===================== DMCA SOLO ===================== */
+
+/* Tema amarillo + glow */
 .modal-content-dmca{
-  --modal-borde:#ffef00;
-  --modal-glow:rgba(255,239,0,.50);
-  border-color: var(--modal-borde);
+  --modal-borde:#ffef00;               /* Amarillo */
+  --modal-glow:rgba(255,239,0,.5);
+  border-color:var(--modal-borde);
 }
 .modal-content-dmca:hover,
-.modal-content-dmca:focus-within{
-  box-shadow:0 0 18px var(--modal-glow);
+.modal-content-dmca:focus-within{ box-shadow:0 0 18px var(--modal-glow); }
+
+/* Cabecera DMCA con el look del sitio */
+.dmca-header{
+  display:flex; align-items:center; justify-content:center;
+  margin-top:4px; margin-bottom:10px;
+}
+.dmca-title{
+  font-family:"Honk", system-ui, sans-serif;
+  font-size: clamp(1.6rem, 4.5vw, 2.6rem);
+  color:#fff;
+  filter: drop-shadow(0 2px 0 rgba(0,0,0,.45)) drop-shadow(0 10px 18px rgba(255,239,0,.10));
+  text-align:center;
 }
 
-/* Cuerpo scrollable interno específico del DMCA */
-.modal-dmca-body{
-  max-height: 70vh;
-  overflow-y: auto;
-  padding-right: 4px; /* espacio para scrollbar */
+/* Artículo DMCA con tipografías/espaciado del sitio */
+.dmca-article{
+  font-family:'Orbitron', sans-serif;
+  font-weight:500; color:#e0e0e0; letter-spacing:.2px;
 }
-.modal-dmca-body h2, .modal-dmca-body h3{
-  margin: 8px 0 6px;
-}
-.modal-dmca-body p, .modal-dmca-body li{
-  line-height: 1.5;
-}
-.modal-dmca-body a{
-  color:#ffef00;
-  text-decoration: underline;
-}
+.dmca-article h1,.dmca-article h2,.dmca-article h3{ color:#fff; margin:12px 0 8px; }
+.dmca-article h1{ font-size:1.4rem; } .dmca-article h2{ font-size:1.2rem; } .dmca-article h3{ font-size:1.05rem; }
+.dmca-article p{ margin:8px 0; line-height:1.55; }
+.dmca-article ul,.dmca-article ol{ margin:8px 0 8px 22px; }
+.dmca-article a{ color:#ffef00; text-decoration:underline; }
 
-/* Footer con link DMCA abajo a la derecha */
-.site-footer{
-  position: relative;
-  text-align: center;
-  padding: 20px;
-  border-top: 1px solid #333;
-  color:#888;
-  font-family:'Roboto Mono', monospace;
-  font-size:.9rem;
-  z-index:2;
+/* Link DMCA FIJO abajo a la derecha (estático) */
+.dmca-link.dmca-fixed{
+  position:fixed; right:14px; bottom:14px; z-index:1200;
+  padding:8px 12px; border:1px solid #ffef00; border-radius:10px;
+  color:#ffef00; text-decoration:none; background:rgba(0,0,0,.35);
+  box-shadow:0 0 12px rgba(255,239,0,.55); font-weight:800; letter-spacing:.3px;
+  transition:transform .15s ease, box-shadow .15s ease, opacity .2s;
+  opacity:.95;
 }
-.site-footer .dmca-link{
-  position: absolute;
-  right: 10px; bottom: 12px;
-  padding: 6px 10px;
-  border: 1px solid #ffef00;
-  border-radius: 10px;
-  color:#ffef00;
-  text-decoration: none;
-  background: rgba(0,0,0,.35);
-  box-shadow: 0 0 10px rgba(255,239,0,.45);
-  font-weight: 700;
-  transition: transform .15s ease, box-shadow .15s ease;
-}
-.site-footer .dmca-link:hover{
-  transform: translateY(-1px);
-  box-shadow: 0 0 14px rgba(255,239,0,.6);
+.dmca-link.dmca-fixed:hover{
+  transform:translateY(-1px);
+  box-shadow:0 0 16px rgba(255,239,0,.75);
+  opacity:1;
 }

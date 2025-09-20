@@ -1,4 +1,4 @@
-// Modal DMCA – carga dmca.html y maneja abrir/cerrar
+// Modal DMCA – carga dmca.html y maneja abrir/cerrar (sin tocar otros modales)
 (function(){
   const openBtn = document.getElementById('open-dmca');
   const modal   = document.getElementById('modal-dmca');
@@ -9,7 +9,6 @@
   const closeBtn = modal.querySelector('.modal-close');
 
   function openModal(){
-    // carga perezosa del HTML si aún no se cargó
     if (!bodyEl.dataset.loaded){
       fetch('dmca.html', {cache: 'no-store'})
         .then(r => r.text())
@@ -20,9 +19,7 @@
         .catch(() => {
           bodyEl.innerHTML = '<p>Error al cargar el contenido.</p>';
         })
-        .finally(() => {
-          show();
-        });
+        .finally(show);
     } else {
       show();
     }
@@ -48,14 +45,8 @@
     openModal();
   });
 
-  // Cerrar
+  // Cerrar (botón, click fuera, ESC)
   closeBtn.addEventListener('click', closeModal);
-  modal.addEventListener('click', (e)=>{
-    if (e.target === modal) closeModal();
-  });
-  document.addEventListener('keydown', (e)=>{
-    if (e.key === 'Escape' && modal.classList.contains('fade-in')) {
-      closeModal();
-    }
-  });
+  modal.addEventListener('click', (e)=>{ if (e.target === modal) closeModal(); });
+  document.addEventListener('keydown', (e)=>{ if (e.key === 'Escape' && modal.classList.contains('fade-in')) closeModal(); });
 })();

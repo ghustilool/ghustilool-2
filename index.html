@@ -63,7 +63,7 @@
     <div class="grid" id="publicaciones-todas"></div>
   </main>
 
-  <!-- 🪟 Modal de juegos (ya existente) -->
+  <!-- 🪟 Modal de juegos -->
   <div id="modal-juego" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
     <div class="modal-content">
       <button class="modal-close" aria-label="Cerrar" title="Cerrar">&times;</button>
@@ -71,12 +71,19 @@
     </div>
   </div>
 
-  <!-- 🪟 Modal DMCA (nuevo, con tema amarillo) -->
+  <!-- 🪟 Modal DMCA (mismo look + neón amarillo + scroll interno) -->
   <div id="modal-dmca" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
     <div class="modal-content modal-content-dmca">
       <button class="modal-close" aria-label="Cerrar DMCA" title="Cerrar">&times;</button>
-      <div id="modal-dmca-body" class="modal-dmca-body">
-        <!-- el HTML se carga vía fetch('dmca.html') -->
+
+      <!-- Cabecera DMCA con el estilo del sitio -->
+      <div class="dmca-header">
+        <h2 class="dmca-title">📜 DMCA</h2>
+      </div>
+
+      <!-- Cuerpo scrolleable -->
+      <div id="modal-dmca-body" class="modal-dmca-body dmca-article">
+        <!-- Se inyecta dmca.html por fetch -->
       </div>
     </div>
   </div>
@@ -84,8 +91,10 @@
   <!-- 🧾 Footer -->
   <footer class="site-footer">
     <p class="copy">&copy; 2025 GhustiLoOL. Todos los derechos reservados.</p>
-    <a href="#" class="dmca-link" id="open-dmca" aria-label="Abrir política DMCA">DMCA</a>
   </footer>
+
+  <!-- Botón DMCA FIJO (no se mueve al scrollear) -->
+  <a href="#" class="dmca-link dmca-fixed" id="open-dmca" aria-label="Abrir política DMCA">DMCA</a>
 
   <!-- 🧠 Scripts -->
   <script src="scripts/filtraretiquetas.js?v=59"></script>
@@ -93,8 +102,7 @@
   <script type="module" src="scripts/cargarpublicaciones.js?v=59"></script>
   <script src="scripts/neonrain.js?v=59"></script>
   <script src="scripts/title-anim.js?v=59"></script>
-
-  <!-- Nuevo: controlador del modal DMCA -->
+  <!-- Controlador del modal DMCA -->
   <script src="scripts/dmca-modal.js?v=59"></script>
 </body>
 </html>
