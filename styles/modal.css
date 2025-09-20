@@ -76,7 +76,6 @@
 .modal-body-buttons .btn:focus-visible{ outline:2px solid #fff; outline-offset:3px; }
 
 /* ===== Chapita como BOTÓN principal (idéntico a filtros) ===== */
-/* Usamos .tag-button + variantes de color que ya tenés en main.css */
 .modal-tag{
   position:absolute;
   left:50%;
@@ -87,7 +86,7 @@
 }
 .modal-tag .tag-button{
   pointer-events:none;             /* visual solamente */
-  background:rgba(0,0,0,.25);      /* coherente con filtros */
+  background:#1a1a2e;              /* ← fondo sólido igual al modal (sin transparencia) */
   box-shadow:0 0 12px currentColor;/* glow leve como active */
 }
 .modal-tag-button{
