@@ -1,10 +1,9 @@
-// Filtrado por etiquetas + búsqueda por texto (combinados)
+// Filtrado por etiquetas + búsqueda por texto (combinados, sin botón)
 
 (function(){
   const grid = document.getElementById('publicaciones-todas');
   const filters = document.getElementById('tag-filters');
   const input  = document.getElementById('search-input');
-  const btn    = document.getElementById('search-btn');
 
   if (!grid || !filters) return;
 
@@ -64,15 +63,12 @@
     aplicarFiltros();
   };
 
-  // Búsqueda por texto
-  function filtrarPorTexto(q){
-    textoActual = (q || '').trim();
-    aplicarFiltros();
-  }
-
-  if (input && btn) {
-    input.addEventListener('input', () => filtrarPorTexto(input.value));
-    btn.addEventListener('click',   () => filtrarPorTexto(input.value));
+  // Búsqueda en vivo (sin botón)
+  if (input) {
+    input.addEventListener('input', () => {
+      textoActual = (input.value || '').trim();
+      aplicarFiltros();
+    });
   }
 
   // Exponer por si otro script quiere re-aplicar

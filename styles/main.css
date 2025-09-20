@@ -21,7 +21,7 @@ body {
   align-items: center;
   justify-content: center;      /* botones centrados */
   gap: 12px;
-  margin: 18px 0 6px;           /* margen compacto (sin “espacio extra”) */
+  margin: 18px 0 6px;           /* compacto */
   z-index: 2;
 }
 
@@ -41,16 +41,13 @@ body {
 .tag-button-online { border-color:#00ffff;color:#00ffff; }
 .tag-button-adult { border-color:#ff0033;color:#ff0033; }
 
-/* Derecha: formulario del buscador */
+/* Derecha: SOLO input (sin botón) */
 .search-form{
   position: absolute;
   right: 0;               /* en la misma línea, alineado a la derecha */
   display: flex;
   align-items: center;
-  gap: 8px;
 }
-
-/* Input con el MISMO look que los botones (violeta) */
 .search-input{
   padding: 8px 12px;
   font-size: 0.95rem;
@@ -61,19 +58,14 @@ body {
   color: #eae0ff;
   background: #1a1a2e;            /* sólido */
   outline: none;
-  min-width: 210px;
+  min-width: 230px;
   transition: box-shadow .2s ease, transform .2s ease, border-color .2s ease;
 }
-.search-input::placeholder{ color: #bfa8ff; opacity: .8; }
+.search-input::placeholder{ color: #bfa8ff; opacity: .9; }
+.search-input:hover,
 .search-input:focus{
   box-shadow: 0 0 12px #b200ff;
   transform: translateY(-1px);
-}
-
-/* Botón “BUSCAR” con el mismo estilo */
-.tag-button-search{
-  border-color:#b200ff;
-  color:#b200ff;
 }
 
 /* ====== Layout general ====== */
@@ -133,7 +125,7 @@ main { padding-bottom: 60px; }
 .card-footer { margin-top: auto; display: flex; flex-direction: column; align-items: center; gap: 6px; }
 .card-meta { font-family: 'Roboto Mono', monospace; font-size: .72rem; color: #aeb3c0; opacity: .9; }
 
-/* ✅ Etiqueta con look botón */
+/* ✅ Etiqueta con look botón (cards) */
 .tag-pill{
   --ring: currentColor;
   display: inline-flex; align-items: center; gap: 8px;

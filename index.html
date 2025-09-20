@@ -17,22 +17,15 @@
   <!-- 🌌 Fondo animado -->
   <div id="neon-background"></div>
 
-  <!-- 🔥 Título con HONK + animación + emoji rotativo -->
+  <!-- 🔥 Título con HONK + animación -->
   <header class="site-header">
     <div class="title-row">
       <span class="title-emoji" id="emoji-left" aria-hidden="true">☠️</span>
       <h1 class="site-title" aria-label="GhustiLoOL">
         <span class="title-word" id="title-word">
-          <span class="t-letter">G</span>
-          <span class="t-letter">h</span>
-          <span class="t-letter">u</span>
-          <span class="t-letter">s</span>
-          <span class="t-letter">t</span>
-          <span class="t-letter">i</span>
-          <span class="t-letter">L</span>
-          <span class="t-letter">o</span>
-          <span class="t-letter">O</span>
-          <span class="t-letter">L</span>
+          <span class="t-letter">G</span><span class="t-letter">h</span><span class="t-letter">u</span>
+          <span class="t-letter">s</span><span class="t-letter">t</span><span class="t-letter">i</span>
+          <span class="t-letter">L</span><span class="t-letter">o</span><span class="t-letter">O</span><span class="t-letter">L</span>
         </span>
       </h1>
       <span class="title-emoji" id="emoji-right" aria-hidden="true">🇦🇷</span>
@@ -50,18 +43,17 @@
       <button class="tag-button tag-button-adult" onclick="filtrarPorEtiqueta('Adult')">🔞 +18</button>
     </div>
 
-    <!-- Buscador a la derecha -->
-    <form id="search-form" class="search-form" onsubmit="return false;">
+    <!-- Solo input (a la derecha) -->
+    <div id="search-form" class="search-form">
       <input
         id="search-input"
         class="search-input"
         type="text"
-        placeholder="Buscar juego…"
+        placeholder="🔎 Buscar juego…"
         autocomplete="off"
         aria-label="Buscar juego"
       />
-      <button id="search-btn" class="tag-button tag-button-search" type="button">🔎 BUSCAR</button>
-    </form>
+    </div>
   </div>
 
   <!-- 🧩 Grilla -->
