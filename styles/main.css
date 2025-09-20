@@ -14,15 +14,15 @@ body {
 /* 🌌 Fondo animado */
 #neon-background { position: fixed; inset: 0; z-index: 0; background:#0a0a0f; }
 
-/* === Barra de filtros + buscador (misma línea, mismo ancho que la grilla) === */
+/* === Barra de filtros + buscador (mismo ancho que la grilla) === */
 .filters-bar{
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;              /* centra los botones */
+  justify-content: center;
   gap: 12px;
   max-width: 1200px;
-  margin: 18px auto 6px;                /* centrado horizontal */
+  margin: 18px auto 6px;
   padding: 0 10px;
   z-index: 2;
 }
@@ -34,7 +34,7 @@ body {
   justify-content: center;
   flex-wrap: wrap; gap: 12px;
   z-index: 2; position: relative;
-  flex: 1 1 auto;                       /* permite que el buscador se ubique al final */
+  flex: 1 1 auto;     /* permite que el buscador se ubique al final */
 }
 .tag-button {
   display: inline-flex; align-items: center; gap: 8px;
@@ -55,27 +55,29 @@ body {
   position: relative;
   display: inline-flex;
   align-items: center;
-  /* que quede al final a la derecha, en la misma línea */
-  margin-left: auto;
+  margin-left: auto; /* queda pegado a la punta derecha de la fila */
+  border-radius: 10px;
+  /* Glow violeta permanente como en tu boceto */
+  box-shadow: 0 0 14px rgba(178,0,255,.55);
 }
 .search-input-wrap::before{
-  content: "🔎|";
+  content: "🔎";
   position: absolute;
   left: 12px; top: 50%; transform: translateY(-50%);
-  color: #b200ff;
+  color: #19d3ff;              /* celeste del ícono */
   font-size: 1rem;
   pointer-events: none;
-  filter: drop-shadow(0 0 2px rgba(0,0,0,.8));
+  filter: drop-shadow(0 0 2px rgba(0,0,0,.85));
 }
 .search-input{
-  padding: 8px 12px 8px 40px;          /* espacio para el prefijo 🔎| */
+  padding: 8px 12px 8px 40px;  /* espacio para el ícono fijo */
   font-size: 0.95rem;
   font-weight: 700;
   font-family: 'Orbitron', sans-serif;
-  border: 2px solid #b200ff;           /* violeta */
+  border: 2px solid #b200ff;  /* violeta */
   border-radius: 10px;
   color: #eae0ff;
-  background: #1a1a2e;                 /* sólido */
+  background: #1a1a2e;        /* sólido (sin transparencia) */
   outline: none;
   min-width: 230px;
   transition: box-shadow .2s ease, transform .2s ease, border-color .2s ease;
@@ -90,7 +92,7 @@ body {
 /* ====== Layout general ====== */
 main { padding-bottom: 60px; }
 
-/* 🧱 Grid */
+/* 🧱 Grilla */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));

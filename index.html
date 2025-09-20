@@ -33,7 +33,7 @@
     </div>
   </header>
 
-  <!-- 🎮 Filtros + 🔎 Buscador (misma línea, buscador como último “botón”) -->
+  <!-- 🎮 Filtros + 🔎 Buscador (buscador como último “botón” a la derecha) -->
   <div class="filters-bar">
     <div class="tag-filter-container" id="tag-filters">
       <button class="tag-button tag-button-all active" onclick="filtrarPorEtiqueta(null)" title="Inicio">🏠</button>
@@ -42,7 +42,7 @@
       <button class="tag-button tag-button-online" onclick="filtrarPorEtiqueta('Online')">🌐 ONLINE</button>
       <button class="tag-button tag-button-adult" onclick="filtrarPorEtiqueta('Adult')">🔞 +18</button>
 
-      <!-- Buscador como “botón” (wrap con ::before para el prefijo 🔎|) -->
+      <!-- Buscador como “botón” -->
       <div class="search-input-wrap">
         <input
           id="search-input"
