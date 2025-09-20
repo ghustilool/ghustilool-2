@@ -63,19 +63,18 @@ body {
   border-radius: 10px;
   box-shadow: 0 0 14px rgba(178,0,255,.55); /* glow violeta permanente */
 }
-/* Prefijo fijo “🔎|” (no desaparece al escribir) */
-.search-input-wrap::before{
-  content: "🔎|";
+.search-prefix{
   position: absolute;
   left: 12px; top: 50%; transform: translateY(-50%);
   color: #b200ff;
   font-size: 1rem;
   pointer-events: none;
+  user-select: none;
+  z-index: 2;                  /* siempre por encima del input */
   filter: drop-shadow(0 0 2px rgba(0,0,0,.85));
 }
-
 .search-input{
-  padding: 8px 12px 8px 40px;  /* deja lugar para 🔎| */
+  padding: 8px 12px 8px 44px;  /* deja lugar para “🔎|” */
   font-size: 0.95rem;
   font-weight: 700;
   font-family: 'Orbitron', sans-serif;
@@ -87,7 +86,7 @@ body {
   width: 210px;                /* más corto como pediste */
   transition: box-shadow .2s ease, transform .2s ease, border-color .2s ease;
 }
-/* sin placeholder: el prefijo lo dibuja ::before */
+/* sin placeholder: el prefijo lo dibuja .search-prefix */
 .search-input::placeholder{ color: transparent; }
 .search-input:hover,
 .search-input:focus{
@@ -202,8 +201,6 @@ footer {
 /* 📱 Responsive */
 @media (max-width: 900px){
   .filters-bar{ flex-direction: column; gap: 10px; }
-  .search-float{
-    position: static; transform: none; margin-top: 6px; /* buscador baja debajo en mobile */
-  }
+  .search-float{ position: static; transform: none; margin-top: 6px; } /* baja debajo en mobile */
 }
 @media (max-width: 480px){ .card{ height: 300px; } }
