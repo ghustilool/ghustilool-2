@@ -14,19 +14,28 @@ body {
 /* 🌌 Fondo animado */
 #neon-background { position: fixed; inset: 0; z-index: 0; background:#0a0a0f; }
 
-/* === Barra de filtros + buscador (misma línea) === */
+/* === Barra de filtros + buscador (misma línea) ===
+   NOTA: max-width igual a la grilla para que el buscador quede
+   en la "punta derecha" del mismo ancho. */
 .filters-bar{
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;      /* botones centrados */
+  justify-content: center;              /* centra los botones */
   gap: 12px;
-  margin: 18px 0 6px;           /* compacto */
+  max-width: 1200px;
+  margin: 18px auto 6px;                /* centrado horizontal */
+  padding: 0 10px;                      /* respirito a los lados */
   z-index: 2;
 }
 
 /* 🎮 Filtros por etiqueta */
-.tag-filter-container { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; z-index: 2; position: relative; }
+.tag-filter-container {
+  display: flex; justify-content: center;
+  flex-wrap: wrap; gap: 12px;
+  z-index: 2; position: relative;
+  flex: 1 1 auto;                       /* permite que el buscador empuje a la derecha */
+}
 .tag-button {
   display: inline-flex; align-items: center; gap: 8px;
   padding: 8px 14px; font-size: 0.95rem; font-weight: 700; font-family: 'Orbitron', sans-serif;
@@ -41,22 +50,20 @@ body {
 .tag-button-online { border-color:#00ffff;color:#00ffff; }
 .tag-button-adult { border-color:#ff0033;color:#ff0033; }
 
-/* Derecha: SOLO input (sin botón) */
+/* Derecha: SOLO input (sin botón) — se pega a la punta derecha de la barra */
 .search-form{
-  position: absolute;
-  right: 0;               /* en la misma línea, alineado a la derecha */
-  display: flex;
-  align-items: center;
+  margin-left: auto;                    /* empuja a la derecha */
+  display: flex; align-items: center;
 }
 .search-input{
   padding: 8px 12px;
   font-size: 0.95rem;
   font-weight: 700;
   font-family: 'Orbitron', sans-serif;
-  border: 2px solid #b200ff;      /* violeta */
+  border: 2px solid #b200ff;            /* violeta */
   border-radius: 10px;
   color: #eae0ff;
-  background: #1a1a2e;            /* sólido */
+  background: #1a1a2e;                  /* sólido */
   outline: none;
   min-width: 230px;
   transition: box-shadow .2s ease, transform .2s ease, border-color .2s ease;
@@ -80,6 +87,7 @@ main { padding-bottom: 60px; }
   align-items: stretch;
   max-width: 1200px;
   margin: 20px auto 0;
+  padding: 0 10px;
 }
 
 /* 🧩 Card */
@@ -174,6 +182,6 @@ footer {
 /* 📱 Responsive */
 @media (max-width: 900px){
   .filters-bar{ flex-direction: column; gap: 10px; }
-  .search-form{ position: static; } /* baja debajo en mobile */
+  .search-form{ margin-left: 0; } /* baja debajo en mobile */
 }
 @media (max-width: 480px){ .card{ height: 300px; } }

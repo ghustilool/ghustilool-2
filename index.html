@@ -32,7 +32,7 @@
     </div>
   </header>
 
-  <!-- 🎮 Filtros + 🔎 Buscador (misma línea) -->
+  <!-- 🎮 Filtros + 🔎 Buscador (misma línea, dentro del mismo ancho que la grilla) -->
   <div class="filters-bar">
     <!-- Botones centrados -->
     <div class="tag-filter-container" id="tag-filters">
@@ -43,13 +43,13 @@
       <button class="tag-button tag-button-adult" onclick="filtrarPorEtiqueta('Adult')">🔞 +18</button>
     </div>
 
-    <!-- Solo input (a la derecha) -->
+    <!-- Buscador minimal a la derecha -->
     <div id="search-form" class="search-form">
       <input
         id="search-input"
         class="search-input"
         type="text"
-        placeholder="🔎 Buscar juego…"
+        placeholder="🔎| "
         autocomplete="off"
         aria-label="Buscar juego"
       />
