@@ -1,48 +1,312 @@
 [
-  {
-    "id": "demo-automation",
-    "nombre": "Automation - The Car Company Tycoon Game",
-    "imagen": "https://picsum.photos/id/1011/800/400",
-    "descargar": "https://example.com/dl1",
+    { 
+    "id": "CUFFBUST",
+    "nombre": "CUFFBUST",
+    "imagen": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2592220/header.jpg?t=1760535283",
+    "descargar": "https://privatebin.rinuploads.org/?b50122936a53b587#6SfBRteuNMfwCUTkbhhW3PacXAB1oqWJEN1XuzhUFyxH",
     "contraseña": "ghustilool",
-    "comprar": "https://store.steampowered.com/app/293760/",
-    "version": "BUILD 199998756 + DLC",
-    "tags": [
-      "Offline"
-    ],
-    "fecha": "2025-10-18"
+    "comprar": "https://store.steampowered.com/app/2592220/CUFFBUST/",
+    "version": "1.0.0",
+    "tags": ["Online"]
   },
-  {
-    "id": "demo-keeper",
-    "nombre": "Keeper",
-    "imagen": "https://picsum.photos/id/1003/800/400",
-    "descargar": "https://example.com/dl2",
-    "version": "v1.0.3",
-    "tags": [
-      "LAN"
-    ],
-    "fecha": "2025-10-17"
+    { 
+    "id": "REPO",
+    "nombre": "R.E.P.O.",
+    "imagen": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3241660/1ea445e044a2d5b09cfa8291350b63ebed6e5741/header.jpg?t=1760529292",
+    "descargar": "https://privatebin.rinuploads.org/?13ee3b8c7d23c89b#DVrt2RLtLdX5htJCGJJ5ruptZ72bANBhafaQFRredv7Y",
+    "contraseña": "ghustilool",
+    "comprar": "https://store.steampowered.com/app/3241660/REPO/",
+    "version": "0.2.2",
+    "tags": ["Online"]
   },
-  {
-    "id": "demo-necesse",
-    "nombre": "Necesse",
-    "imagen": "https://picsum.photos/id/1015/800/400",
-    "descargar": "https://example.com/dl3",
-    "version": "v0.23.5",
-    "tags": [
-      "Online"
-    ],
-    "fecha": "2025-10-16"
+    { 
+    "id": "SupermarketSimulator",
+    "nombre": "Supermarket Simulator",
+    "imagen": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2670630/d09165c3a66a1cd63894933e77105e812971a85d/header_alt_assets_2_spanish.jpg?t=1760015194",
+    "descargar": "https://privatebin.rinuploads.org/?f623688f2de95bda#611cE5bon1qYAypGmSJ8TeaSHwt8NY85yBBfo283qTkU",
+    "contraseña": "ghustilool",
+    "comprar": "https://store.steampowered.com/app/2670630/Supermarket_Simulator/",
+    "version": "1.1.3.148",
+    "tags": ["Online"]
   },
-  {
-    "id": "demo-mp",
-    "nombre": "Magic Pussy: Chapter 3",
-    "imagen": "https://picsum.photos/id/1027/800/400",
-    "descargar": "https://example.com/dl4",
-    "version": "v3.1.0",
-    "tags": [
-      "+18"
-    ],
-    "fecha": "2025-10-15"
-  }
+    { 
+    "id": "Phasmophobia",
+    "nombre": "Phasmophobia",
+    "imagen": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/739630/1047b825d7de47313526559ac7d571de52ef1267/header_alt_assets_4.jpg?t=1760011077",
+    "descargar": "https://privatebin.rinuploads.org/?6de957b6abf3a0d3#Fb8soWPaYc6oXm4i3uwtQZnVv7BEQpZT4KHUXxB35dW7",
+    "contraseña": "ghustilool",
+    "comprar": "https://store.steampowered.com/app/739630/Phasmophobia/",
+    "version": "Crimson Eye 0.14.2.0",
+    "tags": ["Online"]
+  },
+    { 
+    "id": "ContentWarning",
+    "nombre": "Content Warning",
+    "imagen": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2881650/header.jpg?t=1736717925",
+    "descargar": "https://privatebin.rinuploads.org/?d759bd5caee93533#F64tCnpiHHyDGzBV64782NkgG3xFtGgHDCtxv9Wf1C4w",
+    "contraseña": "ghustilool",
+    "comprar": "https://store.steampowered.com/app/2881650/Content_Warning/",
+    "version": "1.17.b",
+    "tags": ["Online"]
+  },
+    { 
+    "id": "THEGAMEOFLIFE2",
+    "nombre": "THE GAME OF LIFE 2",
+    "imagen": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1455630/7e459241dc9cdd601baa81e8d576bc563cd5765b/header_latam.jpg?t=1758628712",
+    "descargar": "https://privatebin.rinuploads.org/?a87c86e892a4da41#2czbbE5gwortawT5WH841EdTmP5dJMz266nAKarBMbrm",
+    "contraseña": "ghustilool",
+    "comprar": "https://store.steampowered.com/app/1455630/THE_GAME_OF_LIFE_2/",
+    "version": "Build 15062021",
+    "tags": ["Online"]
+  },
+    { 
+    "id": "PAYDAYTheHeist",
+    "nombre": "PAYDAY The Heist",
+    "imagen": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/24240/header.jpg?t=1758197363",
+    "descargar": "https://privatebin.rinuploads.org/?fb90d7d9ecf7546a#FxY8CUkh3KXpxudPQMUH2GPfEKJAXA3twViHhCpHLsk",
+    "contraseña": "ghustilool",
+    "comprar": "https://store.steampowered.com/app/24240/PAYDAY_The_Heist/",
+    "version": "1.22.0",
+    "tags": ["Online"]
+  },
+    { 
+    "id": "CastleCrashers",
+    "nombre": "Castle Crashers",
+    "imagen": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/204360/header.jpg?t=1756576714",
+    "descargar": "https://privatebin.rinuploads.org/?794fa0477d662f5d#CjXHdRWZsqphvL751qsQGT8s3wvkCmK4FFx56X5iGwow",
+    "contraseña": "ghustilool",
+    "comprar": "https://store.steampowered.com/app/204360/Castle_Crashers/",
+    "version": "3.0 + DLC",
+    "tags": ["Online"]
+  },
+    { 
+    "id": "Magicite",
+    "nombre": "Magicite",
+    "imagen": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/268750/header.jpg?t=1710472289",
+    "descargar": "https://privatebin.rinuploads.org/?3213732f5614f987#7zpyzmeQT9rmvcMNHagcWUbkGyfvJanDqmU5iMaBXWTt",
+    "contraseña": "ghustilool",
+    "comprar": "https://store.steampowered.com/app/268750/Magicite/",
+    "version": "2.0",
+    "tags": ["Lan"]
+  }, 
+    { 
+    "id": "AmigoKebabSimulator",
+    "nombre": "Amigo: Kebab Simulator",
+    "imagen": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2280320/header.jpg?t=1720864509",
+    "descargar": "https://privatebin.rinuploads.org/?b5b52a6466d77c57#Mzry641Ewgqg5jsfbpCCAHAandwB1ffmrBYLo6ABLiD",
+    "contraseña": "ghustilool",
+    "comprar": "https://store.steampowered.com/app/2280320/Amigo_Kebab_Simulator/",
+    "version": "20230815",
+    "tags": ["Offline"]
+  }, 
+    { 
+    "id": "JumpKing",
+    "nombre": "Jump King",
+    "imagen": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1061090/header.jpg?t=1708097084",
+    "descargar": "https://privatebin.rinuploads.org/?941faaf3ec67177e#47XwCesrRqzf1Q46xd1mXVCJ2Vv1nXpEsxiFdqHiMbni",
+    "contraseña": "ghustilool",
+    "comprar": "https://store.steampowered.com/app/1061090/Jump_King/",
+    "version": "1.06 + DLC",
+    "tags": ["Offline"]
+  }, 
+    { 
+    "id": "CloverPit",
+    "nombre": "CloverPit",
+    "imagen": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3314790/8ba81356b84aa937573fa29fdd708dbd96b01537/header.jpg?t=1759224878",
+    "descargar": "https://privatebin.rinuploads.org/?c2f22c271cb5d896#2baRtrmkqjneQ7jVX7vg2N8NXBm3oZo1p3nPMwxEKa18",
+    "contraseña": "ghustilool",
+    "comprar": "https://store.steampowered.com/app/3314790/CloverPit/",
+    "version": "1.1 build 20193388",
+    "tags": ["Offline"]
+  }, 
+    { 
+    "id": "CrosshairX",
+    "nombre": "Crosshair X",
+    "imagen": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1366800/22e1a703a4d8f45c900741b53a4f933862798a10/header.jpg?t=1750794599",
+    "descargar": "https://privatebin.rinuploads.org/?089d7842d69d515e#8cfWvnZhP1SSYhf1uxGUCFvATNSxDhD3YmYSoMu2d7DA",
+    "contraseña": "ghustilool",
+    "comprar": "https://store.steampowered.com/app/1366800/Crosshair_X/",
+    "version": "Build 19757061",
+    "tags": ["Programas"]
+  },  
+    { 
+    "id": "ATLYSS",
+    "nombre": "ATLYSS",
+    "imagen": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2768430/header.jpg?t=1732316418",
+    "descargar": "https://privatebin.rinuploads.org/?c67b182349226cee#BERJAXq6SDs991RiqiGzwGVUXxNaJ5S2M7Hjuh5pnVfq",
+    "contraseña": "ghustilool",
+    "comprar": "https://store.steampowered.com/app/2768430/ATLYSS/",
+    "version": "1.6.2b",
+    "tags": ["Online"]
+  },  
+    { 
+    "id": "MuseDash",
+    "nombre": "Muse Dash",
+    "imagen": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/774171/header.jpg?t=1756199346",
+    "descargar": "https://privatebin.rinuploads.org/?75713b35f542dedb#4f7LKhB6KoSJRCwA3oLyscHDKvYn9th2ayRcZA1TdZ8g",
+    "contraseña": "ghustilool",
+    "comprar": "https://store.steampowered.com/app/774171/Muse_Dash/",
+    "version": "5.7.0 + DLC",
+    "tags": ["Offline"]
+  },  
+    { 
+    "id": "Megabonk",
+    "nombre": "Megabonk",
+    "imagen": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3405340/d06cb39a82a703e42541085fc61b42d80904b3f8/header.jpg?t=1758218419",
+    "descargar": "https://privatebin.rinuploads.org/?4cdc0767df78f6f2#2TEthKpJx7ZpEbC3Pqw5c4ya1Wir7PRVuQj6UaKtVkY4",
+    "contraseña": "ghustilool",
+    "comprar": "https://store.steampowered.com/app/3405340/Megabonk/",
+    "version": "1.0.7",
+    "tags": ["Offline"]
+  },
+    { 
+    "id": "Automation-TheCarCompanyTycoonGame",
+    "nombre": "Automation - The Car Company Tycoon Game",
+    "imagen": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/293760/header.jpg?t=1738203029",
+    "descargar": "https://privatebin.rinuploads.org/?71abf7effb08024e#GQs5KqKcrhgivd3zfXakjq1XSnVZv19bX3j6EH2dxRS",
+    "contraseña": "ghustilool",
+    "comprar": "https://store.steampowered.com/app/293760/Automation__The_Car_Company_Tycoon_Game/",
+    "version": "Build 19999756 + DLC",
+    "tags": ["Offline"]
+  },
+    { 
+    "id": "ProjectZomboid",
+    "nombre": "Project Zomboid",
+    "imagen": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/108600/header.jpg?t=1739309087",
+    "descargar": "https://privatebin.rinuploads.org/?92697764d821f27a#Di4LBmPxgzRrqcnjpqNRWMVdXh1XwjwpD6NFU9E4agBy",
+    "contraseña": "ghustilool",
+    "comprar": "https://store.steampowered.com/app/108600/Project_Zomboid/",
+    "version": "41.78.16",
+    "tags": ["Online"]
+  },
+    { 
+    "id": "NoImnotaHuman",
+    "nombre": "No, I'm not a Human",
+    "imagen": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3180070/fadebc14211b17b5a6603926612ead9294cad9ce/header.jpg?t=1758293511",
+    "descargar": "https://privatebin.rinuploads.org/?631b2a7b0406b7ae#TqVh8CyWutrtxdA7ok8gQuDfA5QJ4EgwZCZHD1B9fdH",
+    "contraseña": "ghustilool",
+    "comprar": "https://store.steampowered.com/app/3180070/No_Im_not_a_Human/",
+    "version": "1.1.19 / Build 20097531",
+    "tags": ["Offline"]
+  },
+    {
+    "id": "terraria",
+    "nombre": "Terraria",
+    "imagen": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/105600/header.jpg?t=1731252354",
+    "descargar": "https://privatebin.rinuploads.org/?55619512601528e5#324okEHFSuUDtC5P2gsqVRqfre6ZnyU2yTYEFzuupLwe",
+    "contraseña": "ghustilool",
+    "comprar": "https://store.steampowered.com/app/105600/Terraria/",
+    "version": "1.4.4.9",
+    "tags": ["Online"]
+  },
+    {
+    "id": "thesurvivalists",
+    "nombre": "The Survivalists",
+    "imagen": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/897450/header.jpg?t=1729002422",
+    "descargar": "https://privatebin.rinuploads.org/?c44d97bc876203fc#9weFSwfuSHaRo235naXjde4SB6jGpk2FbRRh9foGoSkX",
+    "contraseña": "ghustilool",
+    "comprar": "https://store.steampowered.com/app/897450/The_Survivalists/",
+    "version": "1.1.13.565.740066",
+    "tags": ["Online"]
+  },
+    {
+    "id": "tinkerlands",
+    "nombre": "Tinkerlands",
+    "imagen": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2617700/d3c84c141c67e09a973663834465aa83bbbc9afc/header.jpg?t=1753977968",
+    "descargar": "https://privatebin.rinuploads.org/?541b40fe675a8a9d#3mLP4S2jN5Q1g84Z4wEchc78ffo85fv9pqsP7SkXSEGE",
+    "contraseña": "ghustilool",
+    "comprar": "https://store.steampowered.com/app/2617700/Tinkerlands/",
+    "version": "45810.67",
+    "tags": ["Online"]
+  },
+    {
+    "id": "pokemonalphasapphire",
+    "nombre": "Pokémon Alpha Sapphire",
+    "imagen": "https://www.nintendo.com/eu/media/images/10_share_images/games_15/nintendo_3ds_25/SI_3DS_PokemonAlphaSapphire_enGB_image1600w.jpg",
+    "descargar": "https://privatebin.rinuploads.org/?0e80ea17b301b0bb#puysprNyPsDWzEkgqD5LQzw8y5da7oiwGW69YnTBxpk",
+    "contraseña": "ghustilool",
+    "comprar": "https://www.nintendo.com/en-gb/Games/Nintendo-3DS-games/Pokemon-Alpha-Sapphire-894321.html?srsltid=AfmBOoqVWfoHN1sfoKP8-GhSmqB_8tWL15FIMIHIVPHJkYEexGOBop0y",
+    "version": "Final Release",
+    "tags": ["Offline"]
+  },
+    {
+    "id": "magearena",
+    "nombre": "Mage Arena",
+    "imagen": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3716600/e09e178465c67642c1214736e29d64846d966e52/header.jpg?t=1753574038",
+    "descargar": "https://privatebin.rinuploads.org/?31b3638353383b42#7z94XYGTjQgKVre9FX8CyiK9mG8TYmUNw5dTAQseDFzX",
+    "contraseña": "ghustilool",
+    "comprar": "https://store.steampowered.com/app/3716600/Mage_Arena/",
+    "version": "0.6.2",
+    "tags": ["Online"]
+  },
+    {
+    "id": "duckgame",
+    "nombre": "Duck Game",
+    "imagen": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/312530/header.jpg?t=1719772984",
+    "descargar": "https://privatebin.rinuploads.org/?5db66deed01368cc#B7t8EXpKCt6czh6eDBJJ5QaBAtTQpVh8euXntGCChCjx",
+    "contraseña": "ghustilool",
+    "comprar": "https://store.steampowered.com/app/312530/Duck_Game/",
+    "version": "12062021",
+    "tags": ["Online"]
+  },
+    {
+    "id": "lethalcompany",
+    "nombre": "Lethal Company",
+    "imagen": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1966720/header.jpg?t=1750273815",
+    "descargar": "https://privatebin.rinuploads.org/?a3dfeb7d9ace55e4#FYtXBa1RHUngAHZZSUii5uNuKs7Xp2qKGigxgjJTidHB",
+    "contraseña": "ghustilool",
+    "comprar": "https://store.steampowered.com/app/1966720/Lethal_Company/",
+    "version": "72",
+    "tags": ["Online"]
+  },
+    {
+    "id": "subnauticamodonline",
+    "nombre": "Subnautica + MOD ONLINE",
+    "imagen": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/264710/header.jpg?t=1751944840",
+    "descargar": "https://privatebin.rinuploads.org/?cc2681dcdfb60414#FCLm3oPPPgS8qzSajZ6DYPverwLoipeBPRLc9fwj7M6n",
+    "contraseña": "ghustilool",
+    "comprar": "https://store.steampowered.com/app/264710/Subnautica/",
+    "version": "68598",
+    "tags": ["lan"]
+  },
+    { 
+    "id": "Coromon",
+    "nombre": "Coromon",
+    "imagen": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1218210/6005d622740cc34589b36ab64eb2850c406b5432/header.jpg?t=1756426942",
+    "descargar": "https://privatebin.rinuploads.org/?ab84273d959c3b9a#7Ti5kYRDnR6nnWeD7H7cRAYuWfTiJxUPPEpFnjjbeo4c",
+    "contraseña": "ghustilool",
+    "comprar": "https://store.steampowered.com/app/1218210/Coromon/",
+    "version": "Deluxe Edition",
+    "tags": ["Offline"]
+  }, 
+    { 
+    "id": "WaterparkSimulator",
+    "nombre": "Waterpark Simulator",
+    "imagen": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3293260/b79f3843e1048e88d0c55c66cc5e0e1de1a64717/header_alt_assets_0.jpg?t=1759341628",
+    "descargar": "https://privatebin.rinuploads.org/?ac166119f1f99241#6LYQ3MadSHsUnPdRg9cYq6ac99Ew4xGTpz1Jm3A1aV1d",
+    "contraseña": "ghustilool",
+    "comprar": "https://store.steampowered.com/app/3293260/Waterpark_Simulator/",
+    "version": "0.2.38",
+    "tags": ["Offline"]
+  }, 
+    { 
+    "id": "VintageStory",
+    "nombre": "Vintage Story",
+    "imagen": "https://i.ibb.co/39R91cXd/558495767-1125100356389884-7650391387322328503-n.jpg",
+    "descargar": "https://privatebin.rinuploads.org/?16cd7a99342a7bb4#7yebWDHAS3Ap38oZPLX1tQXe23Q7cxZ461VS9HtZZkZP",
+    "contraseña": "ghustilool",
+    "comprar": "https://www.vintagestory.at/store/",
+    "version": "1.21.2-rc.2",
+    "tags": ["Online", "LAN"]
+  },  
+    { 
+    "id": "FLStudio",
+    "nombre": "FL Studio",
+    "imagen": "https://i.ibb.co/spjjjCv2/557149975-1125099436389976-3214114206200663620-n.jpg",
+    "descargar": "https://i.ibb.co/spjjjCv2/557149975-1125099436389976-3214114206200663620-n.jpg",
+    "contraseña": "ghustilool",
+    "comprar": "https://www.image-line.com/",
+    "version": "25.1.6.4997 (x64) ALL PE +Plugins",
+    "tags": ["Programas"]
+  }  
 ]
