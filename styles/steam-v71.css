@@ -129,29 +129,38 @@ body{
 }
 
 
-/* v72: header compact (title removed) */
-.site-header{padding:8px 12px 0}
+/* v73: align tags next to the search on the right */
+.list-header{display:flex;align-items:center;gap:8px}
+.list-header .tags-bar{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.searchbox{margin:0}
 
-/* v72: brand badge on carousel top-right */
+/* v73: brand badge better placement & visibility */
+.carousel{position:relative}
 .brand-badge{
-  position:absolute; right:14px; top:-38px; display:flex; align-items:center; gap:8px;
-  background:rgba(0,0,0,.28); border:1px solid rgba(255,255,255,.08);
+  position:absolute; right:8px; top:-56px; z-index:5;
+  display:flex; align-items:center; gap:8px;
+  background:rgba(0,0,0,.35); border:1px solid rgba(255,255,255,.08);
   padding:6px 10px; border-radius:999px; backdrop-filter: blur(6px);
+  box-shadow:0 8px 16px rgba(0,0,0,.35);
 }
-.brand-pet{width:34px; height:34px; object-fit:contain}
+.brand-pet{width:28px;height:28px;object-fit:contain}
 .brand-text{
-  font-weight:800; letter-spacing:.18em; font-size:14px;
+  font-weight:800; letter-spacing:.18em; font-size:13px;
   background:linear-gradient(180deg,#ffd166 0%, #e56b6f 50%, #8338ec 100%);
   -webkit-background-clip:text; background-clip:text; color:transparent;
-  text-shadow:0 1px 0 rgba(0,0,0,.35);
+  text-shadow:0 1px 0 rgba(0,0,0,.5);
 }
 
-/* v72: tags row inside list header */
-.list-header .tags-bar{
-  margin:0;
-  display:flex; gap:10px; flex-wrap:wrap;
-}
-.list-header .tags-bar .tag-btn{padding:8px 12px; font-size:12px}
+/* v73: publications thumbnail wider to see more sides */
+.pub-item{grid-template-columns:110px 1fr 140px}
+.pub-cover{width:110px;height:84px;object-fit:cover}
 
-/* v72: align search at right nicely */
-.searchbox{margin-left:auto}
+/* v73: carousel controls visible & on top; autoplay feel */
+.car-btn{z-index:6; opacity:.95}
+.car-prev{left:10px} .car-next{right:10px}
+
+/* v73: pager styles */
+.pager{display:flex;gap:10px;align-items:center;justify-content:center;margin:14px 0 0}
+.pg-btn{padding:8px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.28);color:var(--text);cursor:pointer;font-weight:800}
+.pg-btn[disabled]{opacity:.4;cursor:not-allowed}
+.pg-info{opacity:.7}
