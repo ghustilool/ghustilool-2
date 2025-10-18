@@ -1,5 +1,5 @@
 // app-v71.js (rebuilt v77) – clean + robust
-const JSON_URL = "autores/ghustilool.json?v=77";
+const JSON_URL = "autores/ghustilool.json";
 const TAG_COLOR = {"Offline":"Offline","LAN":"LAN","Online":"Online","+18":"+18","Programas":"Programas"};
 const state = { all:[], filtered:[], filterTag:null, selectedId:null, dots:[], slide:0, page:0 };
 const pageSize = 10;
@@ -12,17 +12,27 @@ document.addEventListener("DOMContentLoaded", init);
 
 async function init(){
   try{
-    const res = await fetch(JSON_URL, {cache:"no-store"});
-    const data = await res.json();
+    let data = null;
+    // first try with timestamp to bust cache
+    try{
+      const res = await fetch(JSON_URL + "?t=" + Date.now(), {cache:"no-store"});
+      data = await res.json();
+    }catch(_){ /* ignore */ }
+    // fallback plain path
+    if (!data){
+      const res2 = await fetch(JSON_URL, {cache:"no-store"});
+      data = await res2.json();
+    }
     state.all = Array.isArray(data)? data : (data.publicaciones||[]);
-    state.all.sort(byDateDesc);
-    state.filtered = state.all.slice();
-    renderCarousel();
-    renderList();
-    bindUI();
   }catch(e){
     console.error("JSON load error", e);
+    state.all = [];
   }
+  state.all.sort(byDateDesc);
+  state.filtered = state.all.slice();
+  renderCarousel();
+  renderList();
+  bindUI();
 }
 
 /* ===== Carousel ===== */
@@ -83,7 +93,10 @@ function renderList(){
   ul.innerHTML = "";
   const start = state.page * pageSize; const end = start + pageSize;
   const pageItems = state.filtered.slice(start, end);
-
+  if (pageItems.length === 0){
+    const note = document.createElement('div'); note.className='empty-note'; note.textContent='No hay publicaciones para mostrar.';
+    ul.appendChild(note);
+  }
   pageItems.forEach(item=>{
     const li = document.createElement("li");
     li.className = "pub-item";
