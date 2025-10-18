@@ -1,8 +1,8 @@
-// app-v71.js (rebuilt v77) – clean + robust
-const JSON_URL = "autores/ghustilool.json";
-const TAG_COLOR = {"Offline":"Offline","LAN":"LAN","Online":"Online","+18":"+18","Programas":"Programas"};
-const state = { all:[], filtered:[], filterTag:null, selectedId:null, dots:[], slide:0, page:0 };
-const pageSize = 10;
+// app-v71.js – Steam-like pass (v71)
+const JSON_URL = "autores/ghustilool.json?v=71";
+const TAG_COLOR = {"Offline":"Offline","LAN":"LAN","Online":"Online","+18":"+18","Programas":"Programas",};
+
+const state = { all:[], filtered:[], filterTag:null, selectedId:null, dots:[], slide:0 };
 
 const safe = (v,d="") => (v==null?d:v);
 const arr = (v) => Array.isArray(v)?v:[];
@@ -12,31 +12,18 @@ document.addEventListener("DOMContentLoaded", init);
 
 async function init(){
   try{
-    let data = null;
-    // first try with timestamp to bust cache
-    try{
-      const res = await fetch(JSON_URL + "?t=" + Date.now(), {cache:"no-store"});
-      data = await res.json();
-    }catch(_){ /* ignore */ }
-    // fallback plain path
-    if (!data){
-      const res2 = await fetch(JSON_URL, {cache:"no-store"});
-      data = await res2.json();
-    }
+    const res = await fetch(JSON_URL);
+    const data = await res.json();
     state.all = Array.isArray(data)? data : (data.publicaciones||[]);
-  }catch(e){
-    console.error("JSON load error", e);
-    state.all = [];
-  }
-  state.all.sort(byDateDesc);
-  state.filtered = state.all.slice();
-  renderCarousel();
-  renderList();
-  bindUI();
+    state.all.sort(byDateDesc);
+    state.filtered = state.all.slice();
+    renderCarousel();
+    renderList();
+    bindUI();
+  }catch(e){ console.error("JSON load error", e); }
 }
 
 /* ===== Carousel ===== */
-let autoTimer;
 function renderCarousel(){
   const track = document.getElementById("car-track");
   const dots = document.getElementById("car-dots");
@@ -48,11 +35,13 @@ function renderCarousel(){
     const img = document.createElement("img");
     img.src = safe(it.imagen, "https://picsum.photos/800/400?blur=2");
     img.alt = safe(it.nombre,"Publicación");
+
     const overlay = document.createElement("div");
     overlay.className = "car-overlay";
     const title = document.createElement("div");
     title.className = "car-title"; title.textContent = safe(it.nombre, it.id||"Sin nombre");
     const ver = document.createElement("span"); ver.className = "ver-chip"; ver.textContent = safe(it.version,"v1.0");
+
     overlay.appendChild(title); overlay.appendChild(ver);
     card.appendChild(img); card.appendChild(overlay); track.appendChild(card);
 
@@ -64,14 +53,8 @@ function renderCarousel(){
 
   document.querySelector(".car-prev").onclick = ()=> scrollStep(-1);
   document.querySelector(".car-next").onclick = ()=> scrollStep(1);
-
-  const car = document.querySelector('.carousel');
-  const startAuto = ()=> { clearInterval(autoTimer); autoTimer = setInterval(()=> scrollStep(1), 5000); };
-  const stopAuto = ()=> { clearInterval(autoTimer); };
-  car.addEventListener('mouseenter', stopAuto);
-  car.addEventListener('mouseleave', startAuto);
-  startAuto();
 }
+
 function scrollStep(dir){
   const top = Math.min(state.all.length, 9);
   const maxIndex = top-1;
@@ -82,22 +65,15 @@ function scrollToSlide(i){
   state.slide = i;
   const track = document.getElementById("car-track");
   const card = track.children[i];
-  if (card) track.scrollTo({ left: card.offsetLeft - 6, behavior:'smooth' });
+  if (card) track.scrollTo({ left: card.offsetLeft - 6, behavior:"smooth" });
   state.dots.forEach((d,idx)=> d.classList.toggle("active", idx===i));
 }
 
 /* ===== List + mini modal ===== */
 function renderList(){
   const ul = document.getElementById("pub-list");
-  if (!ul) return;
   ul.innerHTML = "";
-  const start = state.page * pageSize; const end = start + pageSize;
-  const pageItems = state.filtered.slice(start, end);
-  if (pageItems.length === 0){
-    const note = document.createElement('div'); note.className='empty-note'; note.textContent='No hay publicaciones para mostrar.';
-    ul.appendChild(note);
-  }
-  pageItems.forEach(item=>{
+  state.filtered.forEach(item=>{
     const li = document.createElement("li");
     li.className = "pub-item";
     li.dataset.id = safe(item.id, safe(item.nombre,"").toLowerCase().replace(/\s+/g,"-"));
@@ -121,7 +97,6 @@ function renderList(){
     li.addEventListener("keydown", (e)=>{ if (e.key === "Enter") { openMiniModal(item); selectRow(li); } });
     ul.appendChild(li);
   });
-  renderPager();
 }
 function selectRow(li){
   document.querySelectorAll(".pub-item").forEach(n=> n.classList.remove("selected"));
@@ -163,17 +138,17 @@ function openMiniModal(item){
 }
 function button(text, cls, on){ const b=document.createElement("button"); b.className=cls; b.textContent=text; b.addEventListener("click",on); return b; }
 
-/* ===== Filters/Search/Pager ===== */
+/* ===== Filters/Search ===== */
 function bindUI(){
   const search = document.getElementById("search");
   const sbtn = document.getElementById("searchBtn");
   sbtn.addEventListener("click", applyFilters);
   search.addEventListener("input", applyFilters);
-  document.querySelectorAll(".tag-btn, .tag-button").forEach(b=>{
+  document.querySelectorAll(".tag-btn").forEach(b=>{
     b.addEventListener("click", ()=>{
       const t = b.dataset.filter;
       state.filterTag = (state.filterTag === t) ? null : t;
-      document.querySelectorAll(".tag-btn, .tag-button").forEach(x=> x.classList.remove("active"));
+      document.querySelectorAll(".tag-btn").forEach(x=> x.classList.remove("active"));
       if (state.filterTag) b.classList.add("active");
       applyFilters();
     });
@@ -186,23 +161,5 @@ function applyFilters(){
     const matchTag = state.filterTag ? arr(it.tags).includes(state.filterTag) : true;
     return inText && matchTag;
   });
-  state.page = 0;
   renderList();
-}
-function renderPager(){
-  let pager = document.getElementById("pager");
-  if (!pager){
-    pager = document.createElement("div");
-    pager.id = "pager";
-    pager.className = "pager";
-    document.querySelector(".list-block").appendChild(pager);
-  }
-  pager.innerHTML = "";
-  const totalPages = Math.max(1, Math.ceil(state.filtered.length / pageSize));
-  const prev = document.createElement("button"); prev.className="pg-btn"; prev.textContent="‹ Anterior";
-  prev.disabled = state.page<=0; prev.onclick=()=>{ state.page=Math.max(0,state.page-1); renderList(); };
-  const next = document.createElement("button"); next.className="pg-btn"; next.textContent="Siguiente ›";
-  next.disabled = state.page>=totalPages-1; next.onclick=()=>{ state.page=Math.min(totalPages-1,state.page+1); renderList(); };
-  const info = document.createElement("span"); info.className="pg-info"; info.textContent = (state.page+1) + " / " + totalPages;
-  pager.appendChild(prev); pager.appendChild(info); pager.appendChild(next);
 }

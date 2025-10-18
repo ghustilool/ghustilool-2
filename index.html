@@ -11,22 +11,19 @@
   <link rel="stylesheet" href="styles/steam-v71.css?v=71" />
 </head>
 <body>
+  <header class="site-header">
+    
+  </header>
+
   <main class="container">
     <!-- Añadido recientemente -->
     <section class="recent">
       <div class="section-title">AÑADIDO RECIENTEMENTE</div>
-      
+      <div class="carousel">
 
-<div class="brand-badge old-title-pill" aria-label="GhustiLoOL">
-  <img src="ghusti-pet.gif" alt="" class="brand-pet"/>
-  <h1 class="site-title mini"><span class="title-word" id="title-word">
-    <span class="t-letter">G</span><span class="t-letter">h</span><span class="t-letter">u</span>
-    <span class="t-letter">s</span><span class="t-letter">t</span><span class="t-letter">i</span>
-    <span class="t-letter">L</span><span class="t-letter">o</span><span class="t-letter">O</span><span class="t-letter">L</span>
-  </span></h1>
-</div>
-
-
+      <div class="brand-badge">
+        <img src="ghusti-pet.gif" alt="Ghusti pet" class="brand-pet" />
+        <span class="brand-text">G h u s t i L o O L</span>
       </div>
 
         <button class="car-btn car-prev" aria-label="Anterior">❮</button>
@@ -40,19 +37,14 @@
 
     <!-- Publicaciones -->
     <section class="list-block">
-      
-
-<div class="filters-bar">
-  <div class="tag-filter-container" id="tag-filters">
-    <button class="tag-button tag-button-offline tag-btn" data-filter="Offline">🎮 OFFLINE</button>
-    <button class="tag-button tag-button-lan tag-btn" data-filter="LAN">🔌 LAN</button>
-    <button class="tag-button tag-button-online tag-btn" data-filter="Online">🌐 ONLINE</button>
-    <button class="tag-button tag-button-adult tag-btn" data-filter="+18">🔞 +18</button>
-    <button class="tag-button tag-button-program tag-btn" data-filter="Programas">🧰 PROGRAMAS</button>
-  </div>
-</div>
-
-
+      <div class="list-header">
+        <div class="section-title">PUBLICACIONES</div>
+<nav class="tags-bar"><button class="tag-btn tag-offline" data-filter="Offline">🎮 OFFLINE</button>
+      <button class="tag-btn tag-lan" data-filter="LAN">🔌 LAN</button>
+      <button class="tag-btn tag-online" data-filter="Online">🌐 ONLINE</button>
+      <button class="tag-btn tag-18" data-filter="+18">🔞 +18</button>
+      <button class="tag-btn tag-programas" data-filter="Programas">🧰 PROGRAMAS</button>
+    </nav>
         <div class="searchbox">
           <input id="search" type="text" placeholder="Buscar" autocomplete="off" />
           <button id="searchBtn" aria-label="Buscar">🔎</button>
