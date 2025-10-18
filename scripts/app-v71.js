@@ -2,8 +2,7 @@
 const JSON_URL = "autores/ghustilool.json?v=71";
 const TAG_COLOR = {"Offline":"Offline","LAN":"LAN","Online":"Online","+18":"+18","Programas":"Programas","Tutorial":"Tutorial"};
 
-const state = { all:[], filtered:[], filterTag:null, selectedId:null, dots:[], slide:0, page:0 };
-const pageSize = 10;
+const state = { all:[], filtered:[], filterTag:null, selectedId:null, dots:[], slide:0 };
 
 const safe = (v,d="") => (v==null?d:v);
 const arr = (v) => Array.isArray(v)?v:[];
@@ -19,7 +18,7 @@ async function init(){
     state.all.sort(byDateDesc);
     state.filtered = state.all.slice();
     renderCarousel();
-    state.page = 0; renderList();
+    renderList();
     bindUI();
   }catch(e){ console.error("JSON load error", e); }
 }
@@ -53,14 +52,14 @@ function renderCarousel(){
     dots.appendChild(dot); state.dots.push(dot);
   });
 
-  document.querySelector(".car-prev").onclick = ()=> scrollStep(-1);
-  document.querySelector(".car-next").onclick = ()=> scrollStep(1);
-  const car = document.querySelector('.carousel');
-  const startAuto = ()=> { clearInterval(autoTimer); autoTimer = setInterval(()=> scrollStep(1), 4000); };
-  const stopAuto = ()=> { clearInterval(autoTimer); };
-  car.addEventListener('mouseenter', stopAuto);
-  car.addEventListener('mouseleave', startAuto);
-  startAuto();
+  document.querySelector('.car-prev').onclick = ()=> scrollStep(-1);
+document.querySelector('.car-next').onclick = ()=> scrollStep(1);
+const car = document.querySelector('.carousel');
+const startAuto = ()=> { clearInterval(autoTimer); autoTimer = setInterval(()=> scrollStep(1), 5000); };
+const stopAuto = ()=> { clearInterval(autoTimer); };
+car.addEventListener('mouseenter', stopAuto);
+car.addEventListener('mouseleave', startAuto);
+startAuto();
 }
 
 function scrollStep(dir){
@@ -73,16 +72,15 @@ function scrollToSlide(i){
   state.slide = i;
   const track = document.getElementById("car-track");
   const card = track.children[i];
-  if (card) track.scrollTo({ left: card.offsetLeft - 6, behavior:"smooth" });
+  if (card) track.scrollTo({ left: card.offsetLeft - 6, behavior:'smooth' });
   state.dots.forEach((d,idx)=> d.classList.toggle("active", idx===i));
 }
 
 /* ===== List + mini modal ===== */
 function renderList(){
-  const start = state.page * pageSize; const end = start + pageSize; const pageItems = state.filtered.slice(start, end);
   const ul = document.getElementById("pub-list");
   ul.innerHTML = "";
-  pageItems.forEach(item=>{
+  state.filtered.forEach(item=>{
     const li = document.createElement("li");
     li.className = "pub-item";
     li.dataset.id = safe(item.id, safe(item.nombre,"").toLowerCase().replace(/\s+/g,"-"));
@@ -106,7 +104,6 @@ function renderList(){
     li.addEventListener("keydown", (e)=>{ if (e.key === "Enter") { openMiniModal(item); selectRow(li); } });
     ul.appendChild(li);
   });
-  renderPager();
 }
 function selectRow(li){
   document.querySelectorAll(".pub-item").forEach(n=> n.classList.remove("selected"));
@@ -171,24 +168,5 @@ function applyFilters(){
     const matchTag = state.filterTag ? arr(it.tags).includes(state.filterTag) : true;
     return inText && matchTag;
   });
-  state.page = 0; renderList();
-}
-
-// pager
-function renderPager(){
-  let pager = document.getElementById("pager");
-  if (!pager){
-    pager = document.createElement("div");
-    pager.id = "pager";
-    pager.className = "pager";
-    document.querySelector(".list-block").appendChild(pager);
-  }
-  pager.innerHTML = "";
-  const totalPages = Math.max(1, Math.ceil(state.filtered.length / pageSize));
-  const prev = document.createElement("button"); prev.className="pg-btn"; prev.textContent="‹ Anterior";
-  prev.disabled = state.page<=0; prev.onclick=()=>{ state.page=Math.max(0,state.page-1); state.page = 0; renderList(); };
-  const next = document.createElement("button"); next.className="pg-btn"; next.textContent="Siguiente ›";
-  next.disabled = state.page>=totalPages-1; next.onclick=()=>{ state.page=Math.min(totalPages-1,state.page+1); state.page = 0; renderList(); };
-  const info = document.createElement("span"); info.className="pg-info"; info.textContent = (state.page+1) + " / " + totalPages;
-  pager.appendChild(prev); pager.appendChild(info); pager.appendChild(next);
+  renderList();
 }

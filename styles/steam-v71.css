@@ -129,38 +129,46 @@ body{
 }
 
 
-/* v73: align tags next to the search on the right */
-.list-header{display:flex;align-items:center;gap:8px}
-.list-header .tags-bar{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
-.searchbox{margin:0}
+/* v74 — remove header gap since title is gone */
+.site-header{display:none}
 
-/* v73: brand badge better placement & visibility */
-.carousel{position:relative}
+/* v74 — brand badge with HONK-like styling (scaled) */
+@import url('https://fonts.googleapis.com/css2?family=Honk&display=swap');
 .brand-badge{
-  position:absolute; right:8px; top:-56px; z-index:5;
+  position:absolute; right:12px; top:-60px; z-index:6;
   display:flex; align-items:center; gap:8px;
-  background:rgba(0,0,0,.35); border:1px solid rgba(255,255,255,.08);
-  padding:6px 10px; border-radius:999px; backdrop-filter: blur(6px);
-  box-shadow:0 8px 16px rgba(0,0,0,.35);
+  background:rgba(0,0,0,.35); border:1px solid rgba(255,255,255,.10);
+  padding:6px 12px; border-radius:999px; backdrop-filter: blur(6px);
+  box-shadow:0 8px 18px rgba(0,0,0,.45);
 }
-.brand-pet{width:28px;height:28px;object-fit:contain}
-.brand-text{
-  font-weight:800; letter-spacing:.18em; font-size:13px;
+.brand-pet{width:34px;height:34px;object-fit:contain}
+.brand-title{font-family:'Honk', system-ui; font-size:18px; letter-spacing:.28em; display:flex; align-items:center}
+.brand-title .t-letter{
   background:linear-gradient(180deg,#ffd166 0%, #e56b6f 50%, #8338ec 100%);
   -webkit-background-clip:text; background-clip:text; color:transparent;
-  text-shadow:0 1px 0 rgba(0,0,0,.5);
+  text-shadow:0 1px 0 rgba(0,0,0,.55);
+  animation: floaty 3s ease-in-out infinite;
 }
+.brand-title .t-letter:nth-child(odd){animation-delay:.15s}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-1px)}}
 
-/* v73: publications thumbnail wider to see more sides */
-.pub-item{grid-template-columns:110px 1fr 140px}
-.pub-cover{width:110px;height:84px;object-fit:cover}
+/* v74 — position tags next to search (no big gap), tutorial removed */
+.list-header{display:flex;align-items:center;gap:10px}
+.list-header .tags-bar{margin-left:auto;display:flex;gap:10px;flex-wrap:wrap}
+.list-header .tag-btn{padding:8px 12px;font-weight:800;border-radius:999px}
+.tag-btn{background:rgba(0,0,0,.2); border-width:2px}
 
-/* v73: carousel controls visible & on top; autoplay feel */
-.car-btn{z-index:6; opacity:.95}
+/* Example edge highlight like screenshot */
+.tag-offline{border-color:#7a62ff}
+.tag-lan{border-color:#16e0a9}
+.tag-online{border-color:#69c0ff}
+.tag-18{border-color:#ff4d6d}
+.tag-programas{border-color:#a855f7}
+
+/* v74 — publication thumbnails: restore original height and extend width */
+.pub-item{grid-template-columns:120px 1fr 140px}
+.pub-cover{width:120px;height:78px;object-fit:cover;object-position:center}
+
+/* v74 — carousel controls + autoplay visuals */
+.car-btn{z-index:7; opacity:1; background:rgba(0,0,0,.55)}
 .car-prev{left:10px} .car-next{right:10px}
-
-/* v73: pager styles */
-.pager{display:flex;gap:10px;align-items:center;justify-content:center;margin:14px 0 0}
-.pg-btn{padding:8px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.28);color:var(--text);cursor:pointer;font-weight:800}
-.pg-btn[disabled]{opacity:.4;cursor:not-allowed}
-.pg-info{opacity:.7}
