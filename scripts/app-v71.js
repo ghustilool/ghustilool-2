@@ -1,6 +1,6 @@
 // app-v71.js – Steam-like pass (v71)
 const JSON_URL = "autores/ghustilool.json?v=71";
-const TAG_COLOR = {"Offline":"Offline","LAN":"LAN","Online":"Online","+18":"+18","Programas":"Programas",};
+const TAG_COLOR = {"Offline":"Offline","LAN":"LAN","Online":"Online","+18":"+18","Programas":"Programas","Tutorial":"Tutorial"};
 
 const state = { all:[], filtered:[], filterTag:null, selectedId:null, dots:[], slide:0 };
 
@@ -24,6 +24,7 @@ async function init(){
 }
 
 /* ===== Carousel ===== */
+let autoTimer;
 function renderCarousel(){
   const track = document.getElementById("car-track");
   const dots = document.getElementById("car-dots");
@@ -51,8 +52,14 @@ function renderCarousel(){
     dots.appendChild(dot); state.dots.push(dot);
   });
 
-  document.querySelector(".car-prev").onclick = ()=> scrollStep(-1);
-  document.querySelector(".car-next").onclick = ()=> scrollStep(1);
+  document.querySelector('.car-prev').onclick = ()=> scrollStep(-1);
+document.querySelector('.car-next').onclick = ()=> scrollStep(1);
+const car = document.querySelector('.carousel');
+const startAuto = ()=> { clearInterval(autoTimer); autoTimer = setInterval(()=> scrollStep(1), 5000); };
+const stopAuto = ()=> { clearInterval(autoTimer); };
+car.addEventListener('mouseenter', stopAuto);
+car.addEventListener('mouseleave', startAuto);
+startAuto();
 }
 
 function scrollStep(dir){
@@ -65,7 +72,7 @@ function scrollToSlide(i){
   state.slide = i;
   const track = document.getElementById("car-track");
   const card = track.children[i];
-  if (card) track.scrollTo({ left: card.offsetLeft - 6, behavior:"smooth" });
+  if (card) track.scrollTo({ left: card.offsetLeft - 6, behavior:'smooth' });
   state.dots.forEach((d,idx)=> d.classList.toggle("active", idx===i));
 }
 
