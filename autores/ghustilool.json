@@ -1,0 +1,37 @@
+[
+  {
+    "id": "demo-automation",
+    "nombre": "Automation - The Car Company Tycoon Game",
+    "imagen": "https://picsum.photos/id/1011/640/360",
+    "descargar": "https://example.com/dl1",
+    "contraseña": "ghustilool",
+    "comprar": "https://store.steampowered.com/app/293760/",
+    "version": "BUILD 199999756 + DLC",
+    "tags": [
+      "Offline"
+    ],
+    "fecha": "2025-10-18"
+  },
+  {
+    "id": "demo-keeper",
+    "nombre": "Keeper",
+    "imagen": "https://picsum.photos/id/1018/640/360",
+    "descargar": "https://example.com/dl2",
+    "version": "v1.0.3",
+    "tags": [
+      "LAN"
+    ],
+    "fecha": "2025-10-17"
+  },
+  {
+    "id": "demo-necesse",
+    "nombre": "Necesse",
+    "imagen": "https://picsum.photos/id/1015/640/360",
+    "descargar": "https://example.com/dl3",
+    "version": "v0.23.5",
+    "tags": [
+      "Online"
+    ],
+    "fecha": "2025-10-16"
+  }
+]

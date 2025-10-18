@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GhustiLoOL</title>
+  <link rel="icon" href="ghusti-ico.ico" type="image/x-icon" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/steam.css?v=70" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="title-wrap">
+      <span class="title-emoji" aria-hidden="true">☠️</span>
+      <h1 class="site-title">G h u s t i L o O L</h1>
+      <span class="title-emoji" aria-hidden="true">☠️</span>
+    </div>
+    <nav class="tags-bar">
+      <button class="tag-btn tag-tutorial" data-filter="Tutorial">🏠 TUTORIAL</button>
+      <button class="tag-btn tag-offline" data-filter="Offline">🎮 OFFLINE</button>
+      <button class="tag-btn tag-lan" data-filter="LAN">🔌 LAN</button>
+      <button class="tag-btn tag-online" data-filter="Online">🌐 ONLINE</button>
+      <button class="tag-btn tag-18" data-filter="+18">🔞 +18</button>
+      <button class="tag-btn tag-programas" data-filter="Programas">🧰 PROGRAMAS</button>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="recent">
+      <div class="section-title">AÑADIDO RECIENTEMENTE</div>
+      <div class="carousel">
+        <button class="car-btn car-prev" aria-label="Anterior">‹</button>
+        <div class="car-track" id="car-track"></div>
+        <button class="car-btn car-next" aria-label="Siguiente">›</button>
+      </div>
+    </section>
+
+    <section class="list-block">
+      <div class="list-header">
+        <div class="section-title">PUBLICACIONES</div>
+        <div class="searchbox">
+          <input id="search" type="text" placeholder="Buscar" autocomplete="off" />
+          <button id="searchBtn" aria-label="Buscar">🔎</button>
+        </div>
+      </div>
+      <div class="list-wrap">
+        <ul id="pub-list" class="pub-list" aria-live="polite"></ul>
+        <aside id="mini-modal" class="mini-modal" aria-hidden="true"></aside>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">© GhustiLoOL</footer>
+
+  <script type="module" src="scripts/app.js?v=70"></script>
+  <script src="/ads/ads-modal-lite.js?v=1"></script>
+</body>
+</html>
