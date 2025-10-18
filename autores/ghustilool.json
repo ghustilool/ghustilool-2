@@ -2,11 +2,11 @@
   {
     "id": "demo-automation",
     "nombre": "Automation - The Car Company Tycoon Game",
-    "imagen": "https://picsum.photos/id/1011/640/360",
+    "imagen": "https://picsum.photos/id/1011/800/400",
     "descargar": "https://example.com/dl1",
     "contraseña": "ghustilool",
     "comprar": "https://store.steampowered.com/app/293760/",
-    "version": "BUILD 199999756 + DLC",
+    "version": "BUILD 199998756 + DLC",
     "tags": [
       "Offline"
     ],
@@ -15,7 +15,7 @@
   {
     "id": "demo-keeper",
     "nombre": "Keeper",
-    "imagen": "https://picsum.photos/id/1018/640/360",
+    "imagen": "https://picsum.photos/id/1003/800/400",
     "descargar": "https://example.com/dl2",
     "version": "v1.0.3",
     "tags": [
@@ -26,12 +26,23 @@
   {
     "id": "demo-necesse",
     "nombre": "Necesse",
-    "imagen": "https://picsum.photos/id/1015/640/360",
+    "imagen": "https://picsum.photos/id/1015/800/400",
     "descargar": "https://example.com/dl3",
     "version": "v0.23.5",
     "tags": [
       "Online"
     ],
     "fecha": "2025-10-16"
+  },
+  {
+    "id": "demo-mp",
+    "nombre": "Magic Pussy: Chapter 3",
+    "imagen": "https://picsum.photos/id/1027/800/400",
+    "descargar": "https://example.com/dl4",
+    "version": "v3.1.0",
+    "tags": [
+      "+18"
+    ],
+    "fecha": "2025-10-15"
   }
 ]
