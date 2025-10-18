@@ -127,3 +127,31 @@ body{
   .list-wrap{grid-template-columns:1fr}
   .mini-modal{position:static; display:block}
 }
+
+
+/* v72: header compact (title removed) */
+.site-header{padding:8px 12px 0}
+
+/* v72: brand badge on carousel top-right */
+.brand-badge{
+  position:absolute; right:14px; top:-38px; display:flex; align-items:center; gap:8px;
+  background:rgba(0,0,0,.28); border:1px solid rgba(255,255,255,.08);
+  padding:6px 10px; border-radius:999px; backdrop-filter: blur(6px);
+}
+.brand-pet{width:34px; height:34px; object-fit:contain}
+.brand-text{
+  font-weight:800; letter-spacing:.18em; font-size:14px;
+  background:linear-gradient(180deg,#ffd166 0%, #e56b6f 50%, #8338ec 100%);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  text-shadow:0 1px 0 rgba(0,0,0,.35);
+}
+
+/* v72: tags row inside list header */
+.list-header .tags-bar{
+  margin:0;
+  display:flex; gap:10px; flex-wrap:wrap;
+}
+.list-header .tags-bar .tag-btn{padding:8px 12px; font-size:12px}
+
+/* v72: align search at right nicely */
+.searchbox{margin-left:auto}

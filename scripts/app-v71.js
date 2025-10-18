@@ -1,6 +1,6 @@
 // app-v71.js – Steam-like pass (v71)
 const JSON_URL = "autores/ghustilool.json?v=71";
-const TAG_COLOR = {"Offline":"Offline","LAN":"LAN","Online":"Online","+18":"+18","Programas":"Programas","Tutorial":"Tutorial"};
+const TAG_COLOR = {"Offline":"Offline","LAN":"LAN","Online":"Online","+18":"+18","Programas":"Programas",};
 
 const state = { all:[], filtered:[], filterTag:null, selectedId:null, dots:[], slide:0 };
 
