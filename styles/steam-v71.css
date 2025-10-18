@@ -196,3 +196,65 @@ body{
 
 /* Slight nudge so it's not glued to the carousel */
 .carousel{padding-top:12px}
+
+
+/* v76 — import HONK for old title */
+@import url('https://fonts.googleapis.com/css2?family=Honk&display=swap');
+
+/* === Old header + title animation from legacy site (scoped for mini title) === */
+/* ===== Header ===== */
+.site-header{ text-align:center; padding:34px 16px 8px; position:relative; z-index:2; }
+.title-row{ display:flex; align-items:center; justify-content:center; gap:12px; }
+.title-emoji{ font-size:clamp(1.6rem,5vw,2.4rem); filter:drop-shadow(0 2px 0 rgba(0,0,0,.45)) drop-shadow(0 10px 18px rgba(0,255,255,.06)); user-select:none; }
+.site-title{
+  font-family:"Honk",system-ui,sans-serif; font-size:clamp(3.2rem,10vw,7rem);
+  letter-spacing:.02em; margin:0; line-height:.9; user-select:none; color:#fff;
+  filter:drop-shadow(0 2px 0 rgba(0,0,0,.45)) drop-shadow(0 10px 18px rgba(0,255,255,.06));
+}
+.title-word{ display:inline-block; white-space:nowrap; }
+.t-letter{ display:inline-block; animation:titlePop 2.4s ease-in-out infinite; }
+.t-letter:nth-child(1){animation-delay:0s}.t-letter:nth-child(2){animation-delay:.08s}.t-letter:nth-child(3){animation-delay:.16s}.t-letter:nth-child(4){animation-delay:.24s}.t-letter:nth-child(5){animation-delay:.32s}.t-letter:nth-child(6){animation-delay:.40s}.t-letter:nth-child(7){animation-delay:.48s}.t-letter:nth-child(8){animation-delay:.56s}.t-letter:nth-child(9){animation-delay:.64s}.t-letter:nth-child(10){animation-delay:.72s}
+@keyframes titlePop{0%,100%{transform:translateY(0) rotate(0) scale(1)}30%{transform:translateY(-2px) rotate(-1deg) scale(1.03)}60%{transform:translateY(1px) rotate(1deg) scale(.99)}}
+
+
+/* Mini size overrides */
+.brand-badge.old-title-pill{position:absolute;right:12px;top:-58px;z-index:10;display:flex;align-items:center;gap:10px;
+  padding:6px 16px;border-radius:18px;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.12);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 10px 22px rgba(0,0,0,.45);backdrop-filter:blur(6px)}
+.brand-badge.old-title-pill .brand-pet{width:28px;height:28px;border-radius:6px}
+.brand-badge.old-title-pill .site-title{font-size:20px;letter-spacing:.08em;margin:0;line-height:1}
+.brand-badge.old-title-pill .t-letter{animation-duration:2.2s}
+
+/* === Old filters bar styles from legacy site === */
+/* ===== Botonera filtros ===== */
+.filters-bar{display:flex;align-items:center;justify-content:center;gap:12px;max-width:1200px;margin:18px auto 6px;padding:0 10px;z-index:2}
+.tag-filter-container{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:12px;position:relative;z-index:2}
+
+.tag-button{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:8px 14px;font-size:.95rem;font-weight:700;
+  background:rgba(0,0,0,.4);border:2px solid;border-radius:10px;color:#fff;text-shadow:0 0 2px #000;
+  cursor:pointer;transition:all .2s ease;
+}
+.tag-button:hover{background:rgba(0,0,0,.6);box-shadow:0 0 10px currentColor;transform:translateY(-2px)}
+.tag-button.active{background:rgba(0,0,0,.6);box-shadow:0 0 12px currentColor}
+
+/* Colores botones */
+.tag-button-all{border-color:#ffef00;color:#ffef00}       /* 🏠 */
+.tag-button-offline{border-color:#3399ff;color:#3399ff}
+.tag-button-lan{border-color:#00ff99;color:#00ff99}
+.tag-button-online{border-color:#00ffff;color:#00ffff}
+.tag-button-adult{border-color:#ff0033;color:#ff0033}
+
+/* NUEVOS */
+.tag-button-tutorial{border-color:#ff9f0a;color:#ff9f0a;box-shadow:0 0 12px rgba(255,159,10,.35)}
+.tag-button-tutorial:hover{box-shadow:0 0 18px rgba(255,159,10,.55)}
+.tag-button-program{border-color:#b400ff;color:#b400ff;box-shadow:0 0 12px rgba(180,0,255,.35)}
+.tag-button-program:hover{box-shadow:0 0 18px rgba(180,0,255,.55)}
+
+
+/* Align filters beside search input */
+.list-header{display:flex;align-items:center;gap:12px}
+.filters-bar{margin-left:auto}
+#tag-filters{display:flex;gap:12px;flex-wrap:wrap}
+.searchbox{margin-left:12px}

@@ -151,11 +151,11 @@ function bindUI(){
   const sbtn = document.getElementById("searchBtn");
   sbtn.addEventListener("click", applyFilters);
   search.addEventListener("input", applyFilters);
-  document.querySelectorAll(".tag-btn").forEach(b=>{
+  document.querySelectorAll(".tag-btn, .tag-button").forEach(b=>{
     b.addEventListener("click", ()=>{
       const t = b.dataset.filter;
       state.filterTag = (state.filterTag === t) ? null : t;
-      document.querySelectorAll(".tag-btn").forEach(x=> x.classList.remove("active"));
+      document.querySelectorAll(".tag-btn, .tag-button").forEach(x=> x.classList.remove("active"));
       if (state.filterTag) b.classList.add("active");
       applyFilters();
     });
