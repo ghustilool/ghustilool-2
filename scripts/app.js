@@ -1,6 +1,6 @@
 // app-v71.js – Steam-like pass (v71)
 const JSON_URL = "autores/ghustilool.json?v=71";
-const TAG_COLOR = {"Offline":"Offline","LAN":"LAN","Online":"Online","+18":"+18","Programas":"Programas","Tutorial":"Tutorial"};
+const TAG_COLOR = {"Offline":"offline","LAN":"lan","Online":"online","+18":"+18","Programas":"programas","Tutorial":"tutorial"};
 
 const state = { all:[], filtered:[], filterTag:null, selectedId:null, dots:[], slide:0 };
 
@@ -135,6 +135,11 @@ function scrollToSlide(pageIdx){
   state.dots.forEach((d,idx)=> d.classList.toggle("active", idx===pageIdx));
 }
 /* ===== List + mini modal ===== */
+
+// Consistencia de etiquetas (emoji + clase + label)
+const TAG_EMOJI = {"Offline":"🎮","LAN":"🔌","Online":"🌐","+18":"🔞","Programas":"🧰","Tutorial":"📼"};
+const TAG_LABEL = {"Offline":"OFFLINE","LAN":"LAN","Online":"ONLINE","+18":"+18","Programas":"PROGRAMAS","Tutorial":"TUTORIAL"};
+
 function renderList(){
   const ul = document.getElementById("pub-list");
   ul.innerHTML = "";
@@ -150,7 +155,7 @@ function renderList(){
     const body = document.createElement("div");
     const title = document.createElement("div"); title.className="pub-title"; title.textContent = safe(item.nombre, item.id||"Sin nombre");
     const sub = document.createElement("div"); sub.className="pub-sub";
-    const tg = arr(item.tags)[0] || "Offline"; sub.innerHTML = `<span class="tag-pill tag-${TAG_COLOR[tg]||"Offline"}">${tg}</span>`;
+    const tg = arr(item.tags)[0] || "Offline"; const cls = TAG_COLOR[tg]||"offline"; sub.innerHTML = `<span class="tag-pill tag-${cls==="+"+"18" ? "18" : cls}">${TAG_EMOJI[tg]||""} ${TAG_LABEL[tg]||tg}</span>`;
     body.appendChild(title); body.appendChild(sub);
 
     const right = document.createElement("div"); right.className="right-chip";
@@ -176,7 +181,7 @@ function openMiniModal(item){
   const hwrap = document.createElement("div");
   const title = document.createElement("div"); title.className="mini-title"; title.textContent = safe(item.nombre, item.id||"Sin nombre");
   const sub = document.createElement("div"); sub.className="mini-sub";
-  const tg = arr(item.tags)[0] || "Offline"; sub.innerHTML = `<span class="tag-pill tag-${TAG_COLOR[tg]||"Offline"}">${tg}</span> • Versión: <b>${safe(item.version,"v1.0")}</b>`;
+  const tg = arr(item.tags)[0] || "Offline"; const cls = TAG_COLOR[tg]||"offline"; sub.innerHTML = `<span class="tag-pill tag-${cls==="+"+"18" ? "18" : cls}">${TAG_EMOJI[tg]||""} ${TAG_LABEL[tg]||tg}</span>`;
   hwrap.appendChild(title); hwrap.appendChild(sub); head.appendChild(img); head.appendChild(hwrap);
 
   const btns = document.createElement("div"); btns.className="btns";
