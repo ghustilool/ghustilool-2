@@ -30,13 +30,14 @@ async function init(){
 */
 
 
+
 /* ===== Carousel ===== */
 let autoTimer;
 function renderCarousel(){
   const track = document.getElementById("car-track");
   const dots = document.getElementById("car-dots");
   track.innerHTML = ""; dots.innerHTML = ""; state.dots = [];
-  const top = state.all.slice(0, 9);
+  const top = state.all.slice(0, 6); // SOLO 6
 
   // Build cards
   top.forEach((it)=>{
@@ -70,7 +71,7 @@ function renderCarousel(){
     track.appendChild(card);
   });
 
-  // === 2-dot pagination (3 items per page) ===
+  // === 2-dot pagination (3 items por página) ===
   state.slide = 0;
   state.perPage = 3;
   const totalPages = Math.min(2, Math.max(1, Math.ceil(top.length / state.perPage)));
@@ -78,27 +79,37 @@ function renderCarousel(){
   for (let i=0; i<totalPages; i++){
     const dot = document.createElement("span");
     dot.className = "car-dot" + (i===0 ? " active" : "");
-    dot.addEventListener("click", ()=> scrollToSlide(i));
+    dot.addEventListener("click", ()=> { state.autoDir = (i > state.slide) ? 1 : -1; scrollToSlide(i); });
     dots.appendChild(dot);
     state.dots.push(dot);
   }
 
-  document.querySelector(".car-prev").onclick = ()=> scrollStep(-1);
-  document.querySelector(".car-next").onclick = ()=> scrollStep(1);
+  document.querySelector(".car-prev").onclick = ()=> { state.autoDir = -1; scrollStep(-1); };
+  document.querySelector(".car-next").onclick = ()=> { state.autoDir =  1; scrollStep( 1); };
 
   const car = document.querySelector(".carousel");
-  const startAuto = ()=> { clearInterval(autoTimer); autoTimer = setInterval(()=> scrollStep(1), 5000); };
+
+  // Ping-pong automático (derecha→izquierda→derecha)
+  state.autoDir = 1;
+  const startAuto = ()=> {
+    clearInterval(autoTimer);
+    autoTimer = setInterval(()=> {
+      if (state.slide === 0) state.autoDir = 1;
+      if (state.slide === totalPages-1) state.autoDir = -1;
+      scrollStep(state.autoDir);
+    }, 5000);
+  };
   const stopAuto  = ()=> { clearInterval(autoTimer); };
   car.addEventListener("mouseenter", stopAuto);
   car.addEventListener("mouseleave", startAuto);
   startAuto();
 
-  // Keep cards aligned so no cropped extra image shows
+  // Ajuste de ancho para NO mostrar imagen recortada
   function sizeCarouselCards(){
     const viewport = document.querySelector(".car-viewport");
     const cards = document.querySelectorAll(".car-card");
     if (!viewport || !cards.length) return;
-    const gap = 12; // keep in sync with CSS gap
+    const gap = 12; // mantener en sync con CSS
     const per = state.perPage || 3;
     const w = Math.floor((viewport.clientWidth - gap*(per-1)) / per);
     cards.forEach(c => { c.style.flex = `0 0 ${w}px`; c.style.maxWidth = `${w}px`; });
