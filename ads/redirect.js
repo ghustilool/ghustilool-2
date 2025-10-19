@@ -33,13 +33,27 @@
   if(goEl){ goEl.href = target; }
 
   // 20s countdown
-  var t = 20;
+  
+
+  // Keep the page title informative
+  try{ document.title = (title ? title + ' — ' : '') + 'Publicidad'; }catch(_){}
+
+  var titleEl = document.getElementById('gh-title');
+  var countNum = document.getElementById('gh-count-num');
+  var circle = document.getElementById('gh-circle');
+  var goEl = document.getElementById('gh-go');
+
+  if(titleEl) titleEl.textContent = title || titleEl.textContent || 'descarga';
+  if(goEl) { goEl.href = validTarget(target) ? target : '#'; }
+
+  if(!validTarget(target)){ console.warn('Target inválido:', target); return; }
+
+  var total = 20, t = total;
   function tick(){
-    if(cdEl) cdEl.textContent = String(t);
+    if(countNum) countNum.textContent = String(t);
+    if(circle) circle.style.setProperty('--p', String(((total - t)/total)*100));
     if(t <= 0){
-      // enable button
-      if(goEl){ goEl.style.pointerEvents='auto'; goEl.style.opacity='1'; }
-      // navigate
+      if(goEl){ goEl.removeAttribute('aria-disabled'); }
       try{ location.href = target; }catch(e){ window.open(target, '_blank'); }
       return;
     }
@@ -48,6 +62,4 @@
   }
   tick();
 
-  // Keep the page title informative
-  try{ document.title = (title ? title + ' — ' : '') + 'Publicidad'; }catch(_){}
 })();
