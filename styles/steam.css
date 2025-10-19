@@ -340,3 +340,16 @@ body{
 @media (min-width: 1200px){
   .brand-title{ font-size:30px; }
 }
+
+
+/* ===== Cursor “manito” for Añadido Recientemente — stronger specificity ===== */
+.carousel .car-viewport .car-card,
+.carousel .car-viewport .car-card *,
+.carousel .car-viewport img,
+.carousel .car-track .car-card,
+.carousel .car-track .car-card * {
+  cursor: pointer !important;
+}
+
+/* subtle hover feedback */
+.carousel .car-card:hover img { transform: scale(1.01); transition: transform 120ms ease; }
