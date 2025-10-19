@@ -1,11 +1,10 @@
 
-// v82 — Intercepta DESCARGAR del mini‑modal usando estado de app si hace falta
+// v83 — HARD BIND: forzamos el botón "Descargar" del mini‑modal a pasar por interstitial
 (function(){
   const INTERSTITIAL_URL = "ads/interstitial-v80.html";
   const SECONDS = 20;
 
   const norm = (s)=> (s||"").toLowerCase().replace(/\s+/g,' ').trim();
-
   const makeInterUrl = (to) => {
     if(!to) return null;
     try { new URL(to); } catch(e) { return null; }
@@ -19,90 +18,86 @@
     try{
       if(window.app && app.state){
         const id = app.state.selectedId;
-        const all = app.state.all || [];
-        const it = all.find(x => x.id === id);
+        const it = (app.state.all||[]).find(x => x.id === id);
         if(it && it.descargar) return it.descargar;
       }
-    }catch(e){/* ignore */}
+    }catch(e){}
     return null;
   }
 
-  function resolveTargetUrl(clicked){
-    // 1) href del anchor más cercano
-    const a = clicked.closest && clicked.closest('a[href]');
-    if(a && a.getAttribute('href')) return a.getAttribute('href');
-
-    // 2) atributos de datos comunes
-    const h = clicked.closest('[data-href]');
-    if(h && h.getAttribute('data-href')) return h.getAttribute('data-href');
-
-    const link = clicked.getAttribute && clicked.getAttribute('href');
-    if(link) return link;
-
-    // 3) estado de la app (descargar del item seleccionado)
-    const fromState = getSelectedDownloadUrl();
-    if(fromState) return fromState;
-
-    return null;
-  }
-
-  // Interceptar específicamente dentro del mini‑modal
   const mm = document.getElementById('mini-modal');
 
-  function onMiniClick(ev){
-    const target = ev.target;
-    const btn = target.closest('.btn, a, button');
-    if(!btn) return;
+  function hardBindDownload(){
+    if(!mm) return;
+    // candidatos dentro del mini-modal
+    const allLinks = mm.querySelectorAll('.btns a[href], a.btn[href], a.button[href], .btns button, .btns .btn');
+    let candidate = null;
+    allLinks.forEach(el=>{
+      const t = norm(el.textContent);
+      if(t.includes('descargar')) candidate = candidate || el;
+    });
+    if(!candidate && allLinks.length) candidate = allLinks[0];
+    if(!candidate) return;
 
-    const text = norm(btn.textContent);
-    const isDownload = text.includes('descargar') || btn.classList.contains('btn-download');
-    if(!isDownload) return;
+    // Resolver URL directa: href/data-href/estado app
+    let direct = (candidate.getAttribute && (candidate.getAttribute('href') || candidate.getAttribute('data-href'))) || null;
+    if(!direct) direct = getSelectedDownloadUrl();
+    if(!direct) return;
 
-    const direct = resolveTargetUrl(btn);
     const inter = makeInterUrl(direct);
     if(!inter) return;
 
-    // Previene navegación original y manda al interstitial en la misma pestaña
-    ev.preventDefault();
-    ev.stopPropagation();
-    window.location.href = inter;
+    // Forzar comportamiento
+    // 1) si es <a>, cambiamos href y target
+    if(candidate.tagName === 'A'){
+      candidate.setAttribute('href', inter);
+      candidate.removeAttribute('target');
+    } else {
+      // 2) si es <button> u otro, le ponemos data y fallback href
+      candidate.setAttribute('data-href', inter);
+    }
+
+    // 3) desactivar onclick previos y listeners de burbujeo
+    candidate.onclick = null;
+
+    // 4) añadir listeners en captura y burbuja para ganar a otros scripts
+    function handler(ev){
+      try{ ev.preventDefault(); ev.stopPropagation(); ev.stopImmediatePropagation(); }catch(e){}
+      window.location.href = inter;
+      return false;
+    }
+    candidate.addEventListener('click', handler, true);  // capture
+    candidate.addEventListener('click', handler, false); // bubble
+
+    // 5) marcar
+    candidate.dataset.adsBound = "v83";
   }
 
+  // Vinculación inicial y cada vez que se re-renderiza el mini‑modal
+  hardBindDownload();
   if(mm){
-    // Usar capture para adelantar y ganarle a otros listeners
-    mm.addEventListener('click', onMiniClick, true);
-
-    // Cada vez que cambia el contenido, reescribir HREF del botón de Descargar
-    const mo = new MutationObserver(()=>{
-      const links = mm.querySelectorAll('.btns a, a.btn, a.button');
-      let candidate = null;
-      links.forEach(a=>{
-        const t = norm(a.textContent);
-        if(t.includes('descargar')) candidate = candidate || a;
-      });
-      if(!candidate && links.length) candidate = links[0];
-      if(candidate){
-        const direct = resolveTargetUrl(candidate) || getSelectedDownloadUrl();
-        const inter = makeInterUrl(direct);
-        if(inter) candidate.setAttribute('href', inter);
-      }
-    });
+    const mo = new MutationObserver(()=> hardBindDownload());
     mo.observe(mm, {childList:true, subtree:true});
   }
 
-  // Redundancia: delegación global por si el botón está fuera del #mini-modal
-  document.addEventListener('click', function(ev){
-    const t = ev.target;
-    const inMini = t.closest && t.closest('#mini-modal');
-    if(inMini) return; // ya manejado
-    const btn = t.closest && t.closest('.btn, a, button');
+  // Redundancia total: capturamos clicks dentro del mini‑modal y forzamos igualmente
+  function captureAll(ev){
+    const inMini = ev.target.closest && ev.target.closest('#mini-modal');
+    if(!inMini) return;
+    const btn = ev.target.closest('.btns a, a.btn, a.button, .btns button, .btns .btn');
     if(!btn) return;
-    const tx = norm(btn.textContent);
-    if(!tx.includes('descargar')) return;
-    const direct = resolveTargetUrl(btn) || getSelectedDownloadUrl();
-    const inter = makeInterUrl(direct);
+
+    let inter = null;
+    const href = btn.getAttribute && (btn.getAttribute('href') || btn.getAttribute('data-href'));
+    if(href && href.includes('ads/interstitial-v80.html')) inter = href;
+    if(!inter){
+      const direct = (href && !href.includes('ads/interstitial-v80.html')) ? href : getSelectedDownloadUrl();
+      inter = makeInterUrl(direct);
+    }
     if(!inter) return;
-    ev.preventDefault();
+
+    try{ ev.preventDefault(); ev.stopPropagation(); ev.stopImmediatePropagation(); }catch(e){}
     window.location.href = inter;
-  }, true);
+  }
+  document.addEventListener('click', captureAll, true);
 })();
