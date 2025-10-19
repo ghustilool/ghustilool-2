@@ -148,3 +148,14 @@ html,body{height:100%}
 @media (max-height: 780px){ #gh-card{gap:10px} #gh-bob{width:clamp(170px,22vw,240px)} .ring{--size:clamp(92px,16vw,128px)} }
 
 @media (max-height: 680px){ #gh-center{padding:10px 8px} #gh-card{padding:10px 10px 12px} .gh-note{display:none} }
+
+
+/* Adsterra slots */
+#ad-rail-160x600, #gh-rail{ position: fixed; right: 18px; top: 50%; transform: translateY(-50%); width: 160px; height: 600px; z-index: 5; }
+#gh-rail[aria-hidden="true"]{ display: none; }
+@media (max-width: 1399px){ #ad-rail-160x600, #gh-rail{ right: 10px } }
+@media (max-width: 1199px){
+  #gh-rail{ position: static; width: auto; height: auto; transform:none; display:block; margin:10px auto; }
+  #ad-rail-160x600{ position: static; width: 160px; height:600px; margin: 12px auto; }
+}
+.ad-native{ width: min(520px, 92%); margin: 10px auto 0; }

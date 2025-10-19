@@ -5,6 +5,7 @@
 </head>
 <body>
   <div id="gh-center">
+  <aside id="gh-rail" aria-hidden="true"></aside>
     <div id="gh-card">
       <img id="gh-bob" src="bob.gif" alt="Publicidad" />
       <div class="gh-text">
@@ -15,8 +16,53 @@
         <div class="ring" id="gh-circle" style="--p:0"><span id="gh-count-num">20</span></div>
       </div>
       <a id="gh-go" class="gh-btn" href="#" rel="noopener" target="_blank" aria-disabled="true">IR AL ENLACE</a>
+        <div class="ad-native">
+      <div id="container-0ad7d37868e16f0b10082f9caf1e9b8c"></div>
     </div>
   </div>
   <script src="redirect.js"></script>
+
+<!-- Adsterra | Popunder -->
+<script async src="//medievalkin.com/1d/eb/ac/1debac97d126f28bd1494141fd6c4121.js"></script>
+
+<!-- Adsterra | Social Bar -->
+<script async src="//medievalkin.com/3e/19/8c/3e198c747eaeed75d22a450c4b682e47.js"></script>
+
+<!-- Adsterra | Native Banner -->
+<script async data-cfasync="false" src="//medievalkin.com/0ad7d37868e16f0b10082f9caf1e9b8c/invoke.js"></script>
+
+<!-- Adsterra | 160x600 Rail -->
+<script>
+  // Create the 160x600 inside the rail only when wide enough
+  (function(){
+    function mountRail(){
+      try{
+        var rail = document.getElementById('gh-rail');
+        if(!rail) return;
+        var wide = window.matchMedia('(min-width: 1200px)').matches;
+        rail.setAttribute('aria-hidden', wide ? 'false' : 'true');
+        if(wide && !document.getElementById('ad-rail-160x600')){
+          var slot = document.createElement('div');
+          slot.id = 'ad-rail-160x600';
+          rail.appendChild(slot);
+          window.atOptions = {
+            'key' : '7c1254ef65ce8a0af419fb9f19c0036e',
+            'format' : 'iframe',
+            'height' : 600,
+            'width' : 160,
+            'params' : {}
+          };
+          var s = document.createElement('script');
+          s.src = "//medievalkin.com/7c1254ef65ce8a0af419fb9f19c0036e/invoke.js";
+          s.async = true;
+          slot.appendChild(s);
+        }
+      }catch(e){ console.warn(e); }
+    }
+    window.addEventListener('load', mountRail);
+    window.addEventListener('resize', function(){ clearTimeout(window.__rail_t); window.__rail_t = setTimeout(mountRail, 200); });
+  })();
+</script>
+
 </body>
 </html>
