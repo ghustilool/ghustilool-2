@@ -154,7 +154,7 @@ function renderList(){
 
     const body = document.createElement("div");
     const title = document.createElement("div"); title.className="pub-title"; title.textContent = safe(item.nombre, item.id||"Sin nombre");
-    const sub = document.createElement("div"); sub.className="pub-sub";const tagsArr = arr(item.tags);sub.innerHTML = tagsArr.map(tg=>{  const cls = (TAG_COLOR[tg]||tg.toLowerCase());  const fixed = (cls==="+18"||cls==="+"+"18") ? "18" : cls;  const emj = TAG_EMOJI[tg]||""; const lbl = TAG_LABEL[tg]||tg;  return `<span class="tag-pill tag-${fixed}">${emj} ${lbl}</span>`;}).join(" ");body.appendChild(sub);
+    body.appendChild(title); const sub = document.createElement("div"); sub.className="pub-sub";const tagsArr = arr(item.tags);sub.innerHTML = tagsArr.map(tg=>{  const cls = (TAG_COLOR[tg]||tg.toLowerCase());  const fixed = (cls==="+18"||cls==="+"+"18") ? "18" : cls;  const emj = TAG_EMOJI[tg]||""; const lbl = TAG_LABEL[tg]||tg;  return `<span class="tag-pill tag-${fixed}">${emj} ${lbl}</span>`;}).join(" ");body.appendChild(sub);
 
     const right = document.createElement("div"); right.className="right-chip";
     const chip = document.createElement("span"); chip.className="version-chip"; chip.textContent = safe(item.version,"v1.0");
