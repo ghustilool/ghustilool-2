@@ -87,7 +87,7 @@
     "contraseña": "ghustilool",
     "comprar": "https://store.steampowered.com/app/268750/Magicite/",
     "version": "2.0",
-    "tags": ["Lan"]
+    "tags": ["LAN"]
   }, 
     { 
     "id": "AmigoKebabSimulator",
@@ -267,7 +267,7 @@
     "contraseña": "ghustilool",
     "comprar": "https://store.steampowered.com/app/264710/Subnautica/",
     "version": "68598",
-    "tags": ["lan"]
+    "tags": ["LAN"]
   },
     { 
     "id": "Coromon",
@@ -310,6 +310,7 @@
     "tags": ["Programas"]
   }  
 ]
+
 
 
 
