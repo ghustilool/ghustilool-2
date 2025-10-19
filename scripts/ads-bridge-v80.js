@@ -1,10 +1,9 @@
 
-// v80 — Intercepta "DESCARGAR" para pasar por interstitial con contador Adsterra
+// v81 — Intercepta DESCARGAR del mini‑modal (derecha) de forma robusta
 (function(){
   const INTERSTITIAL_URL = "ads/interstitial-v80.html";
-  const SECONDS = 20; // duración del contador
+  const SECONDS = 20;
 
-  // Devuelve URL final codificada
   const makeUrl = (to) => {
     try { new URL(to); } catch(e) { return null; }
     const u = new URL(INTERSTITIAL_URL, location.href);
@@ -13,51 +12,51 @@
     return u.pathname + u.search;
   };
 
-  function findHrefFromTarget(el){
-    const a = el.closest('a[href]');
-    if (a) return a.getAttribute('href');
-    // si es un botón dentro de .btns con data-href
-    const b = el.closest('[data-href]');
-    if (b) return b.getAttribute('data-href');
-    // buscar dentro
-    const innerA = el.querySelector && el.querySelector('a[href]');
-    if (innerA) return innerA.getAttribute('href');
-    return null;
-  }
+  // Normaliza texto
+  const norm = (s)=> (s||"").toLowerCase().replace(/\s+/g,' ').trim();
 
-  function isDownloadBtn(el){
-    const btn = el.closest('.btn, .button, a, button');
-    if (!btn) return false;
-    const text = (btn.textContent||'').toLowerCase();
-    return text.includes('descargar') || btn.classList.contains('btn-download');
-  }
-
-  // Delegado global
+  // Intercepción global por si hay otros botones sueltos
   document.addEventListener('click', (ev)=>{
-    if(!isDownloadBtn(ev.target)) return;
-    const href = findHrefFromTarget(ev.target);
-    if(!href) return; // si no hay link real, no interceptar
+    const a = ev.target.closest('a[href]');
+    if(!a) return;
+    const txt = norm(a.textContent);
+    if(!txt.includes('descargar')) return;
 
-    const interUrl = makeUrl(href);
-    if(!interUrl) return;
-
+    const inter = makeUrl(a.href);
+    if(!inter) return;
     ev.preventDefault();
-    // Mismo tab (como pediste)
-    window.location.href = interUrl;
-  });
+    window.location.href = inter;
+  }, true); // capture para adelantarnos
 
-  // Refuerzo: cada vez que renderice el mini-modal, aseguro que los anchors de "DESCARGAR" apunten al interstitial
+  // Parches específicos para el mini-modal (derecha)
   const mm = document.getElementById('mini-modal');
-  if (mm){
-    const mo = new MutationObserver(()=>{
-      const links = mm.querySelectorAll('.btns a, a.btn, a.button');
-      links.forEach(a=>{
-        if(((a.textContent||'').toLowerCase().includes('descargar')) && a.href){
-          const newHref = makeUrl(a.href);
-          if (newHref) a.setAttribute('href', newHref);
-        }
-      });
+
+  function rewriteMiniModalLinks() {
+    if(!mm) return;
+
+    const inBtns = mm.querySelectorAll('.btns a[href], a.btn[href], a.button[href]');
+    let candidate = null;
+
+    // 1) Primero, el que diga "descargar"
+    inBtns.forEach(a => {
+      const txt = norm(a.textContent);
+      if(txt.includes('descargar')) candidate = candidate || a;
     });
+
+    // 2) Si no lo detecta por texto, tomamos el PRIMERO dentro de .btns (suele ser Descargar)
+    if(!candidate && inBtns.length) candidate = inBtns[0];
+
+    if(candidate && candidate.href) {
+      const newHref = makeUrl(candidate.href);
+      if(newHref) candidate.setAttribute('href', newHref);
+    }
+  }
+
+  // Reescritura inmediata e incremental
+  rewriteMiniModalLinks();
+
+  if(mm){
+    const mo = new MutationObserver(()=> rewriteMiniModalLinks());
     mo.observe(mm, {childList:true, subtree:true});
   }
 })();
