@@ -84,7 +84,7 @@ body{
 .list-wrap{position:relative; display:grid; grid-template-columns: 1fr 360px; gap:18px}
 .pub-list{list-style:none; margin:12px 0 0; padding:0; display:flex; flex-direction:column; gap:10px}
 .pub-item{
-  display:grid; grid-template-columns: 84px 1fr auto; gap:12px; align-items:center;
+  display:grid; grid-template-columns: 84px 1fr max-content; gap:12px; align-items:center;
   background:rgba(0,0,0,.28); border:1px solid rgba(255,255,255,.08); border-radius:8px; overflow:hidden; cursor:pointer;
 }
 .pub-item:hover{outline:1px solid rgba(102,192,244,.5)}
@@ -93,8 +93,8 @@ body{
 .pub-cover{width:84px; height:84px; object-fit:cover; background:#0a1723}
 .pub-title{font-weight:800}
 .pub-sub{color:var(--muted); font-size:12px; margin-top:4px}
-.right-chip{display:flex; justify-content:flex-end; align-items:center; padding-right:12px}
-.version-chip{display:inline-block; background:#0b1a27; color:#cfe9ff; border:1px solid rgba(255,255,255,.14); padding:7px 12px; border-radius:10px; font-weight:800; white-space: normal; overflow: visible; text-overflow: clip; line-height:1.1; }
+.right-chip{text-align:right; padding-right:12px}
+.version-chip{display:inline-block; background:#0b1a27; color:#cfe9ff; border:1px solid rgba(255,255,255,.14); padding:7px 12px; border-radius:10px; font-weight:800 white-space: nowrap; }
 
 
 /* Mini modal */
@@ -354,9 +354,3 @@ body{
 
 /* subtle hover feedback */
 .carousel .car-card:hover img { transform: scale(1.01); transition: transform 120ms ease; }
-
-@media (max-width: 520px){ .version-chip{display:inline-block; background:#0b1a27; color:#cfe9ff; border:1px solid rgba(255,255,255,.14); padding:7px 12px; border-radius:10px; font-weight:800; white-space: normal; overflow: visible; text-overflow: clip; line-height:1.1; } }
-
-.pub-item .right-chip .version-chip{ max-width:none; }
-/* Mini-modal: mostrar versión debajo del tag */
-.mini-head .mini-version{ margin-top:6px; }
