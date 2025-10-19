@@ -29,6 +29,7 @@ async function init(){
  - Use 2-page pagination with 3 cards per page (2 dots only)
 */
 
+
 /* ===== Carousel ===== */
 let autoTimer;
 function renderCarousel(){
@@ -38,9 +39,10 @@ function renderCarousel(){
   const top = state.all.slice(0, 9);
 
   // Build cards
-  top.forEach((it, i)=>{
+  top.forEach((it)=>{
     const card = document.createElement("article");
     card.className = "car-card";
+
     const img = document.createElement("img");
     img.src = safe(it.imagen, "https://picsum.photos/800/400?blur=2");
     img.alt = safe(it.nombre,"Publicación");
@@ -53,49 +55,56 @@ function renderCarousel(){
     const ver = document.createElement("div");
     ver.className = "car-version";
     ver.textContent = safe(it.version, "");
-    overlay.appendChild(title); overlay.appendChild(ver);
-    \1
-    // open mini modal on click / Enter
+
+    overlay.appendChild(title);
+    overlay.appendChild(ver);
+    card.appendChild(img);
+    card.appendChild(overlay);
+
+    // Open the usual mini-modal
     card.tabIndex = 0;
-    card.setAttribute('role','button');
-    card.addEventListener('click', ()=> openMiniModal(it));
-    card.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ openMiniModal(it); }});
+    card.setAttribute("role","button");
+    card.addEventListener("click", ()=> openMiniModal(it));
+    card.addEventListener("keydown", (e)=>{ if(e.key === "Enter"){ openMiniModal(it); } });
+
+    track.appendChild(card);
   });
 
-  // === 2-dot pagination (3 items per view) ===
+  // === 2-dot pagination (3 items per page) ===
   state.slide = 0;
   state.perPage = 3;
   const totalPages = Math.min(2, Math.max(1, Math.ceil(top.length / state.perPage)));
 
-  for (let i=0;i<totalPages;i++){
+  for (let i=0; i<totalPages; i++){
     const dot = document.createElement("span");
-    dot.className = "car-dot" + (i===0?" active":"");
+    dot.className = "car-dot" + (i===0 ? " active" : "");
     dot.addEventListener("click", ()=> scrollToSlide(i));
-    dots.appendChild(dot); state.dots.push(dot);
+    dots.appendChild(dot);
+    state.dots.push(dot);
   }
 
-  document.querySelector('.car-prev').onclick = ()=> scrollStep(-1);
-  document.querySelector('.car-next').onclick = ()=> scrollStep(1);
+  document.querySelector(".car-prev").onclick = ()=> scrollStep(-1);
+  document.querySelector(".car-next").onclick = ()=> scrollStep(1);
 
-  const car = document.querySelector('.carousel');
+  const car = document.querySelector(".carousel");
   const startAuto = ()=> { clearInterval(autoTimer); autoTimer = setInterval(()=> scrollStep(1), 5000); };
-  const stopAuto = ()=> { clearInterval(autoTimer); };
-  car.addEventListener('mouseenter', stopAuto);
-  car.addEventListener('mouseleave', startAuto);
+  const stopAuto  = ()=> { clearInterval(autoTimer); };
+  car.addEventListener("mouseenter", stopAuto);
+  car.addEventListener("mouseleave", startAuto);
   startAuto();
 
-  // size cards to avoid cropped extra image at the edges
+  // Keep cards aligned so no cropped extra image shows
   function sizeCarouselCards(){
-    const viewport = document.querySelector('.car-viewport');
-    const cards = document.querySelectorAll('.car-card');
-    if (!viewport || cards.length===0) return;
-    const gap = 12; // matches CSS gap between cards
+    const viewport = document.querySelector(".car-viewport");
+    const cards = document.querySelectorAll(".car-card");
+    if (!viewport || !cards.length) return;
+    const gap = 12; // keep in sync with CSS gap
     const per = state.perPage || 3;
     const w = Math.floor((viewport.clientWidth - gap*(per-1)) / per);
     cards.forEach(c => { c.style.flex = `0 0 ${w}px`; c.style.maxWidth = `${w}px`; });
   }
   sizeCarouselCards();
-  window.addEventListener('resize', sizeCarouselCards);
+  window.addEventListener("resize", sizeCarouselCards);
 }
 
 function scrollStep(dir){
@@ -103,17 +112,16 @@ function scrollStep(dir){
   state.slide = Math.max(0, Math.min(maxIndex, state.slide + dir));
   scrollToSlide(state.slide);
 }
-
 function scrollToSlide(pageIdx){
   state.slide = pageIdx;
-  const viewport = document.querySelector('.car-viewport'); // scroll this, not the track
-  const track = document.getElementById('car-track');
+  const viewport = document.querySelector(".car-viewport");
+  const track = document.getElementById("car-track");
   const per = state.perPage || 3;
-  const targetCard = track.children[pageIdx * per];
-  if (targetCard && viewport){
-    viewport.scrollTo({ left: targetCard.offsetLeft - 6, behavior: 'smooth' });
+  const target = track.children[pageIdx * per];
+  if (target && viewport){
+    viewport.scrollTo({ left: target.offsetLeft - 6, behavior: "smooth" });
   }
-  state.dots.forEach((d,idx)=> d.classList.toggle('active', idx===pageIdx));
+  state.dots.forEach((d,idx)=> d.classList.toggle("active", idx===pageIdx));
 }
 /* ===== List + mini modal ===== */
 function renderList(){
