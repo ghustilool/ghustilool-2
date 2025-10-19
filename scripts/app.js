@@ -159,7 +159,7 @@ function renderList(){
     body.appendChild(title); body.appendChild(sub);
 
     const right = document.createElement("div"); right.className="right-chip";
-    const chip = document.createElement("span"); chip.className="version-chip"; chip.textContent = safe(item.version,"v1.0");
+    const chip = document.createElement("span"); chip.className="version-chip"; chip.textContent = safe(item.version,"v1.0"); chip.title = chip.textContent;
     right.appendChild(chip);
 
     li.appendChild(img); li.appendChild(body); li.appendChild(right);

@@ -93,8 +93,8 @@ body{
 .pub-cover{width:84px; height:84px; object-fit:cover; background:#0a1723}
 .pub-title{font-weight:800}
 .pub-sub{color:var(--muted); font-size:12px; margin-top:4px}
-.right-chip{text-align:right; padding-right:12px}
-.version-chip{display:inline-block; background:#0b1a27; color:#cfe9ff; border:1px solid rgba(255,255,255,.14); padding:7px 12px; border-radius:10px; font-weight:800 white-space: nowrap; }
+.right-chip{display:flex; justify-content:flex-end; padding-right:12px}
+.version-chip{display:inline-block; background:#0b1a27; color:#cfe9ff; border:1px solid rgba(255,255,255,.14); padding:7px 12px; border-radius:10px; font-weight:800; white-space: nowrap; max-width: min(28ch, 48vw); overflow:hidden; text-overflow:ellipsis;}
 
 
 /* Mini modal */
@@ -354,3 +354,5 @@ body{
 
 /* subtle hover feedback */
 .carousel .car-card:hover img { transform: scale(1.01); transition: transform 120ms ease; }
+
+@media (max-width: 520px){ .version-chip{white-space:normal; word-break:break-word; line-height:1.15;} }
