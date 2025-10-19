@@ -79,10 +79,20 @@ function scrollToSlide(i){
 /* ===== List + mini modal ===== */
 
 function getOriginalLink(it){
-  const first = [
-    it && it.enlace, it && it.link, it && it.descarga, it && it.url, it && it.download, it && it.href,
-    (typeof (it && it.autores) === 'string' ? it.autores : null),
-    (Array.isArray(it && it.autores) ? ((it.autores.find(a => a && a.url) || {}).url) : null),
+  if (!it) return "#";
+  const arrTry = [];
+  ['enlace','link','descarga','url','download','href','mega','mediafire','gdrive'].forEach(k=>{
+    if (it[k]) arrTry.append(it[k]);
+  });
+  if (it.meta && it.meta.download) arrTry.append(it.meta.download);
+  if (it.links && it.links.download) arrTry.append(it.links.download);
+  if (Array.isArray(it.links)) arrTry.push(...it.links.map(x=>x && (x.url||x.link||x.href)));
+  if (Array.isArray(it.descargas)) arrTry.push(...it.descargas.map(x=>x && (x.url||x.link||x.href)));
+  if (Array.isArray(it.autores)) arrTry.push(...it.autores.map(a=>a && (a.url||a.link||a.href)));
+  if (typeof it.autores === 'string') arrTry.push(it.autores);
+  const first = arrTry.find(v => typeof v === 'string' && v.trim() && v.trim() !== '#') || "#";
+  return String(first).trim();
+}).url) : null),
     it && it.meta && it.meta.download, it && it.links && it.links.download
   ].filter(Boolean)[0];
   return String(first || '#');
