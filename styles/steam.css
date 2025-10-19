@@ -355,8 +355,6 @@ body{
 /* subtle hover feedback */
 .carousel .car-card:hover img { transform: scale(1.01); transition: transform 120ms ease; }
 
-
-/* ===== Multi-tag support (list + mini-modal) ===== */
 .pub-sub{ display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
-.mini-head .mini-meta{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
-.mini-head .mini-tags{ display:flex; gap:6px; flex-wrap:wrap; }
+
+.mini-head .mini-sub{ display:flex; gap:6px; flex-wrap:wrap; align-items:center; }

@@ -154,9 +154,7 @@ function renderList(){
 
     const body = document.createElement("div");
     const title = document.createElement("div"); title.className="pub-title"; title.textContent = safe(item.nombre, item.id||"Sin nombre");
-    const sub = document.createElement("div"); sub.className="pub-sub";
-    const tg = arr(item.tags)[0] || "Offline"; const cls = TAG_COLOR[tg]||"offline"; sub.innerHTML = `<span class="tag-pill tag-${cls==="+"+"18" ? "18" : cls}">${TAG_EMOJI[tg]||""} ${TAG_LABEL[tg]||tg}</span>`;
-    body.appendChild(title); body.appendChild(sub);
+    const sub = document.createElement("div"); sub.className="pub-sub";const tagsArr = arr(item.tags);sub.innerHTML = tagsArr.map(tg=>{  const cls = (TAG_COLOR[tg]||tg.toLowerCase());  const fixed = (cls==="+18"||cls==="+"+"18") ? "18" : cls;  const emj = TAG_EMOJI[tg]||""; const lbl = TAG_LABEL[tg]||tg;  return `<span class="tag-pill tag-${fixed}">${emj} ${lbl}</span>`;}).join(" ");body.appendChild(sub);
 
     const right = document.createElement("div"); right.className="right-chip";
     const chip = document.createElement("span"); chip.className="version-chip"; chip.textContent = safe(item.version,"v1.0");
@@ -180,9 +178,7 @@ function openMiniModal(item){
   const img = document.createElement("img"); img.src = safe(item.imagen,"https://picsum.photos/200/200?blur=2"); img.alt = safe(item.nombre,"Publicación");
   const hwrap = document.createElement("div");
   const title = document.createElement("div"); title.className="mini-title"; title.textContent = safe(item.nombre, item.id||"Sin nombre");
-  const sub = document.createElement("div"); sub.className="mini-sub";
-  const tg = arr(item.tags)[0] || "Offline"; const cls = TAG_COLOR[tg]||"offline"; sub.innerHTML = `<span class="tag-pill tag-${cls==="+"+"18" ? "18" : cls}">${TAG_EMOJI[tg]||""} ${TAG_LABEL[tg]||tg}</span>`;
-  hwrap.appendChild(title); hwrap.appendChild(sub); head.appendChild(img); head.appendChild(hwrap);
+  const sub = document.createElement("div"); sub.className="mini-sub";const tagsArr2 = arr(item.tags);sub.innerHTML = tagsArr2.map(tg=>{  const cls = (TAG_COLOR[tg]||tg.toLowerCase());  const fixed = (cls==="+18"||cls==="+"+"18") ? "18" : cls;  const emj = TAG_EMOJI[tg]||""; const lbl = TAG_LABEL[tg]||tg;  return `<span class="tag-pill tag-${fixed}">${emj} ${lbl}</span>`;}).join(" ");hwrap.appendChild(sub); head.appendChild(img); head.appendChild(hwrap);
 
   const btns = document.createElement("div"); btns.className="btns";
   const dl = button("📥 DESCARGAR","btn btn--dl", ()=>{
