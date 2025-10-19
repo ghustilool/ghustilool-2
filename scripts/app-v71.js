@@ -54,7 +54,12 @@ function renderCarousel(){
     ver.className = "car-version";
     ver.textContent = safe(it.version, "");
     overlay.appendChild(title); overlay.appendChild(ver);
-    card.appendChild(img); card.appendChild(overlay); track.appendChild(card);
+    \1
+    // open mini modal on click / Enter
+    card.tabIndex = 0;
+    card.setAttribute('role','button');
+    card.addEventListener('click', ()=> openMiniModal(it));
+    card.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ openMiniModal(it); }});
   });
 
   // === 2-dot pagination (3 items per view) ===
@@ -78,6 +83,19 @@ function renderCarousel(){
   car.addEventListener('mouseenter', stopAuto);
   car.addEventListener('mouseleave', startAuto);
   startAuto();
+
+  // size cards to avoid cropped extra image at the edges
+  function sizeCarouselCards(){
+    const viewport = document.querySelector('.car-viewport');
+    const cards = document.querySelectorAll('.car-card');
+    if (!viewport || cards.length===0) return;
+    const gap = 12; // matches CSS gap between cards
+    const per = state.perPage || 3;
+    const w = Math.floor((viewport.clientWidth - gap*(per-1)) / per);
+    cards.forEach(c => { c.style.flex = `0 0 ${w}px`; c.style.maxWidth = `${w}px`; });
+  }
+  sizeCarouselCards();
+  window.addEventListener('resize', sizeCarouselCards);
 }
 
 function scrollStep(dir){
