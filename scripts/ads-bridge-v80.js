@@ -1,5 +1,5 @@
 
-// v85 — SAFE intercept: sólo prevenimos si tenemos interstitial listo
+// v86 — ENFORCE: el PRIMER botón de .btns del mini‑modal se fuerza al interstitial
 (function(){
   const INTERSTITIAL_URL = "ads/interstitial-v80.html";
   const SECONDS = 20;
@@ -33,62 +33,72 @@
 
   const mm = document.getElementById('mini-modal');
 
-  function findDownloadAnchor(){
-    if(!mm) return null;
-    const anchors = mm.querySelectorAll('.btns a[href], a.btn[href], a.button[href]');
-    for(const a of anchors){
-      if(norm(a.textContent).includes('descargar')) return a;
-    }
-    return anchors[0] || null;
-  }
+  function enforceFirstIsInterstitial(){
+    if(!mm) return;
+    const btns = mm.querySelector('.btns');
+    if(!btns) return;
+    const anchors = btns.querySelectorAll('a[href], button, .btn');
+    if(!anchors.length) return;
 
-  function resolveDirectUrl(clicked){
-    // 1) closest anchor href
-    const a = clicked.closest && clicked.closest('a[href]');
-    if(a && a.getAttribute('href')) return a.getAttribute('href');
+    // 1) Preferir el que tenga texto "descargar"
+    let first = null;
+    anchors.forEach(a=>{ if(!first && norm(a.textContent).includes('descargar')) first = a; });
+    // 2) Si no hay, tomamos el PRIMERO de la fila (por diseño es "Descargar")
+    if(!first) first = anchors[0];
 
-    // 2) anchor de descargar dentro del mini-modal
-    const ad = findDownloadAnchor();
-    if(ad && ad.getAttribute('href')) return ad.getAttribute('href');
+    // Resolver URL directa
+    let direct = (first.getAttribute && (first.getAttribute('href') || first.getAttribute('data-href'))) || null;
+    if(!direct) direct = getFromState();
+    if(!direct) return;
 
-    // 3) from app state
-    const st = getFromState();
-    if(st) return st;
-
-    return null;
-  }
-
-  function rewriteAnchorHref(){
-    const a = findDownloadAnchor();
-    if(!a) return;
-    const direct = a.getAttribute('href') || getFromState();
     const inter = makeInterUrl(direct);
-    if(inter) a.setAttribute('href', inter);
+    if(!inter) return;
+
+    // Reescribir/forzar navegación
+    if(first.tagName === 'A'){
+      first.setAttribute('href', inter);
+      first.removeAttribute('target');
+    } else {
+      first.setAttribute('data-href', inter);
+    }
+
+    // Handlers que redirigen sí o sí
+    function go(ev){
+      try{ ev.preventDefault(); ev.stopPropagation(); ev.stopImmediatePropagation(); }catch(e){}
+      window.location.href = inter;
+      return false;
+    }
+    first.onclick = null;
+    first.addEventListener('click', go, true);
+    first.addEventListener('click', go, false);
+
+    // Marca para debug
+    first.dataset.adsBound = 'v86';
   }
 
-  // Reescribe cuando cambia el mini-modal
+  // Vincular al render del mini‑modal
   if(mm){
-    const mo = new MutationObserver(()=> rewriteAnchorHref());
+    const mo = new MutationObserver(()=> enforceFirstIsInterstitial());
     mo.observe(mm, {childList:true, subtree:true});
   }
-  // Intento inicial
-  rewriteAnchorHref();
+  // Primer intento
+  enforceFirstIsInterstitial();
 
-  // Intercepta click en mini-modal (sólo si tenemos a dónde ir)
-  function onClick(ev){
-    const inMini = ev.target.closest && ev.target.closest('#mini-modal');
+  // Redundancia: captura click en el primer anchor de .btns
+  document.addEventListener('click', function(ev){
+    const inMini = ev.target.closest && ev.target.closest('#mini-modal .btns');
     if(!inMini) return;
-    const btn = ev.target.closest('.btns a, a.btn, a.button, .btns button, .btns .btn');
-    if(!btn) return;
-    if(!norm(btn.textContent).includes('descargar')) return;
+    const btns = inMini.closest('#mini-modal .btns') || inMini;
+    const anchors = btns.querySelectorAll('a[href], button, .btn');
+    if(!anchors.length) return;
+    let first = null;
+    anchors.forEach(a=>{ if(!first && norm(a.textContent).includes('descargar')) first = a; });
+    if(!first) first = anchors[0];
+    if(!first) return;
 
-    const direct = resolveDirectUrl(btn);
-    const inter = makeInterUrl(direct);
-    if(!inter) return; // sin inter, dejamos que fluya el click normal
-
-    ev.preventDefault();
-    ev.stopPropagation();
+    const inter = first.getAttribute('href') || first.getAttribute('data-href');
+    if(!inter || !inter.includes('ads/interstitial')) return;
+    try{ ev.preventDefault(); ev.stopPropagation(); ev.stopImmediatePropagation(); }catch(e){}
     window.location.href = inter;
-  }
-  document.addEventListener('click', onClick, true);
+  }, true);
 })();
