@@ -13,74 +13,92 @@
     }
     *{box-sizing:border-box}
     body{margin:0; background:radial-gradient(1200px 600px at 50% -120px,#1b2a3a00,#0d131c) , var(--bg); color:var(--ink); font-family:Inter, system-ui, sans-serif}
-    .page{max-width:980px; margin:28px auto; padding:0 16px; position:relative}
+    .layout{max-width:1200px; margin:28px auto; padding:0 16px; display:grid; grid-template-columns: 160px minmax(640px, 1fr) 160px; gap:28px; align-items:start}
+    .banner{background:#200; border-radius:8px; min-height:520px; display:flex; align-items:center; justify-content:center; border:1px solid rgba(255,255,255,.06); overflow:hidden}
     .card{background:rgba(0,0,0,.28); border:1px solid rgba(255,255,255,.06); border-radius:18px; box-shadow:0 16px 48px rgba(0,0,0,.5); padding:26px; position:relative}
-    .hero{display:flex; gap:20px; align-items:center; justify-content:center; flex-direction:column}
-    .hero .art{width:220px; height:220px; border-radius:16px; border:6px solid #1e2b3a; object-fit:cover; background:#0b1220}
-    h1{margin:14px 0 6px; font-size:28px; letter-spacing:.01em}
-    .sub{color:var(--muted); font-size:14px}
+    .hero{display:flex; gap:20px; align-items:center; justify-content:flex-start}
+    .hero .art{width:180px; height:180px; border-radius:16px; border:6px solid #1e2b3a; object-fit:cover; background:#0b1220}
+    h1{margin:6px 0 6px; font-size:28px; letter-spacing:.01em}
+    .sub{color:var(--muted); font-size:13px}
     .timer-wrap{display:flex; justify-content:center; margin:18px 0}
-    .timer{width:160px; height:160px; border-radius:50%; border:12px solid var(--ring); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:42px; color:#cfe1ff; box-shadow: inset 0 0 0 4px rgba(255,255,255,.06)}
+    .timer{width:150px; height:150px; border-radius:50%; border:12px solid var(--ring); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:40px; color:#cfe1ff; box-shadow: inset 0 0 0 4px rgba(255,255,255,.06)}
     .cta{margin:12px 0 0; display:block; width:100%; border:0; border-radius:12px; padding:16px 18px; font-weight:900; letter-spacing:.12em; color:#0d1520; background:var(--grad); text-align:center; cursor:not-allowed; opacity:.55; text-transform:uppercase}
     .cta.ready{cursor:pointer; opacity:1}
     .adsNative{margin-top:22px}
-    .adsCols{display:grid; grid-template-columns:160px 1fr 160px; gap:24px; margin-top:22px}
-    .side{background:var(--panel); border-radius:12px; padding:8px; min-height:600px; display:flex; align-items:center; justify-content:center; border:1px solid rgba(255,255,255,.06)}
     footer{margin:18px 0 4px; color:#7f95ad; font-size:12px; text-align:center}
-    @media (max-width:1024px){ .adsCols{grid-template-columns:1fr; gap:12px} .side{min-height:160px} .hero .art{width:160px; height:160px} }
+    @media (max-width:1024px){
+      .layout{grid-template-columns: 1fr; gap:16px}
+      .banner{min-height:140px}
+      .hero{flex-direction:column; text-align:center}
+    }
   </style>
+
   <!-- Adsterra Popunder -->
   <script type='text/javascript' src='//medievalkin.com/1d/eb/ac/1debac97d126f28bd1494141fd6c4121.js'></script>
   <!-- Adsterra Social Bar -->
   <script type='text/javascript' src='//medievalkin.com/3e/19/8c/3e198c747eaeed75d22a450c4b682e47.js'></script>
 </head>
 <body>
-  <div class="page">
-    <div class="card">
+  <div class="layout">
+    <aside class="banner" id="left-banner">
+      <script type="text/javascript">
+        atOptions = {'key':'7c1254ef65ce8a0af419fb9f19c0036e','format':'iframe','height':600,'width':160,'params':{}};
+      </script>
+      <script type="text/javascript" src="//medievalkin.com/7c1254ef65ce8a0af419fb9f19c0036e/invoke.js"></script>
+    </aside>
+
+    <main class="card">
       <div class="hero">
         <img class="art" src="publicidad-bob-esponja.gif" alt="Publicidad">
-        <h1>Generando enlace</h1>
-        <div class="sub">Serás redirigido en segundos…</div>
+        <div>
+          <h1 id="title">Generando enlace</h1>
+          <div class="sub" id="subtitle">Serás redirigido en segundos…</div>
+        </div>
       </div>
+
       <div class="timer-wrap"><div class="timer" id="timer">20</div></div>
       <button id="go" class="cta" disabled>IR AL ENLACE</button>
+
       <div class="adsNative">
         <script async="async" data-cfasync="false" src="//medievalkin.com/0ad7d37868e16f0b10082f9caf1e9b8c/invoke.js"></script>
         <div id="container-0ad7d37868e16f0b10082f9caf1e9b8c"></div>
       </div>
-      <div class="adsCols">
-        <div class="side">
-          <script type="text/javascript">
-            atOptions = {'key':'7c1254ef65ce8a0af419fb9f19c0036e','format':'iframe','height':600,'width':160,'params':{}};
-          </script>
-          <script type="text/javascript" src="//medievalkin.com/7c1254ef65ce8a0af419fb9f19c0036e/invoke.js"></script>
-        </div>
-        <div></div>
-        <div class="side">
-          <script type="text/javascript">
-            atOptions = {'key':'7c1254ef65ce8a0af419fb9f19c0036e','format':'iframe','height':600,'width':160,'params':{}};
-          </script>
-          <script type="text/javascript" src="//medievalkin.com/7c1254ef65ce8a0af419fb9f19c0036e/invoke.js"></script>
-        </div>
-      </div>
+
       <footer>© GhustiLoOL</footer>
-    </div>
+    </main>
+
+    <aside class="banner" id="right-banner">
+      <script type="text/javascript">
+        atOptions = {'key':'7c1254ef65ce8a0af419fb9f19c0036e','format':'iframe','height':600,'width':160,'params':{}};
+      </script>
+      <script type="text/javascript" src="//medievalkin.com/7c1254ef65ce8a0af419fb9f19c0036e/invoke.js"></script>
+    </aside>
   </div>
+
   <script>
-    const params = new URLSearchParams(location.search);
-    const target = params.get('to');
+    const p = new URLSearchParams(location.search);
+    const target = p.get('to') || p.get('url') || p.get('link') || '';
+    const name = p.get('name') || '';
+    const titleEl = document.getElementById('title');
+    if (name) titleEl.textContent = "Generando enlace: " + name;
+
     const goBtn = document.getElementById('go');
     const timerEl = document.getElementById('timer');
-    let t = 20; let redirected = false; let iv = null;
+
+    const TOTAL = 20;
+    const start = Date.now();
+    let redirected = false;
+
+    function remain(){ return Math.max(0, TOTAL - Math.floor((Date.now()-start)/1000)); }
     function enable(){ goBtn.classList.add('ready'); goBtn.removeAttribute('disabled'); goBtn.style.cursor='pointer'; }
-    function redirect(){
-      if (redirected) return; redirected = true;
-      if (iv) clearInterval(iv); enable(); if (target) window.location.replace(target);
-    }
-    function tick(){ if (t > 0) t -= 1; if (t <= 0){ t = 0; redirect(); } timerEl.textContent = t; }
-    goBtn.addEventListener('click', ()=>{ if (!goBtn.disabled && target){ window.location.href = target; } });
-    setTimeout(enable, 20000);
-    iv = setInterval(tick, 1000);
+    function redirect(){ if(redirected) return; redirected = true; enable(); if(target) window.location.replace(target); }
+    function tick(){ const r = remain(); timerEl.textContent = r; if (r===0) redirect(); }
+
+    goBtn.addEventListener('click', ()=>{ if(!goBtn.disabled && target){ window.location.href = target; } });
+
+    setTimeout(enable, TOTAL*1000);
+    tick();
+    setInterval(tick, 250);
   </script>
 </body>
 </html>

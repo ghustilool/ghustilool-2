@@ -123,6 +123,18 @@ function scrollToSlide(pageIdx){
   state.dots.forEach((d,idx)=> d.classList.toggle("active", idx===pageIdx));
 }
 /* ===== List + mini modal ===== */
+
+function buildInterstitialUrl(originalUrl, item){
+  try{
+    const base = "ads/linkgate.html";
+    const params = new URLSearchParams();
+    params.set("to", originalUrl);
+    const title = (item && (item.nombre || item.name || item.titulo)) ? (item.nombre || item.name || item.titulo) : "";
+    if (title) params.set("name", title);
+    return base + "?" + params.toString();
+  }catch(e){ return buildInterstitialUrl(original, item); }
+}
+
 function renderList(){
   const ul = document.getElementById("pub-list");
   ul.innerHTML = "";
@@ -186,7 +198,7 @@ function openMiniModal(item){
   /* INTERSTITIAL DELEGATE ON ASIDE */
   (function(){
     try{
-      const gate = (u)=> "ads/linkgate.html?to="+encodeURIComponent(u);
+      const gate = (u)=> buildInterstitialUrl(original, item);
       aside.addEventListener('click', function(e){
         const target = e.target.closest('a,button');
         if(!target) return;
@@ -198,7 +210,7 @@ function openMiniModal(item){
                             target.getAttribute('data-original') ||
                             target.getAttribute('href') || '').trim();
           if(original){
-            window.open(gate(original), '_blank', 'noopener');
+            window.open(gate(original, item || null), '_blank', 'noopener');
           }
         }
       }, true);
@@ -213,14 +225,14 @@ function openMiniModal(item){
 /* DOWNLOAD INTERSTITIAL OVERRIDE */
   (function(){
     try{
-      const gate = (u)=> u ? ("ads/linkgate.html?to="+encodeURIComponent(u)) : "#";
+      const gate = (u)=> u ? (buildInterstitialUrl(original, item)) : "#";
       const dl = aside.querySelector('.btn-download') ||
                  aside.querySelector('a[data-role="download"]') ||
                  aside.querySelector('a[href]');
       if (dl){
         const original = (item.enlace || item.link || item.descarga || dl.getAttribute('data-url') || dl.getAttribute('href') || '').trim();
         if (original){
-          dl.setAttribute('href', gate(original));
+          dl.setAttribute('href', gate(original, item || null));
           dl.setAttribute('target','_blank');
           dl.setAttribute('rel','noopener');
           dl.addEventListener('click', (e)=>{
@@ -269,7 +281,7 @@ function applyFilters(){
 
 /* GLOBAL DOWNLOAD INTERCEPTOR */
 (function(){
-  function gate(u){ return "ads/linkgate.html?to="+encodeURIComponent(u); }
+  function gate(u){ return buildInterstitialUrl(original, item); }
   document.addEventListener("click", function(e){
     const a = e.target.closest('a');
     if(!a) return;
@@ -283,7 +295,7 @@ function applyFilters(){
     const original = a.dataset.url || a.getAttribute('data-url') || a.getAttribute('data-original') || a.getAttribute('href');
     if(!original) return;
     e.preventDefault();
-    const url = gate(original);
+    const url = gate(original, item || null);
     window.open(url, "_blank", "noopener");
   }, true);
 })();
