@@ -142,13 +142,12 @@ body{
   box-shadow:0 8px 18px rgba(0,0,0,.45);
 }
 .brand-pet{width:34px;height:34px;object-fit:contain}
-.brand-title{font-family:'Honk', system-ui; font-size:24px; letter-spacing:.06em; display:flex; align-items:center; gap:2px}
+.brand-title{font-family:'Honk', system-ui; font-size:28px; letter-spacing:.05em; display:flex; align-items:center; gap:2px}
 .brand-title .t-letter{
   display:inline-block;
-  background:linear-gradient(180deg,#ffd166 0%, #e56b6f 50%, #8338ec 100%);
-  -webkit-background-clip:text; background-clip:text; color:transparent;
-  -webkit-text-stroke: 0.8px rgba(0,0,0,.45);
-  text-shadow:0 1px 0 rgba(0,0,0,.55);
+  /* Use Honk's own colors (no gradient/clip/filters) */
+  color: inherit;
+  text-shadow: 0 1px 0 rgba(0,0,0,.35);
   animation: floaty 3s ease-in-out infinite;
 }
 .brand-title .t-letter:nth-child(odd){animation-delay:.15s}
@@ -334,5 +333,10 @@ body{
 
 /* HONK TUNING */
 @media (min-width: 1200px){
-  .brand-title{ font-size:26px; }
+  .brand-title{font-family:'Honk', system-ui; font-size:28px; letter-spacing:.05em; display:flex; align-items:center; gap:2px}
+}
+
+/* HONK TUNING 2 */
+@media (min-width: 1200px){
+  .brand-title{ font-size:30px; }
 }
