@@ -340,21 +340,3 @@ body{
 @media (min-width: 1200px){
   .brand-title{ font-size:30px; }
 }
-
-
-/* ===== Cursor “manito” y feedback hover para carrusel “Añadido recientemente” ===== */
-.recent-slider .card,
-.recent-slider .card img,
-.recent-slider .card .overlay,
-.recent-slider .slide,
-.recent-slider .slide .thumb,
-.recent-slider a,
-.recent-slider button {
-  cursor: pointer;
-}
-
-.recent-slider .card:hover .thumb,
-.recent-slider .slide:hover .thumb {
-  transform: scale(1.01);
-  transition: transform 120ms ease;
-}
