@@ -159,7 +159,7 @@ function renderList(){
     body.appendChild(title); body.appendChild(sub);
 
     const right = document.createElement("div"); right.className="right-chip";
-    const chip = document.createElement("span"); chip.className="version-chip"; chip.textContent = safe(item.version,"v1.0"); chip.title = chip.textContent;
+    const chip = document.createElement("span"); chip.className="version-chip"; chip.textContent = safe(item.version,"v1.0");
     right.appendChild(chip);
 
     li.appendChild(img); li.appendChild(body); li.appendChild(right);
@@ -177,12 +177,15 @@ function openMiniModal(item){
   const wrap = document.querySelector(".list-wrap"); wrap?.classList.add("mini-open");
   const aside = document.getElementById("mini-modal"); aside.setAttribute("aria-hidden","false"); aside.innerHTML="";
   const head = document.createElement("div"); head.className="mini-head";
-  const img = document.createElement("img"); img.src = safe(item.imagen,"https://picsum.photos/200/200?blur=2"); img.alt = safe(item.nombre,"Publicación");
+  const img = document.createElement("img"); img.src = safe(item.imagen,"https://picsum.photos/600/340?blur=2"); img.alt = safe(item.nombre,"Publicación");
   const hwrap = document.createElement("div");
   const title = document.createElement("div"); title.className="mini-title"; title.textContent = safe(item.nombre, item.id||"Sin nombre");
   const sub = document.createElement("div"); sub.className="mini-sub";
-  const tg = arr(item.tags)[0] || "Offline"; const cls = TAG_COLOR[tg]||"offline"; sub.innerHTML = `<span class="tag-pill tag-${cls==="+"+"18" ? "18" : cls}">${TAG_EMOJI[tg]||""} ${TAG_LABEL[tg]||tg}</span>`;
-  hwrap.appendChild(title); hwrap.appendChild(sub); head.appendChild(img); head.appendChild(hwrap);
+  const tg = (Array.isArray(item.tags)&&item.tags[0]) ? item.tags[0] : "Offline";
+  const cls = (typeof TAG_COLOR!=="undefined" && TAG_COLOR[tg]) ? TAG_COLOR[tg] : "offline";
+  sub.innerHTML = `<span class="tag-pill tag-${cls==="+"+"18" ? "18" : cls}">${(typeof TAG_EMOJI!=="undefined" && TAG_EMOJI[tg])?TAG_EMOJI[tg]:""} ${(typeof TAG_LABEL!=="undefined" && TAG_LABEL[tg])?TAG_LABEL[tg]:tg}</span>`;
+  const vers = document.createElement("div"); vers.className="mini-version"; vers.innerHTML = `<span class="version-chip">${safe(item.version,"v1.0")}</span>`;
+  hwrap.appendChild(title); hwrap.appendChild(sub); hwrap.appendChild(vers); head.appendChild(img); head.appendChild(hwrap);
 
   const btns = document.createElement("div"); btns.className="btns";
   const dl = button("📥 DESCARGAR","btn btn--dl", ()=>{
