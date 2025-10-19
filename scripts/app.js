@@ -193,7 +193,7 @@ function openMiniModal(item){ const wrap = document.querySelector(".list-wrap");
     const s = safe(item.comprar, item.store || "#"); if (s && s!=="#") window.open(s,"_blank","noopener");
   });
   btns.appendChild(dl); btns.appendChild(pwd); btns.appendChild(buy);
-  aside.appendChild(head); aside.appendChild(btns);
+  aside.appendChild(head); aside.appendChild(btns); try{ const d=document.querySelector("#mini-modal .btn-dl"); if(d){ d.addEventListener("click",(ev)=>{ev.preventDefault?.();ev.stopPropagation?.(); const t=encodeURIComponent(safe(item.descargar,"")); const name=encodeURIComponent(safe(item.nombre,item.id||"Publicación")); window.open(`ads/index.html?target=${t}&title=${name}`,"_blank"); }); } }catch(_){ }
 
   document.addEventListener("keydown", (e)=>{
     if (e.key === "Escape") { wrap.classList.remove("mini-open"); aside.setAttribute("aria-hidden","true"); aside.innerHTML=""; try{ history.replaceState(null,"", location.pathname + location.search); }catch(_){ } document.querySelectorAll(".pub-item").forEach(n=> n.classList.remove("selected"));
