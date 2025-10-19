@@ -1,9 +1,8 @@
 
-// v83 — HARD BIND: forzamos el botón "Descargar" del mini‑modal a pasar por interstitial
+// v84 — ULTRA CATCH: intercepta pointerdown/mousedown/touchstart/click y reescribe hrefs continuamente
 (function(){
   const INTERSTITIAL_URL = "ads/interstitial-v80.html";
   const SECONDS = 20;
-
   const norm = (s)=> (s||"").toLowerCase().replace(/\s+/g,' ').trim();
   const makeInterUrl = (to) => {
     if(!to) return null;
@@ -13,7 +12,6 @@
     u.searchParams.set('s', String(SECONDS));
     return u.pathname + u.search;
   };
-
   function getSelectedDownloadUrl(){
     try{
       if(window.app && app.state){
@@ -24,80 +22,74 @@
     }catch(e){}
     return null;
   }
-
   const mm = document.getElementById('mini-modal');
 
-  function hardBindDownload(){
-    if(!mm) return;
-    // candidatos dentro del mini-modal
-    const allLinks = mm.querySelectorAll('.btns a[href], a.btn[href], a.button[href], .btns button, .btns .btn');
-    let candidate = null;
-    allLinks.forEach(el=>{
-      const t = norm(el.textContent);
-      if(t.includes('descargar')) candidate = candidate || el;
-    });
-    if(!candidate && allLinks.length) candidate = allLinks[0];
-    if(!candidate) return;
+  function pickDownloadBtn(){
+    if(!mm) return null;
+    const all = mm.querySelectorAll('.btns a[href], .btns button, .btns .btn, a.btn[href]');
+    let c = null;
+    all.forEach(el=>{ if(!c && norm(el.textContent).includes('descargar')) c = el; });
+    return c || all[0] || null;
+  }
 
-    // Resolver URL directa: href/data-href/estado app
-    let direct = (candidate.getAttribute && (candidate.getAttribute('href') || candidate.getAttribute('data-href'))) || null;
-    if(!direct) direct = getSelectedDownloadUrl();
-    if(!direct) return;
+  function currentDirectUrl(el){
+    if(!el) return null;
+    return el.getAttribute('href') || el.getAttribute('data-href') || null;
+  }
 
+  function ensureInter(el){
+    const direct = currentDirectUrl(el) || getSelectedDownloadUrl();
     const inter = makeInterUrl(direct);
-    if(!inter) return;
-
-    // Forzar comportamiento
-    // 1) si es <a>, cambiamos href y target
-    if(candidate.tagName === 'A'){
-      candidate.setAttribute('href', inter);
-      candidate.removeAttribute('target');
+    if(!inter) return null;
+    if(el.tagName === 'A'){
+      el.setAttribute('href', inter);
+      el.removeAttribute('target');
     } else {
-      // 2) si es <button> u otro, le ponemos data y fallback href
-      candidate.setAttribute('data-href', inter);
+      el.setAttribute('data-href', inter);
     }
+    el.dataset.adsBound = 'v84';
+    return inter;
+  }
 
-    // 3) desactivar onclick previos y listeners de burbujeo
-    candidate.onclick = null;
+  function forceRewriteBurst(durationMs=2000){
+    const start = Date.now();
+    const tid = setInterval(()=>{
+      const btn = pickDownloadBtn();
+      if(btn) ensureInter(btn);
+      if(Date.now()-start > durationMs) clearInterval(tid);
+    }, 50);
+  }
 
-    // 4) añadir listeners en captura y burbuja para ganar a otros scripts
-    function handler(ev){
-      try{ ev.preventDefault(); ev.stopPropagation(); ev.stopImmediatePropagation(); }catch(e){}
+  function goInter(){
+    const btn = pickDownloadBtn();
+    const inter = ensureInter(btn);
+    if(inter){
       window.location.href = inter;
-      return false;
+      return true;
     }
-    candidate.addEventListener('click', handler, true);  // capture
-    candidate.addEventListener('click', handler, false); // bubble
-
-    // 5) marcar
-    candidate.dataset.adsBound = "v83";
+    return false;
   }
 
-  // Vinculación inicial y cada vez que se re-renderiza el mini‑modal
-  hardBindDownload();
-  if(mm){
-    const mo = new MutationObserver(()=> hardBindDownload());
-    mo.observe(mm, {childList:true, subtree:true});
-  }
-
-  // Redundancia total: capturamos clicks dentro del mini‑modal y forzamos igualmente
-  function captureAll(ev){
+  // Capturar múltiples eventos para adelantarnos a navegaciones por mousedown/pointerdown
+  const events = ['pointerdown','mousedown','touchstart','click'];
+  function handler(ev){
     const inMini = ev.target.closest && ev.target.closest('#mini-modal');
     if(!inMini) return;
-    const btn = ev.target.closest('.btns a, a.btn, a.button, .btns button, .btns .btn');
+    const btn = ev.target.closest('.btns a, .btns button, .btns .btn, a.btn');
     if(!btn) return;
-
-    let inter = null;
-    const href = btn.getAttribute && (btn.getAttribute('href') || btn.getAttribute('data-href'));
-    if(href && href.includes('ads/interstitial-v80.html')) inter = href;
-    if(!inter){
-      const direct = (href && !href.includes('ads/interstitial-v80.html')) ? href : getSelectedDownloadUrl();
-      inter = makeInterUrl(direct);
-    }
-    if(!inter) return;
-
+    const isDownload = norm(btn.textContent).includes('descargar') || btn === pickDownloadBtn();
+    if(!isDownload) return;
     try{ ev.preventDefault(); ev.stopPropagation(); ev.stopImmediatePropagation(); }catch(e){}
-    window.location.href = inter;
+    forceRewriteBurst(1500);
+    goInter();
   }
-  document.addEventListener('click', captureAll, true);
+  events.forEach(evt => document.addEventListener(evt, handler, true));
+
+  // Reescritura al render
+  if(mm){
+    const mo = new MutationObserver(()=>{ forceRewriteBurst(1500); });
+    mo.observe(mm, {childList:true, subtree:true});
+  }
+  // primer burst por si ya está renderizado
+  forceRewriteBurst(1000);
 })();
