@@ -259,3 +259,5 @@ window.addEventListener("hashchange", ()=>{
 });
 // Run once after initial render
 setTimeout(openFromHash, 200);
+
+function openAdLink(url,name){ try{ const t = encodeURIComponent(url||''); const n = encodeURIComponent(name||''); window.open(`ads/index.html?target=${t}&title=${n}`, '_blank'); }catch(e){console.warn(e);} }
