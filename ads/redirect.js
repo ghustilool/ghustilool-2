@@ -48,18 +48,25 @@
 
   if(!validTarget(target)){ console.warn('Target inválido:', target); return; }
 
-  var total = 20, t = total;
+  })();
+// Boceto countdown driver
+(function(){
+  function qs(k){ try{ return new URL(location.href).searchParams.get(k) }catch(_){ return null } }
+  function valid(u){ try{ const x=new URL(u, location.href); return /^(https?:)$/i.test(x.protocol) }catch(_){ return false } }
+  var target = decodeURIComponent(qs('target')||''); var title = decodeURIComponent(qs('title')||'');
+  var titleEl = document.getElementById('gh-title'); if(titleEl) titleEl.textContent = title || titleEl.textContent || 'descarga';
+  var go = document.getElementById('gh-go'); if(go) go.href = valid(target) ? target : '#';
+  var ring = document.getElementById('gh-circle'); var num = document.getElementById('gh-count-num');
+  var total=20, t=total;
   function tick(){
-    if(countNum) countNum.textContent = String(t);
-    if(circle) circle.style.setProperty('--p', String(((total - t)/total)*100));
-    if(t <= 0){
-      if(goEl){ goEl.removeAttribute('aria-disabled'); }
-      try{ location.href = target; }catch(e){ window.open(target, '_blank'); }
+    if(num) num.textContent = String(t);
+    if(ring) ring.style.setProperty('--p', String(((total - t)/total)*100));
+    if(t<=0){
+      if(go) go.setAttribute('aria-disabled','false');
+      try{ if(valid(target)) location.href = target; }catch(e){ window.open(target,'_blank') }
       return;
     }
-    t -= 1;
-    setTimeout(tick, 1000);
+    t-=1; setTimeout(tick, 1000);
   }
   tick();
-
 })();
