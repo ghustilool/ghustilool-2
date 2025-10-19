@@ -185,7 +185,11 @@ function openMiniModal(item){
   const cls = (typeof TAG_COLOR!=="undefined" && TAG_COLOR[tg]) ? TAG_COLOR[tg] : "offline";
   sub.innerHTML = `<span class="tag-pill tag-${cls==="+"+"18" ? "18" : cls}">${(typeof TAG_EMOJI!=="undefined" && TAG_EMOJI[tg])?TAG_EMOJI[tg]:""} ${(typeof TAG_LABEL!=="undefined" && TAG_LABEL[tg])?TAG_LABEL[tg]:tg}</span>`;
   const vers = document.createElement("div"); vers.className="mini-version"; vers.innerHTML = `<span class="version-chip">${safe(item.version,"v1.0")}</span>`;
-  hwrap.appendChild(title); hwrap.appendChild(sub); hwrap.appendChild(vers); head.appendChild(img); head.appendChild(hwrap);
+  hwrap.appendChild(title); hwrap.appendChild(sub);
+  const meta = document.createElement("div"); meta.className="mini-meta";
+  const vtxt = safe(item.version, "v1.0");
+  meta.innerHTML = `&bull; <span class="mini-version-label">Versión:</span> <span class="mini-version-value">${vtxt}</span>`;
+  hwrap.appendChild(meta); hwrap.appendChild(vers); head.appendChild(img); head.appendChild(hwrap);
 
   const btns = document.createElement("div"); btns.className="btns";
   const dl = button("📥 DESCARGAR","btn btn--dl", ()=>{

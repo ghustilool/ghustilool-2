@@ -360,3 +360,15 @@ body{
 .pub-item .right-chip .version-chip{ max-width:none; }
 /* Mini-modal: mostrar versión debajo del tag */
 .mini-head .mini-version{ margin-top:6px; }
+
+/* ===== Mini-modal meta line (versión) ===== */
+.mini-head .mini-meta{
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 13px;
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+}
+.mini-head .mini-meta .mini-version-label{ color:#a8bed6; font-weight:700; }
+.mini-head .mini-meta .mini-version-value{ color:#cfe9ff; font-weight:700; }
