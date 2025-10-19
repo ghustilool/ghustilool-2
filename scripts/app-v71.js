@@ -101,7 +101,8 @@ function scrollToSlide(pageIdx){
 function renderList(){
   const ul = document.getElementById("pub-list");
   ul.innerHTML = "";
-  state.filtered.forEach(item=>{
+  const items = [...state.filtered].sort((a,b)=> (safe(a.nombre,"")||"").localeCompare(safe(b.nombre,"")||"", 'es', {sensitivity:'base'}));
+  items.forEach(item=>{
     const li = document.createElement("li");
     li.className = "pub-item";
     li.dataset.id = safe(item.id, safe(item.nombre,"").toLowerCase().replace(/\s+/g,"-"));
