@@ -23,16 +23,27 @@ async function init(){
   }catch(e){ console.error("JSON load error", e); }
 }
 
+
+/* PATCH: Carousel fix (arrows + 2 dots pages) v2025-10-19
+ - Scroll the viewport, not the track (bug made images static)
+ - Use 2-page pagination with 3 cards per page (2 dots only)
+*/
+
+
+
 /* ===== Carousel ===== */
 let autoTimer;
 function renderCarousel(){
   const track = document.getElementById("car-track");
   const dots = document.getElementById("car-dots");
   track.innerHTML = ""; dots.innerHTML = ""; state.dots = [];
-  const top = state.all.slice(0, 9);
-  top.forEach((it, i)=>{
+  const top = state.all.slice(0, 6); // SOLO 6
+
+  // Build cards
+  top.forEach((it)=>{
     const card = document.createElement("article");
     card.className = "car-card";
+
     const img = document.createElement("img");
     img.src = safe(it.imagen, "https://picsum.photos/800/400?blur=2");
     img.alt = safe(it.nombre,"Publicación");
@@ -40,100 +51,95 @@ function renderCarousel(){
     const overlay = document.createElement("div");
     overlay.className = "car-overlay";
     const title = document.createElement("div");
-    title.className = "car-title"; title.textContent = safe(it.nombre, it.id||"Sin nombre");
-    const ver = document.createElement("span"); ver.className = "ver-chip"; ver.textContent = safe(it.version,"v1.0");
+    title.className = "car-title";
+    title.textContent = safe(it.nombre,"");
+    const ver = document.createElement("div");
+    ver.className = "car-version";
+    ver.textContent = safe(it.version, "");
 
-    overlay.appendChild(title); overlay.appendChild(ver);
-    card.appendChild(img); card.appendChild(overlay); track.appendChild(card);
+    overlay.appendChild(title);
+    overlay.appendChild(ver);
+    card.appendChild(img);
+    card.appendChild(overlay);
 
-    const dot = document.createElement("span");
-    dot.className = "car-dot" + (i===0?" active":"");
-    dot.addEventListener("click", ()=> scrollToSlide(i));
-    dots.appendChild(dot); state.dots.push(dot);
+    // Open the usual mini-modal
+    card.tabIndex = 0;
+    card.setAttribute("role","button");
+    card.addEventListener("click", ()=> openMiniModal(it));
+    card.addEventListener("keydown", (e)=>{ if(e.key === "Enter"){ openMiniModal(it); } });
+
+    track.appendChild(card);
   });
 
-  document.querySelector('.car-prev').onclick = ()=> scrollStep(-1);
-document.querySelector('.car-next').onclick = ()=> scrollStep(1);
-const car = document.querySelector('.carousel');
-const startAuto = ()=> { clearInterval(autoTimer); autoTimer = setInterval(()=> scrollStep(1), 5000); };
-const stopAuto = ()=> { clearInterval(autoTimer); };
-car.addEventListener('mouseenter', stopAuto);
-car.addEventListener('mouseleave', startAuto);
-startAuto();
+  // === 2-dot pagination (3 items por página) ===
+  state.slide = 0;
+  state.perPage = 3;
+  const totalPages = Math.min(2, Math.max(1, Math.ceil(top.length / state.perPage)));
+
+  for (let i=0; i<totalPages; i++){
+    const dot = document.createElement("span");
+    dot.className = "car-dot" + (i===0 ? " active" : "");
+    dot.addEventListener("click", ()=> { state.autoDir = (i > state.slide) ? 1 : -1; scrollToSlide(i); });
+    dots.appendChild(dot);
+    state.dots.push(dot);
+  }
+
+  document.querySelector(".car-prev").onclick = ()=> { state.autoDir = -1; scrollStep(-1); };
+  document.querySelector(".car-next").onclick = ()=> { state.autoDir =  1; scrollStep( 1); };
+
+  const car = document.querySelector(".carousel");
+
+  // Ping-pong automático (derecha→izquierda→derecha)
+  state.autoDir = 1;
+  const startAuto = ()=> {
+    clearInterval(autoTimer);
+    autoTimer = setInterval(()=> {
+      if (state.slide === 0) state.autoDir = 1;
+      if (state.slide === totalPages-1) state.autoDir = -1;
+      scrollStep(state.autoDir);
+    }, 5000);
+  };
+  const stopAuto  = ()=> { clearInterval(autoTimer); };
+  car.addEventListener("mouseenter", stopAuto);
+  car.addEventListener("mouseleave", startAuto);
+  startAuto();
+
+  // Ajuste de ancho para NO mostrar imagen recortada
+  function sizeCarouselCards(){
+    const viewport = document.querySelector(".car-viewport");
+    const cards = document.querySelectorAll(".car-card");
+    if (!viewport || !cards.length) return;
+    const gap = 12; // mantener en sync con CSS
+    const per = state.perPage || 3;
+    const w = Math.floor((viewport.clientWidth - gap*(per-1)) / per);
+    cards.forEach(c => { c.style.flex = `0 0 ${w}px`; c.style.maxWidth = `${w}px`; });
+  }
+  sizeCarouselCards();
+  window.addEventListener("resize", sizeCarouselCards);
 }
 
 function scrollStep(dir){
-  const top = Math.min(state.all.length, 9);
-  const maxIndex = top-1;
+  const maxIndex = Math.max(0, state.dots.length - 1);
   state.slide = Math.max(0, Math.min(maxIndex, state.slide + dir));
   scrollToSlide(state.slide);
 }
-function scrollToSlide(i){
-  state.slide = i;
+function scrollToSlide(pageIdx){
+  state.slide = pageIdx;
+  const viewport = document.querySelector(".car-viewport");
   const track = document.getElementById("car-track");
-  const card = track.children[i];
-  if (card) track.scrollTo({ left: card.offsetLeft - 6, behavior:'smooth' });
-  state.dots.forEach((d,idx)=> d.classList.toggle("active", idx===i));
-}
-
-/* ===== List + mini modal ===== */
-
-function isUrl(x){
-  return typeof x === 'string' && x.trim() && (/^https?:\/\//i.test(x) || x.startsWith('//') || x.startsWith('https://privatebin.rinuploads.org/'));
-}
-function getOriginalLink(it){
-  if(!it) return '#';
-  const tryKeys = ['descargar','enlace','link','url','download','href','mega','mediafire','gdrive'];
-  for(const k of tryKeys){ if(isUrl(it[k])) return it[k].trim(); }
-  // nested/arrays fallback
-  if (Array.isArray(it.autores)) { for (const a of it.autores){ const u=a&&(a.url||a.link||a.href); if(isUrl(u)) return u.trim(); } }
-  if (typeof it.autores==='string' && isUrl(it.autores)) return it.autores.trim();
-  if (it.meta && isUrl(it.meta.download)) return it.meta.download.trim();
-  if (it.links && isUrl(it.links.download)) return it.links.download.trim();
-  if (Array.isArray(it.links)) { for(const l of it.links){ const u=l&&(l.url||l.link||l.href); if(isUrl(u)) return u.trim(); } }
-  if (Array.isArray(it.descargas)) { for(const l of it.descargas){ const u=l&&(l.url||l.link||l.href); if(isUrl(u)) return u.trim(); } }
-  return '#';
-}
-function buildInterstitialUrl(originalUrl, it){
-  try{
-    const base = new URL('./ads/linkgate.html', location.href);
-    const p = new URLSearchParams();
-    p.set('to', originalUrl);
-    const title = it?.nombre || it?.name || it?.titulo || '';
-    if (title) p.set('name', title);
-    base.search = p.toString();
-    return base.toString();
-  }catch(e){ return 'ads/linkgate.html?to='+encodeURIComponent(originalUrl); }
-}
-
-
-function getOriginalLink(it){
-  const first = [
-    it && it.enlace, it && it.link, it && it.descarga, it && it.url, it && it.download, it && it.href,
-    (typeof (it && it.autores) === 'string' ? it.autores : null),
-    (Array.isArray(it && it.autores) ? ((it.autores.find(a => a && a.url) || {}).url) : null),
-    it && it.meta && it.meta.download, it && it.links && it.links.download
-  ].filter(Boolean)[0];
-  return String(first || '#');
-}
-function buildInterstitialUrl(originalUrl, it){
-  try{
-    const base = new URL('./ads/linkgate.html', location.href);
-    const p = new URLSearchParams();
-    p.set('to', originalUrl);
-    const title = (it && (it.nombre || it.name || it.titulo)) ? (it.nombre || it.name || it.titulo) : '';
-    if (title) p.set('name', title);
-    base.search = p.toString();
-    return base.toString();
-  }catch(e){
-    return 'ads/linkgate.html?to='+encodeURIComponent(originalUrl);
+  const per = state.perPage || 3;
+  const target = track.children[pageIdx * per];
+  if (target && viewport){
+    viewport.scrollTo({ left: target.offsetLeft - 6, behavior: "smooth" });
   }
+  state.dots.forEach((d,idx)=> d.classList.toggle("active", idx===pageIdx));
 }
-
+/* ===== List + mini modal ===== */
 function renderList(){
   const ul = document.getElementById("pub-list");
   ul.innerHTML = "";
-  state.filtered.forEach(item=>{
+  const items = [...state.filtered].sort((a,b)=> (safe(a.nombre,"")||"").localeCompare(safe(b.nombre,"")||"", 'es', {sensitivity:'base'}));
+  items.forEach(item=>{
     const li = document.createElement("li");
     li.className = "pub-item";
     li.dataset.id = safe(item.id, safe(item.nombre,"").toLowerCase().replace(/\s+/g,"-"));
@@ -187,63 +193,9 @@ function openMiniModal(item){
     const s = safe(item.comprar, item.store || "#"); if (s && s!=="#") window.open(s,"_blank","noopener");
   });
   btns.appendChild(dl); btns.appendChild(pwd); btns.appendChild(buy);
-  aside.appendChild(head); $1
-  /* FORCE DL BTN */
-  (function(){
-    try{
-      const original = getOriginalLink(item);
-      const href = buildInterstitialUrl(original, item);
-      let tgt = Array.from(aside.querySelectorAll('a,button')).find(n => /descargar/i.test((n.textContent||'')));
-      if (tgt){
-        if (tgt.tagName.toLowerCase() !== 'a'){
-          const a = document.createElement('a');
-          a.className = tgt.className || 'btn btn-primary btn-download';
-          a.innerHTML = tgt.innerHTML || 'DESCARGAR';
-          tgt.replaceWith(a);
-          tgt = a;
-        }
-        tgt.href = href; tgt.target = '_blank'; tgt.rel = 'noopener';
-        tgt.addEventListener('click', ()=>{ tgt.href = buildInterstitialUrl(getOriginalLink(item), item); });
-      }else{
-        const a = document.createElement('a');
-        a.className = 'btn btn-primary btn-download';
-        a.textContent = 'DESCARGAR';
-        a.href = href; a.target = '_blank'; a.rel = 'noopener';
-        btns.appendChild(a);
-      }
-    }catch(e){ console.warn('dl build err', e); }
-  })();
-/* DOWNLOAD FINAL PATCH */
-  (function(){
-    try{
-      const original = getOriginalLink(item);
-      const href = buildInterstitialUrl(original, item);
-      let tgt = Array.from(aside.querySelectorAll('a,button')).find(n => /descargar/i.test((n.textContent||'')));
-      if (tgt){
-        if (tgt.tagName.toLowerCase() !== 'a'){
-          const a = document.createElement('a');
-          a.className = tgt.className || 'btn btn-primary btn-download';
-          a.innerHTML = tgt.innerHTML || 'DESCARGAR';
-          tgt.replaceWith(a);
-          tgt = a;
-        }
-        tgt.setAttribute('href', href);
-        tgt.setAttribute('target', '_blank');
-        tgt.setAttribute('rel', 'noopener');
-        tgt.addEventListener('click', ()=>{
-          const fresh = buildInterstitialUrl(getOriginalLink(item), item);
-          tgt.setAttribute('href', fresh);
-        });
-      }else{
-        const a = document.createElement('a');
-        a.className = 'btn btn-primary btn-download';
-        a.textContent = 'DESCARGAR';
-        a.href = href; a.target = '_blank'; a.rel = 'noopener';
-        btns.appendChild(a);
-      }
-    }catch(e){ console.warn('DOWNLOAD FINAL PATCH error', e); }
-  })();
-document.addEventListener("keydown", (e)=>{
+  aside.appendChild(head); aside.appendChild(btns);
+
+  document.addEventListener("keydown", (e)=>{
     if (e.key === "Escape") {
       wrap.classList.remove("mini-open"); aside.setAttribute("aria-hidden","true"); aside.innerHTML=""; 
       document.querySelectorAll(".pub-item").forEach(n=> n.classList.remove("selected"));
