@@ -24,22 +24,14 @@ async function init(){
 }
 
 
-/* PATCH: Carousel fix (arrows + 2 dots pages) v2025-10-19
- - Scroll the viewport, not the track (bug made images static)
- - Use 2-page pagination with 3 cards per page (2 dots only)
-*/
-
-
-
 /* ===== Carousel ===== */
 let autoTimer;
 function renderCarousel(){
   const track = document.getElementById("car-track");
   const dots = document.getElementById("car-dots");
   track.innerHTML = ""; dots.innerHTML = ""; state.dots = [];
-  const top = state.all.slice(0, 6); // SOLO 6
+  const top = state.all.slice(0, 6); // limit to 6
 
-  // Build cards
   top.forEach((it)=>{
     const card = document.createElement("article");
     card.className = "car-card";
@@ -62,7 +54,7 @@ function renderCarousel(){
     card.appendChild(img);
     card.appendChild(overlay);
 
-    // Open the usual mini-modal
+    // Open mini modal
     card.tabIndex = 0;
     card.setAttribute("role","button");
     card.addEventListener("click", ()=> openMiniModal(it));
@@ -71,29 +63,25 @@ function renderCarousel(){
     track.appendChild(card);
   });
 
-  // === 2-dot pagination (3 items por página) ===
+  // Two pages (3 per page)
   state.slide = 0;
   state.perPage = 3;
   const totalPages = Math.min(2, Math.max(1, Math.ceil(top.length / state.perPage)));
 
-  for (let i=0; i<totalPages; i++){
+  for (let i=0;i<totalPages;i++){
     const dot = document.createElement("span");
     dot.className = "car-dot" + (i===0 ? " active" : "");
     dot.addEventListener("click", ()=> { state.autoDir = (i > state.slide) ? 1 : -1; scrollToSlide(i); });
-    dots.appendChild(dot);
-    state.dots.push(dot);
+    dots.appendChild(dot); state.dots.push(dot);
   }
 
   document.querySelector(".car-prev").onclick = ()=> { state.autoDir = -1; scrollStep(-1); };
   document.querySelector(".car-next").onclick = ()=> { state.autoDir =  1; scrollStep( 1); };
 
+  // Auto ping-pong
   const car = document.querySelector(".carousel");
-
-  // Ping-pong automático (derecha→izquierda→derecha)
   state.autoDir = 1;
-  const startAuto = ()=> {
-    clearInterval(autoTimer);
-    autoTimer = setInterval(()=> {
+  const startAuto = ()=> { clearInterval(autoTimer); autoTimer = setInterval(()=> {
       if (state.slide === 0) state.autoDir = 1;
       if (state.slide === totalPages-1) state.autoDir = -1;
       scrollStep(state.autoDir);
@@ -104,12 +92,12 @@ function renderCarousel(){
   car.addEventListener("mouseleave", startAuto);
   startAuto();
 
-  // Ajuste de ancho para NO mostrar imagen recortada
+  // Sizing to avoid cropped extra image
   function sizeCarouselCards(){
     const viewport = document.querySelector(".car-viewport");
     const cards = document.querySelectorAll(".car-card");
     if (!viewport || !cards.length) return;
-    const gap = 12; // mantener en sync con CSS
+    const gap = 12;
     const per = state.perPage || 3;
     const w = Math.floor((viewport.clientWidth - gap*(per-1)) / per);
     cards.forEach(c => { c.style.flex = `0 0 ${w}px`; c.style.maxWidth = `${w}px`; });
@@ -194,6 +182,27 @@ function openMiniModal(item){
   });
   btns.appendChild(dl); btns.appendChild(pwd); btns.appendChild(buy);
   aside.appendChild(head); aside.appendChild(btns);
+  /* DOWNLOAD INTERSTITIAL OVERRIDE */
+  (function(){
+    try{
+      const gate = (u)=> u ? ("ads/linkgate.html?to="+encodeURIComponent(u)) : "#";
+      const dl = aside.querySelector('.btn-download') ||
+                 aside.querySelector('a[data-role="download"]') ||
+                 aside.querySelector('a[href]');
+      if (dl){
+        const original = (item.enlace || item.link || item.descarga || dl.getAttribute('data-url') || dl.getAttribute('href') || '').trim();
+        if (original){
+          dl.setAttribute('href', gate(original));
+          dl.setAttribute('target','_blank');
+          dl.setAttribute('rel','noopener');
+          dl.addEventListener('click', (e)=>{
+            const o = (item.enlace || item.link || item.descarga || dl.dataset.url || original);
+            dl.href = gate(o);
+          });
+        }
+      }
+    }catch(e){ console.warn('Interstitial override error', e); }
+  })();
 
   document.addEventListener("keydown", (e)=>{
     if (e.key === "Escape") {

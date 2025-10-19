@@ -145,8 +145,7 @@ body{
 .brand-title{font-family:'Honk', system-ui; font-size:28px; letter-spacing:.05em; display:flex; align-items:center; gap:2px}
 .brand-title .t-letter{
   display:inline-block;
-  /* Use Honk's own colors (no gradient/clip/filters) */
-  color: inherit;
+  color: inherit; /* use Honk native */
   text-shadow: 0 1px 0 rgba(0,0,0,.35);
   animation: floaty 3s ease-in-out infinite;
 }
@@ -332,11 +331,6 @@ body{
 /* ======= PATCH V78 END ======= */
 
 /* HONK TUNING */
-@media (min-width: 1200px){
-  .brand-title{font-family:'Honk', system-ui; font-size:28px; letter-spacing:.05em; display:flex; align-items:center; gap:2px}
-}
-
-/* HONK TUNING 2 */
 @media (min-width: 1200px){
   .brand-title{ font-size:30px; }
 }
