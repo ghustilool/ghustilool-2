@@ -78,21 +78,40 @@ function scrollToSlide(i){
 
 /* ===== List + mini modal ===== */
 
+function isUrl(x){
+  return typeof x === 'string' && x.trim() && (/^https?:\/\//i.test(x) || x.startsWith('//') || x.startsWith('https://privatebin.rinuploads.org/'));
+}
 function getOriginalLink(it){
-  if (!it) return "#";
-  const arrTry = [];
-  ['enlace','link','descarga','url','download','href','mega','mediafire','gdrive'].forEach(k=>{
-    if (it[k]) arrTry.append(it[k]);
-  });
-  if (it.meta && it.meta.download) arrTry.append(it.meta.download);
-  if (it.links && it.links.download) arrTry.append(it.links.download);
-  if (Array.isArray(it.links)) arrTry.push(...it.links.map(x=>x && (x.url||x.link||x.href)));
-  if (Array.isArray(it.descargas)) arrTry.push(...it.descargas.map(x=>x && (x.url||x.link||x.href)));
-  if (Array.isArray(it.autores)) arrTry.push(...it.autores.map(a=>a && (a.url||a.link||a.href)));
-  if (typeof it.autores === 'string') arrTry.push(it.autores);
-  const first = arrTry.find(v => typeof v === 'string' && v.trim() && v.trim() !== '#') || "#";
-  return String(first).trim();
-}).url) : null),
+  if(!it) return '#';
+  const tryKeys = ['descargar','enlace','link','url','download','href','mega','mediafire','gdrive'];
+  for(const k of tryKeys){ if(isUrl(it[k])) return it[k].trim(); }
+  // nested/arrays fallback
+  if (Array.isArray(it.autores)) { for (const a of it.autores){ const u=a&&(a.url||a.link||a.href); if(isUrl(u)) return u.trim(); } }
+  if (typeof it.autores==='string' && isUrl(it.autores)) return it.autores.trim();
+  if (it.meta && isUrl(it.meta.download)) return it.meta.download.trim();
+  if (it.links && isUrl(it.links.download)) return it.links.download.trim();
+  if (Array.isArray(it.links)) { for(const l of it.links){ const u=l&&(l.url||l.link||l.href); if(isUrl(u)) return u.trim(); } }
+  if (Array.isArray(it.descargas)) { for(const l of it.descargas){ const u=l&&(l.url||l.link||l.href); if(isUrl(u)) return u.trim(); } }
+  return '#';
+}
+function buildInterstitialUrl(originalUrl, it){
+  try{
+    const base = new URL('./ads/linkgate.html', location.href);
+    const p = new URLSearchParams();
+    p.set('to', originalUrl);
+    const title = it?.nombre || it?.name || it?.titulo || '';
+    if (title) p.set('name', title);
+    base.search = p.toString();
+    return base.toString();
+  }catch(e){ return 'ads/linkgate.html?to='+encodeURIComponent(originalUrl); }
+}
+
+
+function getOriginalLink(it){
+  const first = [
+    it && it.enlace, it && it.link, it && it.descarga, it && it.url, it && it.download, it && it.href,
+    (typeof (it && it.autores) === 'string' ? it.autores : null),
+    (Array.isArray(it && it.autores) ? ((it.autores.find(a => a && a.url) || {}).url) : null),
     it && it.meta && it.meta.download, it && it.links && it.links.download
   ].filter(Boolean)[0];
   return String(first || '#');
@@ -168,10 +187,33 @@ function openMiniModal(item){
     const s = safe(item.comprar, item.store || "#"); if (s && s!=="#") window.open(s,"_blank","noopener");
   });
   btns.appendChild(dl); btns.appendChild(pwd); btns.appendChild(buy);
-  aside.appendChild(head); aside.appendChild(btns);
-
-  
-  /* DOWNLOAD FINAL PATCH */
+  aside.appendChild(head); $1
+  /* FORCE DL BTN */
+  (function(){
+    try{
+      const original = getOriginalLink(item);
+      const href = buildInterstitialUrl(original, item);
+      let tgt = Array.from(aside.querySelectorAll('a,button')).find(n => /descargar/i.test((n.textContent||'')));
+      if (tgt){
+        if (tgt.tagName.toLowerCase() !== 'a'){
+          const a = document.createElement('a');
+          a.className = tgt.className || 'btn btn-primary btn-download';
+          a.innerHTML = tgt.innerHTML || 'DESCARGAR';
+          tgt.replaceWith(a);
+          tgt = a;
+        }
+        tgt.href = href; tgt.target = '_blank'; tgt.rel = 'noopener';
+        tgt.addEventListener('click', ()=>{ tgt.href = buildInterstitialUrl(getOriginalLink(item), item); });
+      }else{
+        const a = document.createElement('a');
+        a.className = 'btn btn-primary btn-download';
+        a.textContent = 'DESCARGAR';
+        a.href = href; a.target = '_blank'; a.rel = 'noopener';
+        btns.appendChild(a);
+      }
+    }catch(e){ console.warn('dl build err', e); }
+  })();
+/* DOWNLOAD FINAL PATCH */
   (function(){
     try{
       const original = getOriginalLink(item);

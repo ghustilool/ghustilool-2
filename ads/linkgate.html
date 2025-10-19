@@ -16,8 +16,8 @@
     .layout{max-width:1200px; margin:28px auto; padding:0 16px; display:grid; grid-template-columns:160px minmax(640px,1fr) 160px; gap:28px; align-items:start}
     .banner{background:#200; border-radius:8px; min-height:520px; display:flex; align-items:center; justify-content:center; border:1px solid rgba(255,255,255,.06); overflow:hidden}
     .card{background:rgba(0,0,0,.28); border:1px solid rgba(255,255,255,.06); border-radius:18px; box-shadow:0 16px 48px rgba(0,0,0,.5); padding:26px; position:relative}
-    .hero{display:flex; gap:20px; align-items:center; justify-content:center; flex-direction:column}
-    .hero .art{width:260px; height:260px; border-radius:16px; border:6px solid #1e2b3a; object-fit:cover; background:#0b1220}
+    .hero{display:flex; gap:20px; align-items:center; justify-content:flex-start}
+    .hero .art{width:180px; height:180px; border-radius:16px; border:6px solid #1e2b3a; object-fit:cover; background:#0b1220}
     h1{margin:6px 0 6px; font-size:28px; letter-spacing:.01em}
     .sub{color:var(--muted); font-size:13px}
     .timer-wrap{display:flex; justify-content:center; margin:18px 0}
@@ -29,7 +29,7 @@
     @media (max-width:1024px){
       .layout{grid-template-columns: 1fr; gap:16px}
       .banner{min-height:140px}
-      .hero{display:flex; gap:20px; align-items:center; justify-content:center; flex-direction:column}
+      .hero{flex-direction:column; text-align:center}
     }
   </style>
 
@@ -66,10 +66,6 @@
       </div>
 
       <footer>© GhustiLoOL</footer>
-    
-      <div id="noTarget" style="display:none; margin-top:10px; color:#ffc9c9; font-size:12px; text-align:center">
-        No se recibió un enlace válido. Verifica que el botón de DESCARGAR esté construyendo <code>?to=URL</code> correctamente.
-      </div>
     </main>
 
     <aside class="banner" id="right-banner">
@@ -83,7 +79,7 @@
   <script>
     const p = new URLSearchParams(location.search);
     function decodeTwice(s){ try{ return decodeURIComponent(decodeURIComponent(s)); }catch(_){ try{ return decodeURIComponent(s); }catch{ return s; } } }
-    let target = decodeTwice(p.get('to') || p.get('url') || p.get('link') || '');
+    const target = decodeTwice(p.get('to') || p.get('url') || p.get('link') || '');
     const name = p.get('name') || '';
     if (name) document.getElementById('title').textContent = 'Generando enlace: ' + name;
 
@@ -102,12 +98,12 @@
       goBtn.style.cursor='pointer';
     }
     function redirect(){
-  if (redirected) return;
-  redirected = true;
-  if (iv) clearInterval(iv);
-  enable();
-  if (target && target !== '#') window.location.replace(target);
-}
+      if (redirected) return;
+      redirected = true;
+      if (iv) clearInterval(iv);
+      enable();
+      if (target) window.location.replace(target);
+    }
     function tick(){
       const r = Math.max(0, Math.ceil((deadline - Date.now())/1000));
       timerEl.textContent = r;
@@ -116,7 +112,6 @@
     goBtn.addEventListener('click', ()=>{ if (!goBtn.disabled && target){ window.location.href = target; } });
 
     setTimeout(enable, TOTAL*1000);
-    if(!target || target === '#') document.getElementById('noTarget').style.display='block';
     tick();
     iv = setInterval(tick, 250);
   </script>
