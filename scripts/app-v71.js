@@ -23,6 +23,12 @@ async function init(){
   }catch(e){ console.error("JSON load error", e); }
 }
 
+
+/* PATCH: Carousel fix (arrows + 2 dots pages) v2025-10-19
+ - Scroll the viewport, not the track (bug made images static)
+ - Use 2-page pagination with 3 cards per page (2 dots only)
+*/
+
 /* ===== Carousel ===== */
 let autoTimer;
 function renderCarousel(){
@@ -30,6 +36,8 @@ function renderCarousel(){
   const dots = document.getElementById("car-dots");
   track.innerHTML = ""; dots.innerHTML = ""; state.dots = [];
   const top = state.all.slice(0, 9);
+
+  // Build cards
   top.forEach((it, i)=>{
     const card = document.createElement("article");
     card.className = "car-card";
@@ -40,42 +48,55 @@ function renderCarousel(){
     const overlay = document.createElement("div");
     overlay.className = "car-overlay";
     const title = document.createElement("div");
-    title.className = "car-title"; title.textContent = safe(it.nombre, it.id||"Sin nombre");
-    const ver = document.createElement("span"); ver.className = "ver-chip"; ver.textContent = safe(it.version,"v1.0");
-
+    title.className = "car-title";
+    title.textContent = safe(it.nombre,"");
+    const ver = document.createElement("div");
+    ver.className = "car-version";
+    ver.textContent = safe(it.version, "");
     overlay.appendChild(title); overlay.appendChild(ver);
     card.appendChild(img); card.appendChild(overlay); track.appendChild(card);
+  });
 
+  // === 2-dot pagination (3 items per view) ===
+  state.slide = 0;
+  state.perPage = 3;
+  const totalPages = Math.min(2, Math.max(1, Math.ceil(top.length / state.perPage)));
+
+  for (let i=0;i<totalPages;i++){
     const dot = document.createElement("span");
     dot.className = "car-dot" + (i===0?" active":"");
     dot.addEventListener("click", ()=> scrollToSlide(i));
     dots.appendChild(dot); state.dots.push(dot);
-  });
+  }
 
   document.querySelector('.car-prev').onclick = ()=> scrollStep(-1);
-document.querySelector('.car-next').onclick = ()=> scrollStep(1);
-const car = document.querySelector('.carousel');
-const startAuto = ()=> { clearInterval(autoTimer); autoTimer = setInterval(()=> scrollStep(1), 5000); };
-const stopAuto = ()=> { clearInterval(autoTimer); };
-car.addEventListener('mouseenter', stopAuto);
-car.addEventListener('mouseleave', startAuto);
-startAuto();
+  document.querySelector('.car-next').onclick = ()=> scrollStep(1);
+
+  const car = document.querySelector('.carousel');
+  const startAuto = ()=> { clearInterval(autoTimer); autoTimer = setInterval(()=> scrollStep(1), 5000); };
+  const stopAuto = ()=> { clearInterval(autoTimer); };
+  car.addEventListener('mouseenter', stopAuto);
+  car.addEventListener('mouseleave', startAuto);
+  startAuto();
 }
 
 function scrollStep(dir){
-  const top = Math.min(state.all.length, 9);
-  const maxIndex = top-1;
+  const maxIndex = Math.max(0, state.dots.length - 1);
   state.slide = Math.max(0, Math.min(maxIndex, state.slide + dir));
   scrollToSlide(state.slide);
 }
-function scrollToSlide(i){
-  state.slide = i;
-  const track = document.getElementById("car-track");
-  const card = track.children[i];
-  if (card) track.scrollTo({ left: card.offsetLeft - 6, behavior:'smooth' });
-  state.dots.forEach((d,idx)=> d.classList.toggle("active", idx===i));
-}
 
+function scrollToSlide(pageIdx){
+  state.slide = pageIdx;
+  const viewport = document.querySelector('.car-viewport'); // scroll this, not the track
+  const track = document.getElementById('car-track');
+  const per = state.perPage || 3;
+  const targetCard = track.children[pageIdx * per];
+  if (targetCard && viewport){
+    viewport.scrollTo({ left: targetCard.offsetLeft - 6, behavior: 'smooth' });
+  }
+  state.dots.forEach((d,idx)=> d.classList.toggle('active', idx===pageIdx));
+}
 /* ===== List + mini modal ===== */
 function renderList(){
   const ul = document.getElementById("pub-list");
