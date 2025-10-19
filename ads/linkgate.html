@@ -1,104 +1,86 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Generando enlace…</title>
-  <link rel="icon" href="../ghusti-ico.ico" type="image/x-icon" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#0f1822; --panel:#121e2a; --muted:#8da2b6; --ring:#2f3c4a; --grad: linear-gradient(90deg,#7a5cff, #24e1b3);
+      --bg:#0f1420; --panel:#111b27; --ink:#eaf1fb; --muted:#9bb0c8;
+      --ring:#253445; --accent1:#7a5cff; --accent2:#24e1b3;
+      --grad:linear-gradient(90deg,var(--accent1),var(--accent2));
     }
     *{box-sizing:border-box}
-    body{margin:0;background:radial-gradient(1200px 600px at 50% -100px,#1b2a3a00,#1b2a3a) , var(--bg); color:#e6eef6; font-family:Inter, system-ui, sans-serif;}
-    .wrap{max-width:780px; margin:24px auto; background:rgba(0,0,0,.25); border-radius:18px; box-shadow:0 14px 40px rgba(0,0,0,.45); padding:24px; border:1px solid rgba(255,255,255,.06); position:relative}
-    header{display:flex; gap:20px; align-items:center; margin-bottom:18px}
-    header img.logo{width:110px; height:110px; object-fit:cover; border-radius:12px; border:4px solid #1e2b3a}
-    h1{font-size:24px; margin:0 0 6px}
-    .sub{color:var(--muted); font-size:13px; margin-bottom:12px}
-    .timer{width:140px;height:140px;border-radius:50%;border:12px solid var(--ring); display:flex; align-items:center; justify-content:center; margin:22px auto; font-weight:800; font-size:36px; color:#b8d3ff; box-shadow: inset 0 0 0 4px rgba(255,255,255,.05)}
-    .cta{display:block; width:100%; border:0; border-radius:10px; padding:14px 18px; font-weight:800; letter-spacing:.08em; color:#0c1320; background:var(--grad); text-align:center; cursor:not-allowed; opacity:.6}
+    body{margin:0; background:radial-gradient(1200px 600px at 50% -120px,#1b2a3a00,#0d131c) , var(--bg); color:var(--ink); font-family:Inter, system-ui, sans-serif}
+    .page{max-width:980px; margin:28px auto; padding:0 16px; position:relative}
+    .card{background:rgba(0,0,0,.28); border:1px solid rgba(255,255,255,.06); border-radius:18px; box-shadow:0 16px 48px rgba(0,0,0,.5); padding:26px; position:relative}
+    .hero{display:flex; gap:20px; align-items:center; justify-content:center; flex-direction:column}
+    .hero .art{width:220px; height:220px; border-radius:16px; border:6px solid #1e2b3a; object-fit:cover; background:#0b1220}
+    h1{margin:14px 0 6px; font-size:28px; letter-spacing:.01em}
+    .sub{color:var(--muted); font-size:14px}
+    .timer-wrap{display:flex; justify-content:center; margin:18px 0}
+    .timer{width:160px; height:160px; border-radius:50%; border:12px solid var(--ring); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:42px; color:#cfe1ff; box-shadow: inset 0 0 0 4px rgba(255,255,255,.06)}
+    .cta{margin:12px 0 0; display:block; width:100%; border:0; border-radius:12px; padding:16px 18px; font-weight:900; letter-spacing:.12em; color:#0d1520; background:var(--grad); text-align:center; cursor:not-allowed; opacity:.55; text-transform:uppercase}
     .cta.ready{cursor:pointer; opacity:1}
-    .ads-row{display:grid; grid-template-columns:160px 1fr 160px; gap:24px; margin-top:22px}
-    .side{background:var(--panel); border-radius:10px; padding:8px; min-height:600px; display:flex; align-items:center; justify-content:center; border:1px solid rgba(255,255,255,.06)}
-    .native{margin-top:20px}
-    footer{margin-top:18px; text-align:center; color:#778ba0; font-size:12px}
-    @media (max-width:960px){
-      .ads-row{grid-template-columns:1fr; gap:12px}
-      .side{min-height:160px}
-      header{flex-direction:column}
-    }
+    .adsNative{margin-top:22px}
+    .adsCols{display:grid; grid-template-columns:160px 1fr 160px; gap:24px; margin-top:22px}
+    .side{background:var(--panel); border-radius:12px; padding:8px; min-height:600px; display:flex; align-items:center; justify-content:center; border:1px solid rgba(255,255,255,.06)}
+    footer{margin:18px 0 4px; color:#7f95ad; font-size:12px; text-align:center}
+    @media (max-width:1024px){ .adsCols{grid-template-columns:1fr; gap:12px} .side{min-height:160px} .hero .art{width:160px; height:160px} }
   </style>
-  <!-- Popunder -->
+  <!-- Adsterra Popunder -->
   <script type='text/javascript' src='//medievalkin.com/1d/eb/ac/1debac97d126f28bd1494141fd6c4121.js'></script>
-  <!-- Social Bar -->
+  <!-- Adsterra Social Bar -->
   <script type='text/javascript' src='//medievalkin.com/3e/19/8c/3e198c747eaeed75d22a450c4b682e47.js'></script>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <img class="logo" src="publicidad-bob-esponja.gif" alt="Publicidad">
-      <div>
+  <div class="page">
+    <div class="card">
+      <div class="hero">
+        <img class="art" src="publicidad-bob-esponja.gif" alt="Publicidad">
         <h1>Generando enlace</h1>
         <div class="sub">Serás redirigido en segundos…</div>
       </div>
-    </header>
-
-    <div class="timer" id="timer">20</div>
-    <button id="go" class="cta" disabled>IR AL ENLACE</button>
-
-    <div class="native">
-      <!-- Native Banner -->
-      <script async="async" data-cfasync="false" src="//medievalkin.com/0ad7d37868e16f0b10082f9caf1e9b8c/invoke.js"></script>
-      <div id="container-0ad7d37868e16f0b10082f9caf1e9b8c"></div>
-    </div>
-
-    <div class="ads-row">
-      <div class="side" id="left-banner">
-        <!-- Left 160x600 -->
-        <script type="text/javascript">
-            atOptions = {'key':'7c1254ef65ce8a0af419fb9f19c0036e','format':'iframe','height':600,'width':160,'params':{}};
-        </script>
-        <script type="text/javascript" src="//medievalkin.com/7c1254ef65ce8a0af419fb9f19c0036e/invoke.js"></script>
+      <div class="timer-wrap"><div class="timer" id="timer">20</div></div>
+      <button id="go" class="cta" disabled>IR AL ENLACE</button>
+      <div class="adsNative">
+        <script async="async" data-cfasync="false" src="//medievalkin.com/0ad7d37868e16f0b10082f9caf1e9b8c/invoke.js"></script>
+        <div id="container-0ad7d37868e16f0b10082f9caf1e9b8c"></div>
       </div>
-      <div></div>
-      <div class="side" id="right-banner">
-        <!-- Right 160x600 (duplicate) -->
-        <script type="text/javascript">
+      <div class="adsCols">
+        <div class="side">
+          <script type="text/javascript">
             atOptions = {'key':'7c1254ef65ce8a0af419fb9f19c0036e','format':'iframe','height':600,'width':160,'params':{}};
-        </script>
-        <script type="text/javascript" src="//medievalkin.com/7c1254ef65ce8a0af419fb9f19c0036e/invoke.js"></script>
+          </script>
+          <script type="text/javascript" src="//medievalkin.com/7c1254ef65ce8a0af419fb9f19c0036e/invoke.js"></script>
+        </div>
+        <div></div>
+        <div class="side">
+          <script type="text/javascript">
+            atOptions = {'key':'7c1254ef65ce8a0af419fb9f19c0036e','format':'iframe','height':600,'width':160,'params':{}};
+          </script>
+          <script type="text/javascript" src="//medievalkin.com/7c1254ef65ce8a0af419fb9f19c0036e/invoke.js"></script>
+        </div>
       </div>
+      <footer>© GhustiLoOL</footer>
     </div>
-
-    <footer>© GhustiLoOL</footer>
   </div>
-
   <script>
     const params = new URLSearchParams(location.search);
     const target = params.get('to');
     const goBtn = document.getElementById('go');
     const timerEl = document.getElementById('timer');
-    let t = 20;
-    function tick(){
-      t--;
-      timerEl.textContent = t;
-      if (t <= 0){
-        enable();
-        window.location.replace(target);
-      }
+    let t = 20; let redirected = false; let iv = null;
+    function enable(){ goBtn.classList.add('ready'); goBtn.removeAttribute('disabled'); goBtn.style.cursor='pointer'; }
+    function redirect(){
+      if (redirected) return; redirected = true;
+      if (iv) clearInterval(iv); enable(); if (target) window.location.replace(target);
     }
-    function enable(){
-      goBtn.classList.add('ready');
-      goBtn.removeAttribute('disabled');
-      goBtn.style.cursor='pointer';
-    }
+    function tick(){ if (t > 0) t -= 1; if (t <= 0){ t = 0; redirect(); } timerEl.textContent = t; }
+    goBtn.addEventListener('click', ()=>{ if (!goBtn.disabled && target){ window.location.href = target; } });
     setTimeout(enable, 20000);
-    setInterval(tick, 1000);
-    goBtn.addEventListener('click', ()=>{
-      if (!goBtn.disabled) window.location.href = target;
-    });
+    iv = setInterval(tick, 1000);
   </script>
 </body>
 </html>
