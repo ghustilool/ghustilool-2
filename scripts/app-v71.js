@@ -23,19 +23,16 @@ async function init(){
   }catch(e){ console.error("JSON load error", e); }
 }
 
-
 /* ===== Carousel ===== */
 let autoTimer;
 function renderCarousel(){
   const track = document.getElementById("car-track");
   const dots = document.getElementById("car-dots");
   track.innerHTML = ""; dots.innerHTML = ""; state.dots = [];
-  const top = state.all.slice(0, 6); // limit to 6
-
-  top.forEach((it)=>{
+  const top = state.all.slice(0, 9);
+  top.forEach((it, i)=>{
     const card = document.createElement("article");
     card.className = "car-card";
-
     const img = document.createElement("img");
     img.src = safe(it.imagen, "https://picsum.photos/800/400?blur=2");
     img.alt = safe(it.nombre,"Publicación");
@@ -43,103 +40,71 @@ function renderCarousel(){
     const overlay = document.createElement("div");
     overlay.className = "car-overlay";
     const title = document.createElement("div");
-    title.className = "car-title";
-    title.textContent = safe(it.nombre,"");
-    const ver = document.createElement("div");
-    ver.className = "car-version";
-    ver.textContent = safe(it.version, "");
+    title.className = "car-title"; title.textContent = safe(it.nombre, it.id||"Sin nombre");
+    const ver = document.createElement("span"); ver.className = "ver-chip"; ver.textContent = safe(it.version,"v1.0");
 
-    overlay.appendChild(title);
-    overlay.appendChild(ver);
-    card.appendChild(img);
-    card.appendChild(overlay);
+    overlay.appendChild(title); overlay.appendChild(ver);
+    card.appendChild(img); card.appendChild(overlay); track.appendChild(card);
 
-    // Open mini modal
-    card.tabIndex = 0;
-    card.setAttribute("role","button");
-    card.addEventListener("click", ()=> openMiniModal(it));
-    card.addEventListener("keydown", (e)=>{ if(e.key === "Enter"){ openMiniModal(it); } });
-
-    track.appendChild(card);
+    const dot = document.createElement("span");
+    dot.className = "car-dot" + (i===0?" active":"");
+    dot.addEventListener("click", ()=> scrollToSlide(i));
+    dots.appendChild(dot); state.dots.push(dot);
   });
 
-  // Two pages (3 per page)
-  state.slide = 0;
-  state.perPage = 3;
-  const totalPages = Math.min(2, Math.max(1, Math.ceil(top.length / state.perPage)));
-
-  for (let i=0;i<totalPages;i++){
-    const dot = document.createElement("span");
-    dot.className = "car-dot" + (i===0 ? " active" : "");
-    dot.addEventListener("click", ()=> { state.autoDir = (i > state.slide) ? 1 : -1; scrollToSlide(i); });
-    dots.appendChild(dot); state.dots.push(dot);
-  }
-
-  document.querySelector(".car-prev").onclick = ()=> { state.autoDir = -1; scrollStep(-1); };
-  document.querySelector(".car-next").onclick = ()=> { state.autoDir =  1; scrollStep( 1); };
-
-  // Auto ping-pong
-  const car = document.querySelector(".carousel");
-  state.autoDir = 1;
-  const startAuto = ()=> { clearInterval(autoTimer); autoTimer = setInterval(()=> {
-      if (state.slide === 0) state.autoDir = 1;
-      if (state.slide === totalPages-1) state.autoDir = -1;
-      scrollStep(state.autoDir);
-    }, 5000);
-  };
-  const stopAuto  = ()=> { clearInterval(autoTimer); };
-  car.addEventListener("mouseenter", stopAuto);
-  car.addEventListener("mouseleave", startAuto);
-  startAuto();
-
-  // Sizing to avoid cropped extra image
-  function sizeCarouselCards(){
-    const viewport = document.querySelector(".car-viewport");
-    const cards = document.querySelectorAll(".car-card");
-    if (!viewport || !cards.length) return;
-    const gap = 12;
-    const per = state.perPage || 3;
-    const w = Math.floor((viewport.clientWidth - gap*(per-1)) / per);
-    cards.forEach(c => { c.style.flex = `0 0 ${w}px`; c.style.maxWidth = `${w}px`; });
-  }
-  sizeCarouselCards();
-  window.addEventListener("resize", sizeCarouselCards);
+  document.querySelector('.car-prev').onclick = ()=> scrollStep(-1);
+document.querySelector('.car-next').onclick = ()=> scrollStep(1);
+const car = document.querySelector('.carousel');
+const startAuto = ()=> { clearInterval(autoTimer); autoTimer = setInterval(()=> scrollStep(1), 5000); };
+const stopAuto = ()=> { clearInterval(autoTimer); };
+car.addEventListener('mouseenter', stopAuto);
+car.addEventListener('mouseleave', startAuto);
+startAuto();
 }
 
 function scrollStep(dir){
-  const maxIndex = Math.max(0, state.dots.length - 1);
+  const top = Math.min(state.all.length, 9);
+  const maxIndex = top-1;
   state.slide = Math.max(0, Math.min(maxIndex, state.slide + dir));
   scrollToSlide(state.slide);
 }
-function scrollToSlide(pageIdx){
-  state.slide = pageIdx;
-  const viewport = document.querySelector(".car-viewport");
+function scrollToSlide(i){
+  state.slide = i;
   const track = document.getElementById("car-track");
-  const per = state.perPage || 3;
-  const target = track.children[pageIdx * per];
-  if (target && viewport){
-    viewport.scrollTo({ left: target.offsetLeft - 6, behavior: "smooth" });
-  }
-  state.dots.forEach((d,idx)=> d.classList.toggle("active", idx===pageIdx));
+  const card = track.children[i];
+  if (card) track.scrollTo({ left: card.offsetLeft - 6, behavior:'smooth' });
+  state.dots.forEach((d,idx)=> d.classList.toggle("active", idx===i));
 }
+
 /* ===== List + mini modal ===== */
 
-function buildInterstitialUrl(originalUrl, item){
+function getOriginalLink(it){
+  const first = [
+    it && it.enlace, it && it.link, it && it.descarga, it && it.url, it && it.download, it && it.href,
+    (typeof (it && it.autores) === 'string' ? it.autores : null),
+    (Array.isArray(it && it.autores) ? ((it.autores.find(a => a && a.url) || {}).url) : null),
+    it && it.meta && it.meta.download, it && it.links && it.links.download
+  ].filter(Boolean)[0];
+  return String(first || '#');
+}
+function buildInterstitialUrl(originalUrl, it){
   try{
-    const base = "ads/linkgate.html";
-    const params = new URLSearchParams();
-    params.set("to", originalUrl);
-    const title = (item && (item.nombre || item.name || item.titulo)) ? (item.nombre || item.name || item.titulo) : "";
-    if (title) params.set("name", title);
-    return base + "?" + params.toString();
-  }catch(e){ return buildInterstitialUrl(original, item); }
+    const base = new URL('./ads/linkgate.html', location.href);
+    const p = new URLSearchParams();
+    p.set('to', originalUrl);
+    const title = (it && (it.nombre || it.name || it.titulo)) ? (it.nombre || it.name || it.titulo) : '';
+    if (title) p.set('name', title);
+    base.search = p.toString();
+    return base.toString();
+  }catch(e){
+    return 'ads/linkgate.html?to='+encodeURIComponent(originalUrl);
+  }
 }
 
 function renderList(){
   const ul = document.getElementById("pub-list");
   ul.innerHTML = "";
-  const items = [...state.filtered].sort((a,b)=> (safe(a.nombre,"")||"").localeCompare(safe(b.nombre,"")||"", 'es', {sensitivity:'base'}));
-  items.forEach(item=>{
+  state.filtered.forEach(item=>{
     const li = document.createElement("li");
     li.className = "pub-item";
     li.dataset.id = safe(item.id, safe(item.nombre,"").toLowerCase().replace(/\s+/g,"-"));
@@ -194,57 +159,39 @@ function openMiniModal(item){
   });
   btns.appendChild(dl); btns.appendChild(pwd); btns.appendChild(buy);
   aside.appendChild(head); aside.appendChild(btns);
-  
-  /* INTERSTITIAL DELEGATE ON ASIDE */
-  (function(){
-    try{
-      const gate = (u)=> buildInterstitialUrl(original, item);
-      aside.addEventListener('click', function(e){
-        const target = e.target.closest('a,button');
-        if(!target) return;
-        const label = (target.textContent||'').toLowerCase();
-        if(label.includes('descargar')){
-          e.preventDefault(); e.stopPropagation();
-          const original = (item.enlace || item.link || item.descarga ||
-                            target.dataset.url || target.getAttribute('data-url') ||
-                            target.getAttribute('data-original') ||
-                            target.getAttribute('href') || '').trim();
-          if(original){
-            window.open(gate(original, item || null), '_blank', 'noopener');
-          }
-        }
-      }, true);
-      const dl = aside.querySelector('a,button');
-      if (dl && (dl.textContent||'').toLowerCase().includes('descargar')){
-        dl.setAttribute('href', 'javascript:void(0)');
-        dl.setAttribute('data-original', (item.enlace||item.link||item.descarga||'').trim());
-        dl.setAttribute('target','_blank');
-      }
-    }catch(e){}
-  })();
-/* DOWNLOAD INTERSTITIAL OVERRIDE */
-  (function(){
-    try{
-      const gate = (u)=> u ? (buildInterstitialUrl(original, item)) : "#";
-      const dl = aside.querySelector('.btn-download') ||
-                 aside.querySelector('a[data-role="download"]') ||
-                 aside.querySelector('a[href]');
-      if (dl){
-        const original = (item.enlace || item.link || item.descarga || dl.getAttribute('data-url') || dl.getAttribute('href') || '').trim();
-        if (original){
-          dl.setAttribute('href', gate(original, item || null));
-          dl.setAttribute('target','_blank');
-          dl.setAttribute('rel','noopener');
-          dl.addEventListener('click', (e)=>{
-            const o = (item.enlace || item.link || item.descarga || dl.dataset.url || original);
-            dl.href = gate(o);
-          });
-        }
-      }
-    }catch(e){ console.warn('Interstitial override error', e); }
-  })();
 
-  document.addEventListener("keydown", (e)=>{
+  
+  /* DOWNLOAD FINAL PATCH */
+  (function(){
+    try{
+      const original = getOriginalLink(item);
+      const href = buildInterstitialUrl(original, item);
+      let tgt = Array.from(aside.querySelectorAll('a,button')).find(n => /descargar/i.test((n.textContent||'')));
+      if (tgt){
+        if (tgt.tagName.toLowerCase() !== 'a'){
+          const a = document.createElement('a');
+          a.className = tgt.className || 'btn btn-primary btn-download';
+          a.innerHTML = tgt.innerHTML || 'DESCARGAR';
+          tgt.replaceWith(a);
+          tgt = a;
+        }
+        tgt.setAttribute('href', href);
+        tgt.setAttribute('target', '_blank');
+        tgt.setAttribute('rel', 'noopener');
+        tgt.addEventListener('click', ()=>{
+          const fresh = buildInterstitialUrl(getOriginalLink(item), item);
+          tgt.setAttribute('href', fresh);
+        });
+      }else{
+        const a = document.createElement('a');
+        a.className = 'btn btn-primary btn-download';
+        a.textContent = 'DESCARGAR';
+        a.href = href; a.target = '_blank'; a.rel = 'noopener';
+        btns.appendChild(a);
+      }
+    }catch(e){ console.warn('DOWNLOAD FINAL PATCH error', e); }
+  })();
+document.addEventListener("keydown", (e)=>{
     if (e.key === "Escape") {
       wrap.classList.remove("mini-open"); aside.setAttribute("aria-hidden","true"); aside.innerHTML=""; 
       document.querySelectorAll(".pub-item").forEach(n=> n.classList.remove("selected"));
@@ -278,24 +225,3 @@ function applyFilters(){
   });
   renderList();
 }
-
-/* GLOBAL DOWNLOAD INTERCEPTOR */
-(function(){
-  function gate(u){ return buildInterstitialUrl(original, item); }
-  document.addEventListener("click", function(e){
-    const a = e.target.closest('a');
-    if(!a) return;
-    // Heurísticas para detectar el botón de descarga
-    const isDownload = a.classList.contains('btn-download')
-                    || a.getAttribute('data-role') === 'download'
-                    || /descargar/i.test(a.textContent||"")
-                    || /download/i.test(a.textContent||"");
-    if(!isDownload) return;
-    // Detectar URL original desde atributos o href actual
-    const original = a.dataset.url || a.getAttribute('data-url') || a.getAttribute('data-original') || a.getAttribute('href');
-    if(!original) return;
-    e.preventDefault();
-    const url = gate(original, item || null);
-    window.open(url, "_blank", "noopener");
-  }, true);
-})();

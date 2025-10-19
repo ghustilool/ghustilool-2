@@ -13,7 +13,7 @@
     }
     *{box-sizing:border-box}
     body{margin:0; background:radial-gradient(1200px 600px at 50% -120px,#1b2a3a00,#0d131c) , var(--bg); color:var(--ink); font-family:Inter, system-ui, sans-serif}
-    .layout{max-width:1200px; margin:28px auto; padding:0 16px; display:grid; grid-template-columns: 160px minmax(640px, 1fr) 160px; gap:28px; align-items:start}
+    .layout{max-width:1200px; margin:28px auto; padding:0 16px; display:grid; grid-template-columns:160px minmax(640px,1fr) 160px; gap:28px; align-items:start}
     .banner{background:#200; border-radius:8px; min-height:520px; display:flex; align-items:center; justify-content:center; border:1px solid rgba(255,255,255,.06); overflow:hidden}
     .card{background:rgba(0,0,0,.28); border:1px solid rgba(255,255,255,.06); border-radius:18px; box-shadow:0 16px 48px rgba(0,0,0,.5); padding:26px; position:relative}
     .hero{display:flex; gap:20px; align-items:center; justify-content:flex-start}
@@ -33,9 +33,9 @@
     }
   </style>
 
-  <!-- Adsterra Popunder -->
+  <!-- Popunder -->
   <script type='text/javascript' src='//medievalkin.com/1d/eb/ac/1debac97d126f28bd1494141fd6c4121.js'></script>
-  <!-- Adsterra Social Bar -->
+  <!-- Social Bar -->
   <script type='text/javascript' src='//medievalkin.com/3e/19/8c/3e198c747eaeed75d22a450c4b682e47.js'></script>
 </head>
 <body>
@@ -52,7 +52,7 @@
         <img class="art" src="publicidad-bob-esponja.gif" alt="Publicidad">
         <div>
           <h1 id="title">Generando enlace</h1>
-          <div class="sub" id="subtitle">Serás redirigido en segundos…</div>
+          <div class="sub">Serás redirigido en segundos…</div>
         </div>
       </div>
 
@@ -60,6 +60,7 @@
       <button id="go" class="cta" disabled>IR AL ENLACE</button>
 
       <div class="adsNative">
+        <!-- Native Banner -->
         <script async="async" data-cfasync="false" src="//medievalkin.com/0ad7d37868e16f0b10082f9caf1e9b8c/invoke.js"></script>
         <div id="container-0ad7d37868e16f0b10082f9caf1e9b8c"></div>
       </div>
@@ -77,28 +78,42 @@
 
   <script>
     const p = new URLSearchParams(location.search);
-    const target = p.get('to') || p.get('url') || p.get('link') || '';
+    function decodeTwice(s){ try{ return decodeURIComponent(decodeURIComponent(s)); }catch(_){ try{ return decodeURIComponent(s); }catch{ return s; } } }
+    const target = decodeTwice(p.get('to') || p.get('url') || p.get('link') || '');
     const name = p.get('name') || '';
-    const titleEl = document.getElementById('title');
-    if (name) titleEl.textContent = "Generando enlace: " + name;
+    if (name) document.getElementById('title').textContent = 'Generando enlace: ' + name;
 
     const goBtn = document.getElementById('go');
     const timerEl = document.getElementById('timer');
 
     const TOTAL = 20;
-    const start = Date.now();
-    let redirected = false;
+    const deadline = Date.now() + TOTAL*1000;
+    let enabled = false, redirected = false, iv = null;
 
-    function remain(){ return Math.max(0, TOTAL - Math.floor((Date.now()-start)/1000)); }
-    function enable(){ goBtn.classList.add('ready'); goBtn.removeAttribute('disabled'); goBtn.style.cursor='pointer'; }
-    function redirect(){ if(redirected) return; redirected = true; enable(); if(target) window.location.replace(target); }
-    function tick(){ const r = remain(); timerEl.textContent = r; if (r===0) redirect(); }
-
-    goBtn.addEventListener('click', ()=>{ if(!goBtn.disabled && target){ window.location.href = target; } });
+    function enable(){
+      if (enabled) return;
+      enabled = true;
+      goBtn.classList.add('ready');
+      goBtn.removeAttribute('disabled');
+      goBtn.style.cursor='pointer';
+    }
+    function redirect(){
+      if (redirected) return;
+      redirected = true;
+      if (iv) clearInterval(iv);
+      enable();
+      if (target) window.location.replace(target);
+    }
+    function tick(){
+      const r = Math.max(0, Math.ceil((deadline - Date.now())/1000));
+      timerEl.textContent = r;
+      if (r === 0) redirect();
+    }
+    goBtn.addEventListener('click', ()=>{ if (!goBtn.disabled && target){ window.location.href = target; } });
 
     setTimeout(enable, TOTAL*1000);
     tick();
-    setInterval(tick, 250);
+    iv = setInterval(tick, 250);
   </script>
 </body>
 </html>
