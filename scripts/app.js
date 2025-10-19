@@ -180,11 +180,7 @@ function openMiniModal(item){ const wrap = document.querySelector(".list-wrap");
   const sub = document.createElement("div"); sub.className="mini-sub";const tagsArr2 = arr(item.tags);sub.innerHTML = tagsArr2.map(tg=>{  const cls = (TAG_COLOR[tg]||tg.toLowerCase());  const fixed = (cls==="+18"||cls==="+"+"18") ? "18" : cls;  const emj = TAG_EMOJI[tg]||""; const lbl = TAG_LABEL[tg]||tg;  return `<span class="tag-pill tag-${fixed}">${emj} ${lbl}</span>`;}).join(" ");hwrap.appendChild(sub); head.appendChild(img); head.appendChild(hwrap);
 
   const btns = document.createElement("div"); btns.className="btns";
-  const dl = button("📥 DESCARGAR","btn btn--dl", ()=>{
-    const link = safe(item.descargar, item.link || "#");
-    try{ if (window.openAdInterstitial) window.openAdInterstitial(link); else window.open(link,"_blank","noopener"); }
-    catch{ window.open(link,"_blank","noopener"); }
-  });
+  const dl = button("📥 DESCARGAR","btn btn--dl", ()=>{ const link = safe(item.descargar, item.link || "#"); const name = safe(item.nombre, item.id || "Publicación"); try{ window.open(`ads/index.html?target=${encodeURIComponent(link)}&title=${encodeURIComponent(name)}`,"_blank","noopener"); } catch{ window.open(`ads/index.html?target=${encodeURIComponent(link)}&title=${encodeURIComponent(name)}`,"_blank"); } });
   const pwd = button("🔑 CONTRASEÑA","btn btn--pwd", ()=>{
     const p = safe(item.contraseña, item.password || ""); if(!p){ alert("Sin contraseña"); return; }
     navigator.clipboard.writeText(p).then(()=> { pwd.textContent="✅ COPIADA"; setTimeout(()=> pwd.textContent="🔑 CONTRASEÑA", 1200); });
@@ -193,7 +189,7 @@ function openMiniModal(item){ const wrap = document.querySelector(".list-wrap");
     const s = safe(item.comprar, item.store || "#"); if (s && s!=="#") window.open(s,"_blank","noopener");
   });
   btns.appendChild(dl); btns.appendChild(pwd); btns.appendChild(buy);
-  aside.appendChild(head); aside.appendChild(btns); try{ const d=document.querySelector("#mini-modal .btn-dl"); if(d){ d.addEventListener("click",(ev)=>{ev.preventDefault?.();ev.stopPropagation?.(); const t=encodeURIComponent(safe(item.descargar,"")); const name=encodeURIComponent(safe(item.nombre,item.id||"Publicación")); window.open(`ads/index.html?target=${t}&title=${name}`,"_blank"); }); } }catch(_){ }
+  aside.appendChild(head); aside.appendChild(btns); try{ const d=document.querySelector("#mini-modal .btn.btn--dl"); if(d){ d.addEventListener("click",(ev)=>{ ev.preventDefault?.(); ev.stopPropagation?.(); const link=safe(item.descargar,item.link||"#"); const name=safe(item.nombre,item.id||"Publicación"); window.open(`ads/index.html?target=${encodeURIComponent(link)}&title=${encodeURIComponent(name)}`,"_blank","noopener"); }); }}catch(_){ } try{ const d=document.querySelector("#mini-modal .btn-dl"); if(d){ d.addEventListener("click",(ev)=>{ev.preventDefault?.();ev.stopPropagation?.(); const t=encodeURIComponent(safe(item.descargar,"")); const name=encodeURIComponent(safe(item.nombre,item.id||"Publicación")); window.open(`ads/index.html?target=${t}&title=${name}`,"_blank"); }); } }catch(_){ }
 
   document.addEventListener("keydown", (e)=>{
     if (e.key === "Escape") { wrap.classList.remove("mini-open"); aside.setAttribute("aria-hidden","true"); aside.innerHTML=""; try{ history.replaceState(null,"", location.pathname + location.search); }catch(_){ } document.querySelectorAll(".pub-item").forEach(n=> n.classList.remove("selected"));
