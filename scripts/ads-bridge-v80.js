@@ -1,9 +1,10 @@
 
-// v84 — ULTRA CATCH: intercepta pointerdown/mousedown/touchstart/click y reescribe hrefs continuamente
+// v85 — SAFE intercept: sólo prevenimos si tenemos interstitial listo
 (function(){
   const INTERSTITIAL_URL = "ads/interstitial-v80.html";
   const SECONDS = 20;
   const norm = (s)=> (s||"").toLowerCase().replace(/\s+/g,' ').trim();
+
   const makeInterUrl = (to) => {
     if(!to) return null;
     try { new URL(to); } catch(e) { return null; }
@@ -12,84 +13,82 @@
     u.searchParams.set('s', String(SECONDS));
     return u.pathname + u.search;
   };
-  function getSelectedDownloadUrl(){
+
+  function getFromState(){
     try{
       if(window.app && app.state){
         const id = app.state.selectedId;
-        const it = (app.state.all||[]).find(x => x.id === id);
+        const it = (app.state.all||[]).find(x=>x.id===id);
+        if(it && it.descargar) return it.descargar;
+      }
+    }catch(e){}
+    try{
+      if(window.state && state.selectedId && Array.isArray(state.all)){
+        const it = state.all.find(x=>x.id===state.selectedId);
         if(it && it.descargar) return it.descargar;
       }
     }catch(e){}
     return null;
   }
+
   const mm = document.getElementById('mini-modal');
 
-  function pickDownloadBtn(){
+  function findDownloadAnchor(){
     if(!mm) return null;
-    const all = mm.querySelectorAll('.btns a[href], .btns button, .btns .btn, a.btn[href]');
-    let c = null;
-    all.forEach(el=>{ if(!c && norm(el.textContent).includes('descargar')) c = el; });
-    return c || all[0] || null;
+    const anchors = mm.querySelectorAll('.btns a[href], a.btn[href], a.button[href]');
+    for(const a of anchors){
+      if(norm(a.textContent).includes('descargar')) return a;
+    }
+    return anchors[0] || null;
   }
 
-  function currentDirectUrl(el){
-    if(!el) return null;
-    return el.getAttribute('href') || el.getAttribute('data-href') || null;
+  function resolveDirectUrl(clicked){
+    // 1) closest anchor href
+    const a = clicked.closest && clicked.closest('a[href]');
+    if(a && a.getAttribute('href')) return a.getAttribute('href');
+
+    // 2) anchor de descargar dentro del mini-modal
+    const ad = findDownloadAnchor();
+    if(ad && ad.getAttribute('href')) return ad.getAttribute('href');
+
+    // 3) from app state
+    const st = getFromState();
+    if(st) return st;
+
+    return null;
   }
 
-  function ensureInter(el){
-    const direct = currentDirectUrl(el) || getSelectedDownloadUrl();
+  function rewriteAnchorHref(){
+    const a = findDownloadAnchor();
+    if(!a) return;
+    const direct = a.getAttribute('href') || getFromState();
     const inter = makeInterUrl(direct);
-    if(!inter) return null;
-    if(el.tagName === 'A'){
-      el.setAttribute('href', inter);
-      el.removeAttribute('target');
-    } else {
-      el.setAttribute('data-href', inter);
-    }
-    el.dataset.adsBound = 'v84';
-    return inter;
+    if(inter) a.setAttribute('href', inter);
   }
 
-  function forceRewriteBurst(durationMs=2000){
-    const start = Date.now();
-    const tid = setInterval(()=>{
-      const btn = pickDownloadBtn();
-      if(btn) ensureInter(btn);
-      if(Date.now()-start > durationMs) clearInterval(tid);
-    }, 50);
-  }
-
-  function goInter(){
-    const btn = pickDownloadBtn();
-    const inter = ensureInter(btn);
-    if(inter){
-      window.location.href = inter;
-      return true;
-    }
-    return false;
-  }
-
-  // Capturar múltiples eventos para adelantarnos a navegaciones por mousedown/pointerdown
-  const events = ['pointerdown','mousedown','touchstart','click'];
-  function handler(ev){
-    const inMini = ev.target.closest && ev.target.closest('#mini-modal');
-    if(!inMini) return;
-    const btn = ev.target.closest('.btns a, .btns button, .btns .btn, a.btn');
-    if(!btn) return;
-    const isDownload = norm(btn.textContent).includes('descargar') || btn === pickDownloadBtn();
-    if(!isDownload) return;
-    try{ ev.preventDefault(); ev.stopPropagation(); ev.stopImmediatePropagation(); }catch(e){}
-    forceRewriteBurst(1500);
-    goInter();
-  }
-  events.forEach(evt => document.addEventListener(evt, handler, true));
-
-  // Reescritura al render
+  // Reescribe cuando cambia el mini-modal
   if(mm){
-    const mo = new MutationObserver(()=>{ forceRewriteBurst(1500); });
+    const mo = new MutationObserver(()=> rewriteAnchorHref());
     mo.observe(mm, {childList:true, subtree:true});
   }
-  // primer burst por si ya está renderizado
-  forceRewriteBurst(1000);
+  // Intento inicial
+  rewriteAnchorHref();
+
+  // Intercepta click en mini-modal (sólo si tenemos a dónde ir)
+  function onClick(ev){
+    const inMini = ev.target.closest && ev.target.closest('#mini-modal');
+    if(!inMini) return;
+    const btn = ev.target.closest('.btns a, a.btn, a.button, .btns button, .btns .btn');
+    if(!btn) return;
+    if(!norm(btn.textContent).includes('descargar')) return;
+
+    const direct = resolveDirectUrl(btn);
+    const inter = makeInterUrl(direct);
+    if(!inter) return; // sin inter, dejamos que fluya el click normal
+
+    ev.preventDefault();
+    ev.stopPropagation();
+    window.location.href = inter;
+  }
+  document.addEventListener('click', onClick, true);
 })();
