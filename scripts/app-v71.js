@@ -182,7 +182,35 @@ function openMiniModal(item){
   });
   btns.appendChild(dl); btns.appendChild(pwd); btns.appendChild(buy);
   aside.appendChild(head); aside.appendChild(btns);
-  /* DOWNLOAD INTERSTITIAL OVERRIDE */
+  
+  /* INTERSTITIAL DELEGATE ON ASIDE */
+  (function(){
+    try{
+      const gate = (u)=> "ads/linkgate.html?to="+encodeURIComponent(u);
+      aside.addEventListener('click', function(e){
+        const target = e.target.closest('a,button');
+        if(!target) return;
+        const label = (target.textContent||'').toLowerCase();
+        if(label.includes('descargar')){
+          e.preventDefault(); e.stopPropagation();
+          const original = (item.enlace || item.link || item.descarga ||
+                            target.dataset.url || target.getAttribute('data-url') ||
+                            target.getAttribute('data-original') ||
+                            target.getAttribute('href') || '').trim();
+          if(original){
+            window.open(gate(original), '_blank', 'noopener');
+          }
+        }
+      }, true);
+      const dl = aside.querySelector('a,button');
+      if (dl && (dl.textContent||'').toLowerCase().includes('descargar')){
+        dl.setAttribute('href', 'javascript:void(0)');
+        dl.setAttribute('data-original', (item.enlace||item.link||item.descarga||'').trim());
+        dl.setAttribute('target','_blank');
+      }
+    }catch(e){}
+  })();
+/* DOWNLOAD INTERSTITIAL OVERRIDE */
   (function(){
     try{
       const gate = (u)=> u ? ("ads/linkgate.html?to="+encodeURIComponent(u)) : "#";
