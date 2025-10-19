@@ -213,3 +213,54 @@ body{
 /* ===== END PATCH v75 ===== */
 
 /* ======= PATCH V75 END ======= */
+
+
+/* ======= PATCH V77 START ======= */
+
+/* ===== PATCH v77 — Mini-modal derecha reforzado ===== */
+/* Aire bajo buscador (por si se perdió) */
+.searchbox{ margin-bottom:12px; }
+
+/* Estructura mini-modal a columna */
+#mini-modal .mini-head{
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  gap:10px !important;
+}
+
+/* Imagen grande y centrada */
+#mini-modal .mini-head img,
+#right .mini-head img{
+  width:100% !important;
+  height:auto !important;
+  max-height:260px !important;
+  object-fit:cover !important;
+  object-position:center !important;
+  border-radius:12px !important;
+  border:1px solid rgba(255,255,255,.1) !important;
+  margin:0 auto !important;
+}
+
+/* Título + meta centrados */
+#mini-modal .mini-title,
+#right .mini-title{
+  text-align:center !important;
+  margin-top:4px !important;
+}
+#mini-modal .mini-sub,
+#right .mini-sub{
+  text-align:center !important;
+  margin:4px 0 8px 0 !important;
+}
+
+/* Botonera en columna, sin tocar estilos originales */
+#mini-modal .btns,
+#right .mini-modal .btns{
+  display:grid !important;
+  grid-template-columns:1fr !important;
+  gap:10px !important;
+}
+/* ===== FIN PATCH v77 ===== */
+
+/* ======= PATCH V77 END ======= */
