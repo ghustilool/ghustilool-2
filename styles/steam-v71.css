@@ -264,3 +264,68 @@ body{
 /* ===== FIN PATCH v77 ===== */
 
 /* ======= PATCH V77 END ======= */
+
+
+/* ======= PATCH V78 START ======= */
+
+/* ===== PATCH v78 — Modal de video (overlay) ===== */
+.video-overlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn .15s ease;
+}
+@keyframes fadeIn{ from{opacity:0} to{opacity:1} }
+
+.video-modal{
+  position: relative;
+  width: min(920px, 92vw);
+  aspect-ratio: 16/9;
+  background: #0e1420;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 14px;
+  box-shadow: 0 12px 40px rgba(0,0,0,.5);
+  overflow: hidden;
+}
+
+.video-modal iframe{
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+.video-close{
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: rgba(0,0,0,.45);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.15);
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  transition: transform .12s ease, background .12s ease;
+}
+.video-close:hover{ transform: scale(1.06); background: rgba(0,0,0,.6); }
+
+/* Botón Tutorial en el mini-modal: mismo estilo que tus botones */
+.btn--tutorial{
+  /* se hereda del tema; solo aseguramos icono + ancho */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+/* ===== FIN PATCH v78 ===== */
+
+/* ======= PATCH V78 END ======= */
