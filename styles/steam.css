@@ -358,3 +358,15 @@ body{
 .pub-sub{ display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
 
 .mini-head .mini-sub{ display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
+
+.mini-head .mini-share{
+  margin-top: 8px;
+  background: transparent;
+  border: 1px dashed rgba(255,255,255,.18);
+  color: #cfe9ff;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.mini-head .mini-share:hover{ border-style: solid; }

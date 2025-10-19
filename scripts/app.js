@@ -171,8 +171,7 @@ function selectRow(li){
   document.querySelectorAll(".pub-item").forEach(n=> n.classList.remove("selected"));
   li.classList.add("selected");
 }
-function openMiniModal(item){ try{ if(item && item.id){ location.hash = "#" + encodeURIComponent(item.id); } }catch(_){} 
-  const wrap = document.querySelector(".list-wrap"); wrap?.classList.add("mini-open");
+function openMiniModal(item){ const wrap = document.querySelector(".list-wrap"); wrap?.classList.add("mini-open");
   const aside = document.getElementById("mini-modal"); aside.setAttribute("aria-hidden","false"); aside.innerHTML="";
   const head = document.createElement("div"); head.className="mini-head";
   const img = document.createElement("img"); img.src = safe(item.imagen,"https://picsum.photos/200/200?blur=2"); img.alt = safe(item.nombre,"Publicación");
@@ -197,9 +196,7 @@ function openMiniModal(item){ try{ if(item && item.id){ location.hash = "#" + en
   aside.appendChild(head); aside.appendChild(btns);
 
   document.addEventListener("keydown", (e)=>{
-    if (e.key === "Escape") {
-      wrap.classList.remove("mini-open"); aside.setAttribute("aria-hidden","true"); aside.innerHTML=""; 
-      document.querySelectorAll(".pub-item").forEach(n=> n.classList.remove("selected"));
+    if (e.key === "Escape") { wrap.classList.remove("mini-open"); aside.setAttribute("aria-hidden","true"); aside.innerHTML=""; try{ history.replaceState(null,"", location.pathname + location.search); }catch(_){ } document.querySelectorAll(".pub-item").forEach(n=> n.classList.remove("selected"));
     }
   }, { once:true });
 }
@@ -244,9 +241,10 @@ function openFromHash(){
       (safe(x.id,"").toLowerCase() === wanted) ||
       (safe(x.nombre,"").toLowerCase() === wanted)
     );
-    if(it){
-      // open modal
+    if(it){ // open modal
       openMiniModal(it);
+      // clear hash to keep URL clean
+      try{ history.replaceState(null,"", location.pathname + location.search); }catch(_){ }
       // select & scroll list row if present
       const key = safe(it.id, safe(it.nombre,"")).toLowerCase().replace(/\s+/g,"-");
       const row = document.querySelector(`.pub-item[data-id="${key}"]`);
