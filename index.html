@@ -8,7 +8,7 @@
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <!-- Styles -->
-  <link rel="stylesheet" href="styles/steam-v71.css?v=71" />
+  <link rel="stylesheet" href="styles/steam-v71.css?v=75" />
 </head>
 <body>
   <main class="container">
@@ -37,6 +37,16 @@
     <section class="list-block">
       <div class="list-header">
         <div class="section-title">PUBLICACIONES</div>
+<!-- v75 filters inline start -->
+<div class="filters-inline" role="toolbar">
+  <button class="tag-btn chip tag-offline" data-tag="Offline">🎮 OFFLINE</button>
+  <button class="tag-btn chip tag-lan" data-tag="LAN">🔌 LAN</button>
+  <button class="tag-btn chip tag-online" data-tag="Online">🌐 ONLINE</button>
+  <button class="tag-btn chip tag-+18" data-tag="+18">🔞 +18</button>
+  <button class="tag-btn chip tag-programas" data-tag="Programas">🧰 PROGRAMAS</button>
+</div>
+<!-- v75 filters inline end -->
+
         <div class="searchbox">
           <input id="search" type="text" placeholder="Buscar" autocomplete="off" />
           <button id="searchBtn" aria-label="Buscar">🔎</button>
@@ -54,6 +64,7 @@
 
   <!-- Scripts -->
   <script type="module" src="scripts/app-v71.js?v=71"></script>
+<script src="scripts/filters-inline-v75.js?v=75"></script>
   <script src="/ads/ads-modal-lite.js?v=1"></script>
 </body>
 </html>

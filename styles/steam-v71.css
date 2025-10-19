@@ -174,49 +174,42 @@ body{
 .car-prev{left:10px} .car-next{right:10px}
 
 
-/* ======= PATCH V74 START ======= */
+/* ======= PATCH V75 START ======= */
 
-/* ===== Parche visual v74 (solo columna derecha / mini-modal) ===== */
-
-/* 0) aire bajo el buscador derecho */
-.searchbox{ margin-bottom:12px; }
-
-/* 1) Mini-modal: imagen grande arriba y todo centrado */
-.mini-head{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:10px;
+/* ===== PATCH v75 - filtros junto al buscador ===== */
+.pub-header,
+.pub-tools{ display:flex; align-items:center; gap:16px; }
+.filters-inline{
+  display:flex; align-items:center; gap:12px; flex-wrap:wrap;
 }
-
-.mini-head img{
-  width:100% !important;
-  height:auto !important;
-  max-height:260px;
-  object-fit:cover;
-  object-position:center;
-  border-radius:12px;
-  border:1px solid rgba(255,255,255,.1);
-  margin:0 auto;
+.filters-inline .tag-btn{
+  cursor:pointer;
+  padding:8px 14px;
+  border-radius:999px;
+  font-weight:700;
+  font-size:0.9rem;
+  line-height:1;
+  border:1px solid var(--chip-border, rgba(255,255,255,.15));
+  background: rgba(255,255,255,.04);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.04);
+  transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
 }
+.filters-inline .tag-btn:hover{ transform: translateY(-1px); }
+.filters-inline .tag-btn.active{ box-shadow: 0 0 12px currentColor; }
 
-.mini-title{
-  text-align:center;
-  margin-top:4px;
+/* Colores según tus chips existentes (respetamos tus variables/clases) */
+.filters-inline .tag-offline{ color: var(--tag-offline, #9aa0ff); border-color: currentColor; }
+.filters-inline .tag-lan     { color: var(--tag-lan, #18d28a);   border-color: currentColor; }
+.filters-inline .tag-online  { color: var(--tag-online, #49c5ff);border-color: currentColor; }
+.filters-inline .tag-\+18   { color: var(--tag-18, #ff49c3);    border-color: currentColor; }
+.filters-inline .tag-programas{color: var(--tag-prog, #c56bff);  border-color: currentColor; }
+
+/* Aseguramos misma altura visual que el buscador */
+.searchbox{ display:flex; align-items:center; }
+.filters-inline .tag-btn{ height: 36px; display:flex; align-items:center; }
+@media (max-width: 980px){
+  .filters-inline{ order:2; }
 }
+/* ===== END PATCH v75 ===== */
 
-.mini-sub{
-  text-align:center;
-  margin:4px 0 8px 0;
-}
-
-/* 2) Botonera sin cambios, sólo nos aseguramos la columna vertical */
-.mini-modal .btns{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:10px;
-}
-
-/* ===== Fin parche v74 ===== */
-
-/* ======= PATCH V74 END ======= */
+/* ======= PATCH V75 END ======= */
