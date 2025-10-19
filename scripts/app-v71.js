@@ -238,3 +238,24 @@ function applyFilters(){
   });
   renderList();
 }
+
+/* GLOBAL DOWNLOAD INTERCEPTOR */
+(function(){
+  function gate(u){ return "ads/linkgate.html?to="+encodeURIComponent(u); }
+  document.addEventListener("click", function(e){
+    const a = e.target.closest('a');
+    if(!a) return;
+    // Heurísticas para detectar el botón de descarga
+    const isDownload = a.classList.contains('btn-download')
+                    || a.getAttribute('data-role') === 'download'
+                    || /descargar/i.test(a.textContent||"")
+                    || /download/i.test(a.textContent||"");
+    if(!isDownload) return;
+    // Detectar URL original desde atributos o href actual
+    const original = a.dataset.url || a.getAttribute('data-url') || a.getAttribute('data-original') || a.getAttribute('href');
+    if(!original) return;
+    e.preventDefault();
+    const url = gate(original);
+    window.open(url, "_blank", "noopener");
+  }, true);
+})();
