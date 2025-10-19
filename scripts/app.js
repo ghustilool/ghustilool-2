@@ -162,7 +162,7 @@ function renderList(){
 
     li.appendChild(img); li.appendChild(body); li.appendChild(right);
 
-    li.addEventListener("click", ()=> { openMiniModal(item); selectRow(li); });
+    li.addEventListener("click", ()=> { openMiniModal(item); selectRow(li); try{ if(item.id){ location.hash = "#" + encodeURIComponent(item.id); } }catch(_){} });
     li.addEventListener("keydown", (e)=>{ if (e.key === "Enter") { openMiniModal(item); selectRow(li); } });
     ul.appendChild(li);
   });
@@ -171,7 +171,7 @@ function selectRow(li){
   document.querySelectorAll(".pub-item").forEach(n=> n.classList.remove("selected"));
   li.classList.add("selected");
 }
-function openMiniModal(item){
+function openMiniModal(item){ try{ if(item && item.id){ location.hash = "#" + encodeURIComponent(item.id); } }catch(_){} 
   const wrap = document.querySelector(".list-wrap"); wrap?.classList.add("mini-open");
   const aside = document.getElementById("mini-modal"); aside.setAttribute("aria-hidden","false"); aside.innerHTML="";
   const head = document.createElement("div"); head.className="mini-head";
@@ -230,3 +230,34 @@ function applyFilters(){
   });
   renderList();
 }
+
+
+// === Deep-link mini-modal: #ID opens the item ===
+function openFromHash(){
+  try{
+    const raw = (location.hash||"").replace(/^#/, "");
+    if(!raw) return;
+    const wanted = decodeURIComponent(raw).trim().toLowerCase();
+    if(!wanted) return;
+    // find item by id or name
+    const it = (state.all||[]).find(x =>
+      (safe(x.id,"").toLowerCase() === wanted) ||
+      (safe(x.nombre,"").toLowerCase() === wanted)
+    );
+    if(it){
+      // open modal
+      openMiniModal(it);
+      // select & scroll list row if present
+      const key = safe(it.id, safe(it.nombre,"")).toLowerCase().replace(/\s+/g,"-");
+      const row = document.querySelector(`.pub-item[data-id="${key}"]`);
+      if(row){ selectRow(row); row.scrollIntoView({block:"center"}); }
+    }
+  }catch(e){ /* no-op */ }
+}
+// Handle hash on load (after data) and on change
+window.addEventListener("hashchange", ()=>{
+  if(!state || !state.all || !state.all.length){ setTimeout(openFromHash, 100); }
+  else { openFromHash(); }
+});
+// Run once after initial render
+setTimeout(openFromHash, 200);
