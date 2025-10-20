@@ -25,8 +25,13 @@
       </div>
       <a id="gh-go" class="gh-btn" href="#" rel="noopener" target="_blank" aria-disabled="true">IR AL ENLACE</a>
 
-      <div class="ad-blocks">
-        <div id="ad-rect-300x250" aria-hidden="true"></div>
+      <div class="ad-rect-center" id="ad-rect-300x250" aria-hidden="true"></div>
+      <div class="native-panel">
+        <div class="native-title">Recomendados</div>
+        <div class="ad-native">
+          <div id="container-0ad7d37868e16f0b10082f9caf1e9b8c"></div>
+        </div>
+      </div>
         <div class="ad-native">
           <div id="container-0ad7d37868e16f0b10082f9caf1e9b8c"></div>
         </div>
@@ -65,6 +70,7 @@
         document.body.appendChild(s);
       }
     }
+
     function placeTop(){
       const top = document.getElementById('ad-top');
       if(!top) return;
@@ -75,11 +81,12 @@
       else { mountIframe(top, KEY_TOP_320, 320, 50); }
       top.className = 'ad-top';
     }
-    function placeBelow(){
+
+    function placeRect(){
       const rect = document.getElementById('ad-rect-300x250');
       mountIframe(rect, KEY_RECT_300, 300, 250);
-      mountNative();
     }
+
     function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
     function mountRails(){
       const L = document.getElementById('gh-rail-left');
@@ -93,7 +100,7 @@
         const vw=window.innerWidth||document.documentElement.clientWidth;
         const vh=window.innerHeight||document.documentElement.clientHeight;
         const need=r.width + 2*(W+GAP) + 24;
-        const showAllowed = vw>=Math.max(900,need);
+        const showAllowed = vw>=Math.max(1180,need); // slightly stricter so rails never crowd
         if(!showAllowed){ L.style.display=R.style.display='none'; return; }
         const top = clamp((vh-H)/2, 12, vh-H-12);
         let leftX = clamp(r.left - GAP - W, 12, vw/2 - W - GAP);
@@ -109,19 +116,9 @@
       window.addEventListener('resize', function(){ clearTimeout(window.__railsR); window.__railsR=setTimeout(mountRails, 150); }, {passive:true});
       window.addEventListener('scroll', function(){ clearTimeout(window.__railsS); window.__railsS=setTimeout(mountRails, 150); }, {passive:true});
     }
-    function addSmartlink(){
-      const wrap = document.createElement('div');
-      wrap.className='ad-smartlink';
-      const a = document.createElement('a');
-      a.href='https://medievalkin.com/xug76izj9j?key=ea49897502094d8df57a18f0d612cbff';
-      a.target='_blank'; a.rel='nofollow noopener';
-      a.textContent='Ofertas recomendadas »';
-      wrap.appendChild(a);
-      const card = document.getElementById('gh-card');
-      if(card) card.appendChild(wrap);
-    }
-    function initAll(){ placeTop(); placeBelow(); mountRails(); addSmartlink(); }
-    window.addEventListener('load', initAll);
+
+    function init(){ placeTop(); placeRect(); mountNative(); mountRails(); }
+    window.addEventListener('load', init);
     window.addEventListener('resize', function(){ clearTimeout(window.__topR); window.__topR=setTimeout(placeTop, 200); }, {passive:true});
   })();
   </script>
