@@ -92,15 +92,20 @@
     const card = document.getElementById('gh-card');
     if(!L || !R || !card) return;
     const r = card.getBoundingClientRect();
-    const GAP = 12, W = 160;
-    // Horizontal lock relative to the card
-    L.style.left = (r.left - GAP - W) + 'px';
-    R.style.left = (r.right + GAP) + 'px';
-    // Vertical centering handled purely by CSS (top:50% + translateY(-50%))
+    const GAP=12, W=160;
+    L.style.left = (r.left - GAP - W)+'px';
+    R.style.left = (r.right + GAP)+'px';
     L.style.top = '50%'; R.style.top = '50%';
-    L.style.transform = 'translateY(-50%)';
-    R.style.transform = 'translateY(-50%)';
-    L.style.display = 'block'; R.style.display = 'block';
+    L.style.transform = 'translateY(-50%)'; R.style.transform = 'translateY(-50%)';
+    L.style.display='block'; R.style.display='block';
+  }
+    L.style.left = (r.left - GAP - W)+'px';
+    R.style.left = (r.right + GAP)+'px';
+    const HL = 600, HR = 300;
+    const topL = Math.max(12, Math.min(window.innerHeight - HL - 12, (window.innerHeight - HL)/2));
+    const topR = Math.max(12, Math.min(window.innerHeight - HR - 12, (window.innerHeight - HR)/2));
+    L.style.top = topL+'px'; R.style.top = topR+'px';
+    L.style.display='block'; R.style.display='block';
   }
 
   // --- countdown & redirect ---
