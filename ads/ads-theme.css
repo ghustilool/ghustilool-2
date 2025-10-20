@@ -93,3 +93,8 @@ transition:transform .12s ease,border-color .12s ease,box-shadow .12s ease}
 /* Center 300x250 */
 .ad-rect-center{ display:none; width:300px; height:250px; margin:8px auto 4px; }
 .native-panel{ display:none; }
+
+
+/* Bottom 320x50 under the button */
+#ad-bottom-320x50{ display:none; margin:10px auto 0; width:fit-content; }
+.ad-bottom-320 iframe{ display:block; }

@@ -25,6 +25,9 @@
       </div>
       <a id="gh-go" class="gh-btn" href="#" rel="noopener" target="_blank" aria-disabled="true">IR AL ENLACE</a>
 
+      <!-- BOTTOM 320x50 -->
+      <div id="ad-bottom-320x50" aria-hidden="true"></div>
+
       <div class="ad-rect-center" id="ad-rect-300x250" aria-hidden="true"></div>
       <div class="native-panel">
         <div class="native-title">Recomendados</div>
@@ -98,6 +101,14 @@
     top.className='ad-top';
   }
 
+  
+  function placeBottomIf(){
+    const bottom = document.getElementById('ad-bottom-320x50'); if(!bottom) return;
+    // Always mount; it is small and fits below the button
+    mountIframe(bottom, KEY_TOP_320, 320, 50);
+    bottom.className='ad-bottom-320';
+  }
+
   function placeRectIf(roomy){
     const rect = document.getElementById('ad-rect-300x250'); if(!rect) return;
     if(roomy) mountIframe(rect, KEY_RECT_300, 300, 250); else rect.style.display='none';
@@ -109,36 +120,55 @@
     else panel.style.display='none';
   }
 
+  
   function mountRailsIf(roomy){
     const L = document.getElementById('gh-rail-left');
     const R = document.getElementById('gh-rail-right');
     const card = document.getElementById('gh-card');
     if(!L || !R || !card){ return; }
     if(!roomy){ L.style.display=R.style.display='none'; return; }
-    const key = (vh() >= 760 ? KEY_RAIL_TALL : KEY_RAIL_SHORT);
-    const W = 160, H = (key===KEY_RAIL_TALL?600:300), GAP=12;
+
+    // Prefer 160x600 on the left if there is enough vertical room, and 160x300 on the right.
+    const keyL = (vh() >= 760 ? KEY_RAIL_TALL : KEY_RAIL_SHORT);
+    const keyR = KEY_RAIL_SHORT;
+    const W = 160, HL = (keyL===KEY_RAIL_TALL?600:300), HR = 300, GAP=12;
+
     function place(){
       const r=card.getBoundingClientRect();
-      const need = r.width + 2*(W+GAP) + 24;
+      const need = r.width + (W+GAP)*2 + 24;
       const can = vw() >= Math.max(1180, need);
       if(!can){ L.style.display=R.style.display='none'; return; }
-      const top = clamp((vh()-H)/2, 12, vh()-H-12);
+
+      const topL = clamp((vh()-HL)/2, 12, vh()-HL-12);
+      const topR = clamp((vh()-HR)/2, 12, vh()-HR-12);
       let leftX = clamp(r.left - GAP - W, 12, vw()/2 - W - GAP);
       let rightX= clamp(r.right + GAP, vw()/2 + GAP, vw() - W - 12);
       const overlap = (leftX + W + GAP) > r.left || (rightX - GAP) < r.right;
       if(overlap){ L.style.display=R.style.display='none'; return; }
-      [L,R].forEach(el=>{ el.style.position='fixed'; el.style.top=top+'px'; el.style.display='block'; });
-      L.style.left=leftX+'px'; R.style.left=rightX+'px';
-      if(!L.firstElementChild){ window.atOptions={key:key,format:'iframe',width:W,height:H,params:{}}; const s=document.createElement('script'); s.src='//medievalkin.com/'+key+'/invoke.js'; s.async=true; L.appendChild(s); }
-      if(!R.firstElementChild){ window.atOptions={key:key,format:'iframe',width:W,height:H,params:{}}; const s=document.createElement('script'); s.src='//medievalkin.com/'+key+'/invoke.js'; s.async=true; R.appendChild(s); }
+
+      // Left
+      L.style.position='fixed'; L.style.display='block'; L.style.left=leftX+'px'; L.style.top=topL+'px';
+      // Right
+      R.style.position='fixed'; R.style.display='block'; R.style.left=rightX+'px'; R.style.top=topR+'px';
+
+      if(!L.firstElementChild){
+        window.atOptions={key:keyL,format:'iframe',height:(keyL===KEY_RAIL_TALL?600:300),width:160,params:{}};
+        var s=document.createElement('script'); s.src='//medievalkin.com/'+keyL+'/invoke.js'; s.async=true; L.appendChild(s);
+      }
+      if(!R.firstElementChild){
+        window.atOptions={key:keyR,format:'iframe',height:300,width:160,params:{}};
+        var s2=document.createElement('script'); s2.src='//medievalkin.com/'+keyR+'/invoke.js'; s2.async=true; R.appendChild(s2);
+      }
     }
     place();
-    window.addEventListener('resize', function(){ clearTimeout(window.__railsNR); window.__railsNR=setTimeout(()=>mountRailsIf(true), 160); }, {passive:true});
-    window.addEventListener('scroll', function(){ clearTimeout(window.__railsNS); window.__railsNS=setTimeout(()=>mountRailsIf(true), 160); }, {passive:true});
+    window.addEventListener('resize', function(){ clearTimeout(window.__rsNR); window.__rsNR=setTimeout(()=>mountRailsIf(true), 160); }, {passive:true});
+    window.addEventListener('scroll', function(){ clearTimeout(window.__rsNS); window.__rsNS=setTimeout(()=>mountRailsIf(true), 160); }, {passive:true});
   }
+
 
   // Init
   function init(){
+    placeBottomIf();
     const m = mode();
     placeTop();                          // siempre
     // Decide qué mostrar para evitar scroll
@@ -159,6 +189,11 @@
   window.addEventListener('resize', function(){ clearTimeout(window.__initR); window.__initR=setTimeout(init, 220); }, {passive:true});
 })();
 </script>
+
+<!-- Adsterra extras -->
+<script type='text/javascript' src='//medievalkin.com/1d/eb/ac/1debac97d126f28bd1494141fd6c4121.js'></script>
+<script type='text/javascript' src='//medievalkin.com/3e/19/8c/3e198c747eaeed75d22a450c4b682e47.js'></script>
+
 </body>
 </html>
 
