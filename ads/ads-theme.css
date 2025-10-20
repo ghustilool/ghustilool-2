@@ -70,3 +70,19 @@ transition:transform .12s ease,border-color .12s ease,box-shadow .12s ease}
 
 
 /* Bottom 320x50 under the button */
+
+
+/* === DESKTOP-ONLY AD SLOTS === */
+#ad-top{ margin:6px auto 12px; width:fit-content; }
+#ad-top iframe{ display:block; }
+
+#ad-native{ margin:10px auto 0; width:min(640px,92vw); }
+#ad-native iframe{ max-width:100%; }
+
+.rail{ position:fixed; width:160px; z-index:5; display:none; }
+#rail-left{ left:12px; }
+#rail-right{ right:12px; }
+
+@media (max-width: 1180px){
+  .rail{ display:none !important; }
+}

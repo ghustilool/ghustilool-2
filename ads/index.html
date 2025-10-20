@@ -8,8 +8,10 @@
 </head>
 <body>
   <div id="gh-center">
-<!-- TOP BANNER -->
-<div id="gh-card">
+    <aside id="rail-left" class="rail" aria-hidden="true"></aside>
+    <aside id="rail-right" class="rail" aria-hidden="true"></aside>
+    <div id="ad-top" aria-hidden="true"></div>
+    <div id="gh-card">
       <img id="gh-bob" src="bob.gif" alt="Publicidad" />
       <div class="gh-text">
         <div class="gh-title">Redirigiendo a: <span id="gh-title">...</span></div>
@@ -19,6 +21,7 @@
         <div class="ring" id="gh-circle" style="--p:0"><span id="gh-count-num">20</span></div>
       </div>
       <a id="gh-go" class="gh-btn" href="#" rel="noopener" target="_blank" aria-disabled="true">IR AL ENLACE</a>
+      <div id="ad-native" aria-hidden="true"></div>
 
       <!-- BOTTOM 320x50 -->
 <div class="ad-rect-center" id="ad-rect-300x250" aria-hidden="true"></div>
@@ -32,6 +35,45 @@
       </div>
     </div>
   </div>
+
+<script>
+(function(){
+  function ins(el, file){
+    fetch('codes/'+file).then(r=>r.text()).then(t=>{ el.innerHTML = t; el.removeAttribute('aria-hidden'); });
+  }
+  function placeRails(){
+    const L = document.getElementById('rail-left');
+    const R = document.getElementById('rail-right');
+    const card = document.getElementById('gh-card');
+    if(!L || !R || !card){ return; }
+    const r = card.getBoundingClientRect();
+    const W = 160, GAP = 12;
+    const leftX = Math.max(12, r.left - GAP - W);
+    const rightX = Math.max(12, window.innerWidth - (r.right + GAP + W));
+    if(leftX < 12 || rightX < 12){ L.style.display=R.style.display='none'; return; }
+    L.style.left = (r.left - GAP - W)+'px';
+    R.style.left = (r.right + GAP)+'px';
+    const HL = 600, HR = 300;
+    const topL = Math.max(12, Math.min(window.innerHeight - HL - 12, (window.innerHeight - HL)/2));
+    const topR = Math.max(12, Math.min(window.innerHeight - HR - 12, (window.innerHeight - HR)/2));
+    L.style.top = topL+'px'; R.style.top = topR+'px';
+    L.style.display='block'; R.style.display='block';
+  }
+  window.addEventListener('load', function(){
+    ins(document.getElementById('ad-top'), 'banner-728x90.html');
+    ins(document.getElementById('rail-left'), 'rail-left-160x600.html');
+    ins(document.getElementById('rail-right'), 'rail-right-160x300.html');
+    ins(document.getElementById('ad-native'), 'native.html');
+    // background extras
+    fetch('codes/popunder.html').then(r=>r.text()).then(t=>{ const s=document.createElement('div'); s.innerHTML=t; document.body.appendChild(s); });
+    fetch('codes/socialbar.html').then(r=>r.text()).then(t=>{ const s=document.createElement('div'); s.innerHTML=t; document.body.appendChild(s); });
+    placeRails();
+  }, {once:true});
+  window.addEventListener('resize', function(){ clearTimeout(window.__rel); window.__rel=setTimeout(placeRails, 150); });
+  window.addEventListener('scroll', function(){ clearTimeout(window.__res); window.__res=setTimeout(placeRails, 150); });
+})();
+</script>
+
 </body>
 </html>
 
