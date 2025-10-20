@@ -87,20 +87,20 @@
 
   // --- place rails ---
   function placeRails(){
-    const L = $('#rail-left'), R = $('#rail-right'), card = $('#gh-card');
+    const L = document.getElementById('rail-left');
+    const R = document.getElementById('rail-right');
+    const card = document.getElementById('gh-card');
     if(!L || !R || !card) return;
     const r = card.getBoundingClientRect();
-    const W = 160, GAP = 12;
-    const leftX = Math.max(12, r.left - GAP - W);
-    const rightX = Math.max(12, window.innerWidth - (r.right + GAP + W));
-    /* always show rails */
-    L.style.left = (r.left - GAP - W)+'px';
-    R.style.left = (r.right + GAP)+'px';
-    const HL = 600, HR = 300;
-    const topL = Math.max(12, Math.min(window.innerHeight - HL - 12, (window.innerHeight - HL)/2));
-    const topR = Math.max(12, Math.min(window.innerHeight - HR - 12, (window.innerHeight - HR)/2));
-    L.style.top = topL+'px'; R.style.top = topR+'px';
-    L.style.display='block'; R.style.display='block';
+    const GAP = 12, W = 160;
+    // Horizontal lock relative to the card
+    L.style.left = (r.left - GAP - W) + 'px';
+    R.style.left = (r.right + GAP) + 'px';
+    // Vertical centering handled purely by CSS (top:50% + translateY(-50%))
+    L.style.top = '50%'; R.style.top = '50%';
+    L.style.transform = 'translateY(-50%)';
+    R.style.transform = 'translateY(-50%)';
+    L.style.display = 'block'; R.style.display = 'block';
   }
 
   // --- countdown & redirect ---
@@ -146,8 +146,8 @@
     placeRails();
     if(target) startCountdown(target);
   }, {once:true});
-  window.addEventListener('resize', function(){ clearTimeout(window.__rel); window.__rel=setTimeout(placeRails, 150); });
-  window.addEventListener('scroll', function(){ clearTimeout(window.__res); window.__res=setTimeout(placeRails, 150); });
+  window.__rel=setTimeout(placeRails, 150); });
+  window.__res=setTimeout(placeRails, 150); });
 })();
 </script>
 

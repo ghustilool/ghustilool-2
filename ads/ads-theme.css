@@ -83,3 +83,30 @@ transition:transform .12s ease,border-color .12s ease,box-shadow .12s ease}
 #rail-left{ left:12px; }
 #rail-right{ right:12px; }
 
+
+
+/* Native under button: clamp and center */
+#ad-native{
+  width:100%;
+  max-width:500px;
+  margin:20px auto 0;
+  display:flex;
+  justify-content:center;
+  overflow:hidden;
+}
+#ad-native iframe, #ad-native > div{
+  max-width:100%;
+  height:auto;
+}
+
+/* Static rails: always fixed & vertically centered */
+.rail{
+  position:fixed;
+  width:160px;
+  z-index:5;
+  display:block; /* ensure visible */
+  top:50%;
+  transform:translateY(-50%);
+}
+#rail-left{ left:12px; }
+#rail-right{ right:12px; }
