@@ -37,64 +37,67 @@
   <!-- Adsterra | Native Banner -->
   <script async data-cfasync="false" src="//medievalkin.com/0ad7d37868e16f0b10082f9caf1e9b8c/invoke.js"></script>
 
-  <!-- Adsterra | Dual Rails 160x600 (left & right) -->
-  <script>
-  (function(){
-    const KEY='7c1254ef65ce8a0af419fb9f19c0036e';
-    const GAP=12, W=160, H=600;
-    function mount(el,id){
-      if(!el) return;
-      if(!document.getElementById(id)){
-        const slot=document.createElement('div'); slot.id=id; el.appendChild(slot);
-        window.atOptions={key:KEY,format:'iframe',height:H,width:W,params:{}};
-        const s=document.createElement('script'); s.src='//medievalkin.com/'+KEY+'/invoke.js'; s.async=true; slot.appendChild(s);
+  <!-- Adsterra | Dual Rails 160x600 (left & right, hidden until mounted) -->
+<script>
+(function(){
+  const KEY='7c1254ef65ce8a0af419fb9f19c0036e';
+  const GAP=12, W=160, H=600;
+  function hasChild(el){ return el && el.firstElementChild; }
+  function mount(el,id){
+    if(!el || document.getElementById(id)) return;
+    const slot=document.createElement('div'); slot.id=id; el.appendChild(slot);
+    window.atOptions={key:KEY,format:'iframe',height:H,width:W,params:{}};
+    const s=document.createElement('script'); s.src='//medievalkin.com/'+KEY+'/invoke.js'; s.async=true; slot.appendChild(s);
+  }
+  function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
+  function place(){
+    try{
+      const card=document.getElementById('gh-card');
+      const L=document.getElementById('gh-rail-left');
+      const R=document.getElementById('gh-rail-right');
+      if(!card||!L||!R) return;
+      const r=card.getBoundingClientRect();
+      const vw=window.innerWidth||document.documentElement.clientWidth;
+      const vh=window.innerHeight||document.documentElement.clientHeight;
+      const need=r.width + 2*(W+GAP) + 24;
+      const showAllowed = vw>=Math.max(900,need);
+      if(!showAllowed){
+        L.style.display=R.style.display='none';
+        L.setAttribute('aria-hidden','true'); R.setAttribute('aria-hidden','true');
+        return;
       }
-    }
-    function clamp(v, a, b){ return Math.max(a, Math.min(b, v)); }
-    function place(){
-      try{
-        const card=document.getElementById('gh-card');
-        const L=document.getElementById('gh-rail-left');
-        const R=document.getElementById('gh-rail-right');
-        if(!card||!L||!R) return;
-        const r=card.getBoundingClientRect();
-        const vw=window.innerWidth||document.documentElement.clientWidth;
-        const vh=window.innerHeight||document.documentElement.clientHeight;
-        const need=r.width + 2*(W+GAP) + 24;
-        const show=vw>=Math.max(900,need);
-        if(!show){
-          L.style.display=R.style.display='none';
-          L.setAttribute('aria-hidden','true'); R.setAttribute('aria-hidden','true');
-          return;
-        }
+      // Compute positions
+      const top = clamp((vh-H)/2, 12, vh-H-12);
+      let leftX = clamp(r.left - GAP - W, 12, vw/2 - W - GAP);
+      let rightX = clamp(r.right + GAP, vw/2 + GAP, vw - W - 12);
+      const overlap = (leftX + W + GAP) > r.left || (rightX - GAP) < r.right;
+      if(overlap){
+        L.style.display=R.style.display='none';
+        L.setAttribute('aria-hidden','true'); R.setAttribute('aria-hidden','true');
+        return;
+      }
+      // Position but keep hidden until mounted
+      [L,R].forEach(el => {
+        el.style.position='fixed';
+        el.style.top=top+'px';
+      });
+      L.style.left = leftX+'px'; R.style.left = rightX+'px';
+      // Mount if needed
+      mount(L,'ad-rail-left-160x600'); mount(R,'ad-rail-right-160x600');
+      // Show only once ad slot exists
+      if(hasChild(L) && hasChild(R)){
         L.removeAttribute('aria-hidden'); R.removeAttribute('aria-hidden');
-        // vertical clamp
-        const top = clamp((vh-H)/2, 12, vh-H-12);
-        // desired positions next to card
-        let leftX = r.left - GAP - W;
-        let rightX = r.right + GAP;
-        // clamp inside viewport and keep on their sides
-        leftX = clamp(leftX, 12, vw/2 - W - GAP);
-        rightX = clamp(rightX, vw/2 + GAP, vw - W - 12);
-        // if still overlapping (e.g., small widths), hide
-        const overlap = (leftX + W + GAP) > r.left || (rightX - GAP) < r.right;
-        if(overlap){
-          L.style.display=R.style.display='none';
-          L.setAttribute('aria-hidden','true'); R.setAttribute('aria-hidden','true');
-          return;
-        }
-        L.style.position=R.style.position='fixed';
-        L.style.top=R.style.top=top+'px';
-        L.style.left=leftX+'px';
-        R.style.left=rightX+'px';
         L.style.display=R.style.display='block';
-        mount(L,'ad-rail-left-160x600'); mount(R,'ad-rail-right-160x600');
-      }catch(e){ console.warn(e); }
-    }
-    window.addEventListener('load', place);
-    window.addEventListener('resize', function(){ clearTimeout(window.__dlr); window.__dlr=setTimeout(place,120); });
-    window.addEventListener('scroll', function(){ clearTimeout(window.__dlr); window.__dlr=setTimeout(place,120); });
-  })();
-  </script>
+      } else {
+        // Re-check shortly (ads scripts are async)
+        setTimeout(place, 250);
+      }
+    }catch(e){ console.warn(e); }
+  }
+  window.addEventListener('load', place);
+  window.addEventListener('resize', function(){ clearTimeout(window.__dlr); window.__dlr=setTimeout(place, 120); });
+  window.addEventListener('scroll', function(){ clearTimeout(window.__dlr); window.__dlr=setTimeout(place, 120); });
+})();
+</script>
 </body>
 </html>
