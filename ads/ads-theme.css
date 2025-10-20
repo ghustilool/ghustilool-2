@@ -83,6 +83,3 @@ transition:transform .12s ease,border-color .12s ease,box-shadow .12s ease}
 #rail-left{ left:12px; }
 #rail-right{ right:12px; }
 
-@media (max-width: 1180px){
-  .rail{ display:none !important; }
-}

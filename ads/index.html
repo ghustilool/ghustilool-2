@@ -93,7 +93,7 @@
     const W = 160, GAP = 12;
     const leftX = Math.max(12, r.left - GAP - W);
     const rightX = Math.max(12, window.innerWidth - (r.right + GAP + W));
-    if(leftX < 12 || rightX < 12){ L.style.display=R.style.display='none'; return; }
+    /* always show rails */
     L.style.left = (r.left - GAP - W)+'px';
     R.style.left = (r.right + GAP)+'px';
     const HL = 600, HR = 300;
