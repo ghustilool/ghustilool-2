@@ -35,9 +35,29 @@ transition:transform .12s ease,border-color .12s ease,box-shadow .12s ease}
 @media (max-height: 780px){ #gh-card{gap:10px} #gh-bob{width:clamp(170px,22vw,240px)} .ring{--size:clamp(92px,16vw,128px)} }
 @media (max-height: 680px){ #gh-center{padding:10px 8px} #gh-card{padding:10px 10px 12px} .gh-note{display:none} }
 
-/* Dual 160x600 rails */
-#gh-rail-left,#gh-rail-right{ z-index:5; width:160px; height:600px; border-radius:12px; overflow:hidden; box-shadow:0 8px 30px rgba(0,0,0,.35); }
+/* Rails hidden by default (they show after mount) */
+#gh-rail-left,#gh-rail-right{ display:none; z-index:5; width:160px; height:auto; border-radius:12px; overflow:hidden; box-shadow:0 8px 30px rgba(0,0,0,.35); }
 @media (max-width:1199px){ #gh-rail-left,#gh-rail-right{ display:none !important; } }
 
-/* Native zone */
-.ad-native{ width:min(520px,92%); margin:10px auto 0; }
+/* Top banner area */
+#ad-top{ display:none; margin:6px auto 10px; width:fit-content; }
+.ad-top iframe{ display:block; }
+
+/* Below-card ad blocks */
+.ad-blocks{
+  display:grid;
+  grid-template-columns: 300px minmax(220px, 1fr);
+  gap:12px;
+  align-items:start;
+  width:min(560px, 92vw);
+  margin:8px auto 0;
+}
+@media (max-width: 760px){
+  .ad-blocks{ grid-template-columns: 1fr; }
+  #ad-rect-300x250{ margin: 0 auto; }
+}
+
+/* Smartlink */
+.ad-smartlink{ margin:8px auto 0; opacity:.85; font-size:13px; width:min(560px,92vw); text-align:center }
+.ad-smartlink a{ color:#8ecbff; text-decoration:none }
+.ad-smartlink a:hover{ text-decoration:underline }
