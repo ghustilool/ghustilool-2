@@ -370,17 +370,3 @@ body{
   cursor: pointer;
 }
 .mini-head .mini-share:hover{ border-style: solid; }
-
-
-/* ===== UI FIX PATCH v2 ===== */
-/* Search button corner fix (preserve original size) */
-.searchbox{ border-radius:12px; overflow:hidden; }
-.searchbox button{
-  background:linear-gradient(180deg,#79d3ff,#3fa8de);
-  border-left:1px solid rgba(255,255,255,.15);
-  height:100%;
-  padding:0 10px;             /* keep original footprint */
-  border-radius:0 12px 12px 0; /* fill right corners */
-  display:flex; align-items:center; justify-content:center;
-}
-

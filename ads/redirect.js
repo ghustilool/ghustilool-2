@@ -83,9 +83,13 @@
     $('#gh-title').textContent = readableName(target);
 
     // Mount ads
+    document.getElementById('ad-top').insertAdjacentHTML('afterbegin','<div id="ph-top" class="placeholder-ad">TOP 728×90 (test placeholder)</div>');
     fetchAndMount('ad-top', 'banner-728x90.html');
+    document.body.insertAdjacentHTML('beforeend','<div id="ph-rail-left" class="placeholder-ad">LEFT 160×600 (test)</div>');
     fetchAndMount('rail-left', 'rail-left-160x600.html');
+    document.body.insertAdjacentHTML('beforeend','<div id="ph-rail-right" class="placeholder-ad">RIGHT 160×300 (test)</div>');
     fetchAndMount('rail-right', 'rail-right-160x300.html');
+    document.getElementById('ad-native').insertAdjacentHTML('afterbegin','<div id="ph-native" class="placeholder-ad">NATIVE (test)</div>');
     fetchAndMount('ad-native', 'native.html');
 
     // Background extras (popunder/social bar)

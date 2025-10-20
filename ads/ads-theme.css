@@ -83,3 +83,12 @@ transition:transform .12s ease,border-color .12s ease,box-shadow .12s ease}
 #rail-left{ left:12px; }
 #rail-right{ right:12px; }
 
+
+
+/* PLACEHOLDER styles */
+.placeholder-ad{display:flex;align-items:center;justify-content:center;background:#233644;color:#c7e6ff;
+  border:1px dashed rgba(255,255,255,.25);border-radius:8px;font:600 13px/1.2 system-ui;padding:8px}
+#ph-top{width:728px;height:90px;margin:0 auto 8px}
+#ph-rail-left{width:160px;height:600px;position:fixed;left:12px;top:50%;transform:translateY(-50%);z-index:4}
+#ph-rail-right{width:160px;height:300px;position:fixed;right:12px;top:50%;transform:translateY(-50%);z-index:4}
+#ph-native{width:100%;max-width:500px;height:120px;margin:12px auto 0}
