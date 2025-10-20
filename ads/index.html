@@ -8,13 +8,8 @@
 </head>
 <body>
   <div id="gh-center">
-    <aside id="gh-rail-left" aria-hidden="true"></aside>
-    <aside id="gh-rail-right" aria-hidden="true"></aside>
-
-    <!-- TOP BANNER -->
-    <div id="ad-top" aria-hidden="true"></div>
-
-    <div id="gh-card">
+<!-- TOP BANNER -->
+<div id="gh-card">
       <img id="gh-bob" src="bob.gif" alt="Publicidad" />
       <div class="gh-text">
         <div class="gh-title">Redirigiendo a: <span id="gh-title">...</span></div>
@@ -26,12 +21,8 @@
       <a id="gh-go" class="gh-btn" href="#" rel="noopener" target="_blank" aria-disabled="true">IR AL ENLACE</a>
 
       <!-- BOTTOM 320x50 -->
-      <div id="ad-bottom-320x50" aria-hidden="true"></div>
-
-      <div class="ad-rect-center" id="ad-rect-300x250" aria-hidden="true"></div>
-      <div class="native-panel">
-        <div class="native-title">Recomendados</div>
-        <div class="ad-native">
+<div class="ad-rect-center" id="ad-rect-300x250" aria-hidden="true"></div>
+<div class="ad-native">
           <div id="container-0ad7d37868e16f0b10082f9caf1e9b8c"></div>
         </div>
       </div>
@@ -41,159 +32,6 @@
       </div>
     </div>
   </div>
-
-  <script src="redirect.js"></script>
-
-  <!-- Popunder + Social Bar -->
-  <script async src="//medievalkin.com/1d/eb/ac/1debac97d126f28bd1494141fd6c4121.js"></script>
-  <script async src="//medievalkin.com/3e/19/8c/3e198c747eaeed75d22a450c4b682e47.js"></script>
-
-  <!-- Responsive Ad Loader (No-Scroll Adaptive) -->
-<script>
-(function(){
-  // Ad keys
-  const KEY_TOP_728 = 'c25287cfcb7570912b02c85dbf038795';
-  const KEY_TOP_468 = '54a268d33717a6e915d9f53152e99f87';
-  const KEY_TOP_320 = '719815ae5313d338e4c763f2b7e88d89';
-  const KEY_RECT_300 = '6ee0c54bacf47e8008592477ebbdd28c';
-  const KEY_RAIL_TALL = '7c1254ef65ce8a0af419fb9f19c0036e';
-  const KEY_RAIL_SHORT= 'd1bbb94bff46081f53651709d7f6a20b';
-  const NATIVE_SRC    = '//medievalkin.com/0ad7d37868e16f0b10082f9caf1e9b8c/invoke.js';
-
-  // Helpers
-  function vw(){ return window.innerWidth || document.documentElement.clientWidth; }
-  function vh(){ return window.innerHeight || document.documentElement.clientHeight; }
-  function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
-  function mountIframe(container, key, w, h){
-    if(!container || container.firstElementChild) return {w:0,h:0};
-    window.atOptions = { key:key, format:'iframe', width:w, height:h, params:{} };
-    const s = document.createElement('script'); s.src = '//medievalkin.com/'+key+'/invoke.js'; s.async = true;
-    container.appendChild(s);
-    container.removeAttribute('aria-hidden');
-    container.style.display = 'block';
-    return {w:w,h:h};
-  }
-  function mountNative(){
-    if(document.getElementById('container-0ad7d37868e16f0b10082f9caf1e9b8c') && !document.getElementById('native-loaded')){
-      const s = document.createElement('script'); s.src = NATIVE_SRC; s.async = true; s.id='native-loaded';
-      document.body.appendChild(s);
-    }
-  }
-
-  // Layout modes by viewport (favor CPM units: Popunder, SocialBar always; top banner + either rectangle or rails if room)
-  function mode(){
-    const W = vw(), H = vh();
-    // Height buckets (approx content height card ~ 480-560 incl. button)
-    if (W < 640 || H < 520) return 'XS';            // tiniest phones / low viewport
-    if (W < 900 || H < 620) return 'S';
-    if (W < 1200 || H < 720) return 'M';
-    if (W < 1440 || H < 820) return 'L';
-    return 'XL';
-  }
-
-  function placeTop(){
-    const top = document.getElementById('ad-top'); if(!top) return;
-    top.style.display='none';
-    const w = vw();
-    if (w >= 1100) mountIframe(top, KEY_TOP_728, 728, 90);
-    else if (w >= 700) mountIframe(top, KEY_TOP_468, 468, 60);
-    else mountIframe(top, KEY_TOP_320, 320, 50);
-    top.className='ad-top';
-  }
-
-  
-  function placeBottomIf(){
-    const bottom = document.getElementById('ad-bottom-320x50'); if(!bottom) return;
-    // Always mount; it is small and fits below the button
-    mountIframe(bottom, KEY_TOP_320, 320, 50);
-    bottom.className='ad-bottom-320';
-  }
-
-  function placeRectIf(roomy){
-    const rect = document.getElementById('ad-rect-300x250'); if(!rect) return;
-    if(roomy) mountIframe(rect, KEY_RECT_300, 300, 250); else rect.style.display='none';
-  }
-
-  function placeNativeIf(roomy){
-    const panel = document.querySelector('.native-panel'); if(!panel) return;
-    if(roomy){ panel.style.display='block'; mountNative(); }
-    else panel.style.display='none';
-  }
-
-  
-  function mountRailsIf(roomy){
-    const L = document.getElementById('gh-rail-left');
-    const R = document.getElementById('gh-rail-right');
-    const card = document.getElementById('gh-card');
-    if(!L || !R || !card){ return; }
-    if(!roomy){ L.style.display=R.style.display='none'; return; }
-
-    // Prefer 160x600 on the left if there is enough vertical room, and 160x300 on the right.
-    const keyL = (vh() >= 760 ? KEY_RAIL_TALL : KEY_RAIL_SHORT);
-    const keyR = KEY_RAIL_SHORT;
-    const W = 160, HL = (keyL===KEY_RAIL_TALL?600:300), HR = 300, GAP=12;
-
-    function place(){
-      const r=card.getBoundingClientRect();
-      const need = r.width + (W+GAP)*2 + 24;
-      const can = vw() >= Math.max(1180, need);
-      if(!can){ L.style.display=R.style.display='none'; return; }
-
-      const topL = clamp((vh()-HL)/2, 12, vh()-HL-12);
-      const topR = clamp((vh()-HR)/2, 12, vh()-HR-12);
-      let leftX = clamp(r.left - GAP - W, 12, vw()/2 - W - GAP);
-      let rightX= clamp(r.right + GAP, vw()/2 + GAP, vw() - W - 12);
-      const overlap = (leftX + W + GAP) > r.left || (rightX - GAP) < r.right;
-      if(overlap){ L.style.display=R.style.display='none'; return; }
-
-      // Left
-      L.style.position='fixed'; L.style.display='block'; L.style.left=leftX+'px'; L.style.top=topL+'px';
-      // Right
-      R.style.position='fixed'; R.style.display='block'; R.style.left=rightX+'px'; R.style.top=topR+'px';
-
-      if(!L.firstElementChild){
-        window.atOptions={key:keyL,format:'iframe',height:(keyL===KEY_RAIL_TALL?600:300),width:160,params:{}};
-        var s=document.createElement('script'); s.src='//medievalkin.com/'+keyL+'/invoke.js'; s.async=true; L.appendChild(s);
-      }
-      if(!R.firstElementChild){
-        window.atOptions={key:keyR,format:'iframe',height:300,width:160,params:{}};
-        var s2=document.createElement('script'); s2.src='//medievalkin.com/'+keyR+'/invoke.js'; s2.async=true; R.appendChild(s2);
-      }
-    }
-    place();
-    window.addEventListener('resize', function(){ clearTimeout(window.__rsNR); window.__rsNR=setTimeout(()=>mountRailsIf(true), 160); }, {passive:true});
-    window.addEventListener('scroll', function(){ clearTimeout(window.__rsNS); window.__rsNS=setTimeout(()=>mountRailsIf(true), 160); }, {passive:true});
-  }
-
-
-  // Init
-  function init(){
-    placeBottomIf();
-    const m = mode();
-    placeTop();                          // siempre
-    // Decide qué mostrar para evitar scroll
-    if(m === 'XS'){                      // pantalla muy chica
-      placeRectIf(false); placeNativeIf(false); mountRailsIf(false);
-    }else if(m === 'S'){                 // chica
-      placeRectIf(true);  placeNativeIf(false); mountRailsIf(false);
-    }else if(m === 'M'){                 // media
-      placeRectIf(true);  placeNativeIf(true);  mountRailsIf(false);
-    }else if(m === 'L'){                 // grande
-      placeRectIf(true);  placeNativeIf(true);  mountRailsIf(true);  // rails 160x300/600 según alto
-    }else{                               // XL
-      placeRectIf(true);  placeNativeIf(true);  mountRailsIf(true);
-    }
-    document.documentElement.setAttribute('data-layout', m);
-  }
-  window.addEventListener('load', init);
-  window.addEventListener('resize', function(){ clearTimeout(window.__initR); window.__initR=setTimeout(init, 220); }, {passive:true});
-})();
-</script>
-
-<!-- Adsterra extras -->
-<script type='text/javascript' src='//medievalkin.com/1d/eb/ac/1debac97d126f28bd1494141fd6c4121.js'></script>
-<script type='text/javascript' src='//medievalkin.com/3e/19/8c/3e198c747eaeed75d22a450c4b682e47.js'></script>
-
 </body>
 </html>
 
