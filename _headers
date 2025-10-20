@@ -1,4 +1,0 @@
-/*
-  Access-Control-Allow-Origin: *
-  Content-Security-Policy: script-src 'self' https://medievalkin.com; connect-src 'self' https://medievalkin.com; object-src 'none';
-  X-Content-Type-Options: nosniff
