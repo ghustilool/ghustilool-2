@@ -370,3 +370,19 @@ body{
   cursor: pointer;
 }
 .mini-head .mini-share:hover{ border-style: solid; }
+
+
+/* ===== UI FIX PATCH ===== */
+/* Search button fill fix */
+.searchbox{ border-radius:12px; overflow:hidden; background:rgba(255,255,255,.10); }
+.searchbox button{
+  display:flex; align-items:center; justify-content:center;
+  background:linear-gradient(180deg,#79d3ff,#3fa8de);
+  color:#0a1723; padding:10px 12px; font-weight:900; cursor:pointer;
+  border-left:1px solid rgba(255,255,255,.15); min-width:46px; height:100%;
+}
+
+/* Mini-modal: add distinct color to Tutorial button */
+.btn--tutorial{ border-color: var(--tutorial); box-shadow: inset 0 0 0 1px rgba(0,0,0,.0); }
+.btn--tutorial:hover{ filter: brightness(1.1); }
+
