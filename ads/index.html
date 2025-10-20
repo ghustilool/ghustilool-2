@@ -45,82 +45,120 @@
   <script async src="//medievalkin.com/1d/eb/ac/1debac97d126f28bd1494141fd6c4121.js"></script>
   <script async src="//medievalkin.com/3e/19/8c/3e198c747eaeed75d22a450c4b682e47.js"></script>
 
-  <!-- Responsive Ad Loader -->
-  <script>
-  (function(){
-    const KEY_TOP_728 = 'c25287cfcb7570912b02c85dbf038795';
-    const KEY_TOP_468 = '54a268d33717a6e915d9f53152e99f87';
-    const KEY_TOP_320 = '719815ae5313d338e4c763f2b7e88d89';
-    const KEY_RECT_300 = '6ee0c54bacf47e8008592477ebbdd28c';
-    const KEY_RAIL_TALL = '7c1254ef65ce8a0af419fb9f19c0036e';
-    const KEY_RAIL_SHORT= 'd1bbb94bff46081f53651709d7f6a20b';
-    const NATIVE_SRC    = '//medievalkin.com/0ad7d37868e16f0b10082f9caf1e9b8c/invoke.js';
+  <!-- Responsive Ad Loader (No-Scroll Adaptive) -->
+<script>
+(function(){
+  // Ad keys
+  const KEY_TOP_728 = 'c25287cfcb7570912b02c85dbf038795';
+  const KEY_TOP_468 = '54a268d33717a6e915d9f53152e99f87';
+  const KEY_TOP_320 = '719815ae5313d338e4c763f2b7e88d89';
+  const KEY_RECT_300 = '6ee0c54bacf47e8008592477ebbdd28c';
+  const KEY_RAIL_TALL = '7c1254ef65ce8a0af419fb9f19c0036e';
+  const KEY_RAIL_SHORT= 'd1bbb94bff46081f53651709d7f6a20b';
+  const NATIVE_SRC    = '//medievalkin.com/0ad7d37868e16f0b10082f9caf1e9b8c/invoke.js';
 
-    function mountIframe(container, key, w, h){
-      if(!container || container.firstElementChild) return;
-      window.atOptions = { key:key, format:'iframe', width:w, height:h, params:{} };
-      const s = document.createElement('script'); s.src = '//medievalkin.com/'+key+'/invoke.js'; s.async = true;
-      container.appendChild(s);
-      container.removeAttribute('aria-hidden');
-      container.style.display = 'block';
+  // Helpers
+  function vw(){ return window.innerWidth || document.documentElement.clientWidth; }
+  function vh(){ return window.innerHeight || document.documentElement.clientHeight; }
+  function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
+  function mountIframe(container, key, w, h){
+    if(!container || container.firstElementChild) return {w:0,h:0};
+    window.atOptions = { key:key, format:'iframe', width:w, height:h, params:{} };
+    const s = document.createElement('script'); s.src = '//medievalkin.com/'+key+'/invoke.js'; s.async = true;
+    container.appendChild(s);
+    container.removeAttribute('aria-hidden');
+    container.style.display = 'block';
+    return {w:w,h:h};
+  }
+  function mountNative(){
+    if(document.getElementById('container-0ad7d37868e16f0b10082f9caf1e9b8c') && !document.getElementById('native-loaded')){
+      const s = document.createElement('script'); s.src = NATIVE_SRC; s.async = true; s.id='native-loaded';
+      document.body.appendChild(s);
     }
-    function mountNative(){
-      if(document.getElementById('container-0ad7d37868e16f0b10082f9caf1e9b8c') && !document.getElementById('native-loaded')){
-        const s = document.createElement('script'); s.src = NATIVE_SRC; s.async = true; s.id='native-loaded';
-        document.body.appendChild(s);
-      }
-    }
+  }
 
-    function placeTop(){
-      const top = document.getElementById('ad-top');
-      if(!top) return;
-      const vw = window.innerWidth || document.documentElement.clientWidth;
-      top.style.display='none';
-      if(vw >= 1100){ mountIframe(top, KEY_TOP_728, 728, 90); }
-      else if(vw >= 700){ mountIframe(top, KEY_TOP_468, 468, 60); }
-      else { mountIframe(top, KEY_TOP_320, 320, 50); }
-      top.className = 'ad-top';
-    }
+  // Layout modes by viewport (favor CPM units: Popunder, SocialBar always; top banner + either rectangle or rails if room)
+  function mode(){
+    const W = vw(), H = vh();
+    // Height buckets (approx content height card ~ 480-560 incl. button)
+    if (W < 640 || H < 520) return 'XS';            // tiniest phones / low viewport
+    if (W < 900 || H < 620) return 'S';
+    if (W < 1200 || H < 720) return 'M';
+    if (W < 1440 || H < 820) return 'L';
+    return 'XL';
+  }
 
-    function placeRect(){
-      const rect = document.getElementById('ad-rect-300x250');
-      mountIframe(rect, KEY_RECT_300, 300, 250);
-    }
+  function placeTop(){
+    const top = document.getElementById('ad-top'); if(!top) return;
+    top.style.display='none';
+    const w = vw();
+    if (w >= 1100) mountIframe(top, KEY_TOP_728, 728, 90);
+    else if (w >= 700) mountIframe(top, KEY_TOP_468, 468, 60);
+    else mountIframe(top, KEY_TOP_320, 320, 50);
+    top.className='ad-top';
+  }
 
-    function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
-    function mountRails(){
-      const L = document.getElementById('gh-rail-left');
-      const R = document.getElementById('gh-rail-right');
-      const card = document.getElementById('gh-card');
-      if(!L || !R || !card) return;
-      const key = (window.innerHeight || document.documentElement.clientHeight) >= 760 ? KEY_RAIL_TALL : KEY_RAIL_SHORT;
-      const W = 160, H = (key===KEY_RAIL_TALL?600:300), GAP=12;
-      function place(){
-        const r=card.getBoundingClientRect();
-        const vw=window.innerWidth||document.documentElement.clientWidth;
-        const vh=window.innerHeight||document.documentElement.clientHeight;
-        const need=r.width + 2*(W+GAP) + 24;
-        const showAllowed = vw>=Math.max(1180,need); // slightly stricter so rails never crowd
-        if(!showAllowed){ L.style.display=R.style.display='none'; return; }
-        const top = clamp((vh-H)/2, 12, vh-H-12);
-        let leftX = clamp(r.left - GAP - W, 12, vw/2 - W - GAP);
-        let rightX= clamp(r.right + GAP, vw/2 + GAP, vw - W - 12);
-        const overlap = (leftX + W + GAP) > r.left || (rightX - GAP) < r.right;
-        if(overlap){ L.style.display=R.style.display='none'; return; }
-        [L,R].forEach(el=>{ el.style.position='fixed'; el.style.top=top+'px'; el.style.display='block'; });
-        L.style.left=leftX+'px'; R.style.left=rightX+'px';
-        if(!L.firstElementChild){ window.atOptions={key:key,format:'iframe',width:W,height:H,params:{}}; const s=document.createElement('script'); s.src='//medievalkin.com/'+key+'/invoke.js'; s.async=true; L.appendChild(s); }
-        if(!R.firstElementChild){ window.atOptions={key:key,format:'iframe',width:W,height:H,params:{}}; const s=document.createElement('script'); s.src='//medievalkin.com/'+key+'/invoke.js'; s.async=true; R.appendChild(s); }
-      }
-      place();
-      window.addEventListener('resize', function(){ clearTimeout(window.__railsR); window.__railsR=setTimeout(mountRails, 150); }, {passive:true});
-      window.addEventListener('scroll', function(){ clearTimeout(window.__railsS); window.__railsS=setTimeout(mountRails, 150); }, {passive:true});
-    }
+  function placeRectIf(roomy){
+    const rect = document.getElementById('ad-rect-300x250'); if(!rect) return;
+    if(roomy) mountIframe(rect, KEY_RECT_300, 300, 250); else rect.style.display='none';
+  }
 
-    function init(){ placeTop(); placeRect(); mountNative(); mountRails(); }
-    window.addEventListener('load', init);
-    window.addEventListener('resize', function(){ clearTimeout(window.__topR); window.__topR=setTimeout(placeTop, 200); }, {passive:true});
-  })();
-  </script>
+  function placeNativeIf(roomy){
+    const panel = document.querySelector('.native-panel'); if(!panel) return;
+    if(roomy){ panel.style.display='block'; mountNative(); }
+    else panel.style.display='none';
+  }
+
+  function mountRailsIf(roomy){
+    const L = document.getElementById('gh-rail-left');
+    const R = document.getElementById('gh-rail-right');
+    const card = document.getElementById('gh-card');
+    if(!L || !R || !card){ return; }
+    if(!roomy){ L.style.display=R.style.display='none'; return; }
+    const key = (vh() >= 760 ? KEY_RAIL_TALL : KEY_RAIL_SHORT);
+    const W = 160, H = (key===KEY_RAIL_TALL?600:300), GAP=12;
+    function place(){
+      const r=card.getBoundingClientRect();
+      const need = r.width + 2*(W+GAP) + 24;
+      const can = vw() >= Math.max(1180, need);
+      if(!can){ L.style.display=R.style.display='none'; return; }
+      const top = clamp((vh()-H)/2, 12, vh()-H-12);
+      let leftX = clamp(r.left - GAP - W, 12, vw()/2 - W - GAP);
+      let rightX= clamp(r.right + GAP, vw()/2 + GAP, vw() - W - 12);
+      const overlap = (leftX + W + GAP) > r.left || (rightX - GAP) < r.right;
+      if(overlap){ L.style.display=R.style.display='none'; return; }
+      [L,R].forEach(el=>{ el.style.position='fixed'; el.style.top=top+'px'; el.style.display='block'; });
+      L.style.left=leftX+'px'; R.style.left=rightX+'px';
+      if(!L.firstElementChild){ window.atOptions={key:key,format:'iframe',width:W,height:H,params:{}}; const s=document.createElement('script'); s.src='//medievalkin.com/'+key+'/invoke.js'; s.async=true; L.appendChild(s); }
+      if(!R.firstElementChild){ window.atOptions={key:key,format:'iframe',width:W,height:H,params:{}}; const s=document.createElement('script'); s.src='//medievalkin.com/'+key+'/invoke.js'; s.async=true; R.appendChild(s); }
+    }
+    place();
+    window.addEventListener('resize', function(){ clearTimeout(window.__railsNR); window.__railsNR=setTimeout(()=>mountRailsIf(true), 160); }, {passive:true});
+    window.addEventListener('scroll', function(){ clearTimeout(window.__railsNS); window.__railsNS=setTimeout(()=>mountRailsIf(true), 160); }, {passive:true});
+  }
+
+  // Init
+  function init(){
+    const m = mode();
+    placeTop();                          // siempre
+    // Decide qué mostrar para evitar scroll
+    if(m === 'XS'){                      // pantalla muy chica
+      placeRectIf(false); placeNativeIf(false); mountRailsIf(false);
+    }else if(m === 'S'){                 // chica
+      placeRectIf(true);  placeNativeIf(false); mountRailsIf(false);
+    }else if(m === 'M'){                 // media
+      placeRectIf(true);  placeNativeIf(true);  mountRailsIf(false);
+    }else if(m === 'L'){                 // grande
+      placeRectIf(true);  placeNativeIf(true);  mountRailsIf(true);  // rails 160x300/600 según alto
+    }else{                               // XL
+      placeRectIf(true);  placeNativeIf(true);  mountRailsIf(true);
+    }
+    document.documentElement.setAttribute('data-layout', m);
+  }
+  window.addEventListener('load', init);
+  window.addEventListener('resize', function(){ clearTimeout(window.__initR); window.__initR=setTimeout(init, 220); }, {passive:true});
+})();
+</script>
 </body>
 </html>
+

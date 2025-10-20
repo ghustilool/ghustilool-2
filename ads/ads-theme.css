@@ -81,3 +81,15 @@ transition:transform .12s ease,border-color .12s ease,box-shadow .12s ease}
 .ad-native iframe{ max-width:100%; }
 
 /* Slightly stricter rails breakpoint handled in JS; keep hidden by default */
+
+/* No-scroll adaptive tweaks */
+:root{ --space: 14px; }
+[data-layout="XS"] #gh-card{ gap:8px; padding:10px 10px 12px; }
+[data-layout="XS"] #gh-bob{ width:clamp(150px,36vw,200px); }
+[data-layout="XS"] .ring{ --size:100px; }
+[data-layout="S"]  #gh-card{ gap:10px; padding:12px; }
+[data-layout="S"]  #gh-bob{ width:clamp(160px,34vw,210px); }
+
+/* Center 300x250 */
+.ad-rect-center{ display:none; width:300px; height:250px; margin:8px auto 4px; }
+.native-panel{ display:none; }
