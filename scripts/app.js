@@ -37,7 +37,7 @@ function renderCarousel(){
   const track = document.getElementById("car-track");
   const dots = document.getElementById("car-dots");
   track.innerHTML = ""; dots.innerHTML = ""; state.dots = [];
-  const top = state.all.slice(0, 6); // SOLO 6
+  const top = state.all.slice(0, 12); // SOLO 6
 
   // Build cards
   top.forEach((it)=>{
