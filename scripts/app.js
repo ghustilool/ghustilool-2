@@ -37,7 +37,8 @@ function renderCarousel(){
   const track = document.getElementById("car-track");
   const dots = document.getElementById("car-dots");
   track.innerHTML = ""; dots.innerHTML = ""; state.dots = [];
-  const top = state.all.slice(0, 6); // SOLO 6
+  state.perPage = 3; const MAX_PAGES = 5;
+  const top = state.all.slice(0, state.perPage * MAX_PAGES); // hasta 15 (5 puntos)
 
   // Build cards
   top.forEach((it)=>{
@@ -73,8 +74,7 @@ function renderCarousel(){
 
   // === 2-dot pagination (3 items por página) ===
   state.slide = 0;
-  state.perPage = 3;
-  const totalPages = Math.min(2, Math.max(1, Math.ceil(top.length / state.perPage)));
+  const totalPages = Math.max(1, Math.min(MAX_PAGES, Math.ceil(top.length / state.perPage)));
 
   for (let i=0; i<totalPages; i++){
     const dot = document.createElement("span");
@@ -123,6 +123,7 @@ function scrollStep(dir){
   state.slide = Math.max(0, Math.min(maxIndex, state.slide + dir));
   scrollToSlide(state.slide);
 }
+
 function scrollToSlide(pageIdx){
   state.slide = pageIdx;
   const viewport = document.querySelector(".car-viewport");
@@ -131,14 +132,15 @@ function scrollToSlide(pageIdx){
   const target = track.children[pageIdx * per];
   if (target && viewport){
     const pad = parseFloat(getComputedStyle(viewport).paddingLeft) || 0;
-const first = track.children[0] ? track.children[0].offsetLeft : 0;
-let left = target.offsetLeft - first - pad;
-const maxLeft = track.scrollWidth - viewport.clientWidth;
-left = Math.max(0, Math.min(left, maxLeft));
-viewport.scrollTo({ left: Math.round(left), behavior: "smooth" });
+    const first = track.children[0] ? track.children[0].offsetLeft : 0;
+    let left = target.offsetLeft - first - pad;
+    const maxLeft = track.scrollWidth - viewport.clientWidth;
+    left = Math.max(0, Math.min(left, maxLeft));
+    viewport.scrollTo({ left: Math.round(left), behavior: "smooth" });
   }
   state.dots.forEach((d,idx)=> d.classList.toggle("active", idx===pageIdx));
 }
+
 /* ===== List + mini modal ===== */
 
 // Consistencia de etiquetas (emoji + clase + label)
