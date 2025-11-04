@@ -73,8 +73,8 @@ function renderCarousel(){
 
   // === 2-dot pagination (3 items por página) ===
   state.slide = 0;
-  state.perPage = 2;
-  const totalPages = Math.min(3, Math.max(1, Math.ceil(top.length / state.perPage)));
+  state.perPage = 3;
+  const totalPages = Math.min(4, Math.max(1, Math.ceil(top.length / state.perPage)));
 
   for (let i=0; i<totalPages; i++){
     const dot = document.createElement("span");
@@ -130,7 +130,7 @@ function scrollToSlide(pageIdx){
   const per = state.perPage || 3;
   const target = track.children[pageIdx * per];
   if (target && viewport){
-    viewport.scrollTo({ left: (pageIdx===0 ? 0 : target.offsetLeft), behavior: "smooth" });
+    viewport.scrollTo({ left: (pageIdx===0 ? 0 : Math.max(0, target.offsetLeft - 6)), behavior: "smooth" });
   }
   state.dots.forEach((d,idx)=> d.classList.toggle("active", idx===pageIdx));
 }
