@@ -130,7 +130,9 @@ function scrollToSlide(pageIdx){
   const per = state.perPage || 3;
   const target = track.children[pageIdx * per];
   if (target && viewport){
-    viewport.scrollTo({ left: (pageIdx===0 ? 0 : Math.max(0, target.offsetLeft - 6)), behavior: "smooth" });
+    const pad = parseFloat(getComputedStyle(viewport).paddingLeft)||0;
+  const left = (pageIdx===0 ? 0 : Math.max(0, target.offsetLeft - pad));
+  viewport.scrollTo({ left, behavior: "smooth" });
   }
   state.dots.forEach((d,idx)=> d.classList.toggle("active", idx===pageIdx));
 }
