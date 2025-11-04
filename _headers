@@ -1,0 +1,4 @@
+/ads/*
+  Content-Security-Policy: default-src * data: blob: 'unsafe-inline' 'unsafe-eval'; script-src * 'unsafe-inline' 'unsafe-eval'; style-src * 'unsafe-inline'; img-src * data: blob:; connect-src *; frame-src *; base-uri 'self'; object-src 'none'
+  Access-Control-Allow-Origin: *
+  X-Content-Type-Options: nosniff
