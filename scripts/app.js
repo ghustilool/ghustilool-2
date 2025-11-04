@@ -37,7 +37,7 @@ function renderCarousel(){
   const track = document.getElementById("car-track");
   const dots = document.getElementById("car-dots");
   track.innerHTML = ""; dots.innerHTML = ""; state.dots = [];
-  const top = state.all.slice(0, 12); // SOLO 6
+  const top = state.all.slice(0, 6); // SOLO 6
 
   // Build cards
   top.forEach((it)=>{
@@ -74,7 +74,7 @@ function renderCarousel(){
   // === 2-dot pagination (3 items por página) ===
   state.slide = 0;
   state.perPage = 3;
-  const totalPages = Math.min(4, Math.max(1, Math.ceil(top.length / state.perPage)));
+  const totalPages = Math.min(2, Math.max(1, Math.ceil(top.length / state.perPage)));
 
   for (let i=0; i<totalPages; i++){
     const dot = document.createElement("span");
@@ -123,16 +123,32 @@ function scrollStep(dir){
   state.slide = Math.max(0, Math.min(maxIndex, state.slide + dir));
   scrollToSlide(state.slide);
 }
-function scrollToSlide(pageIdx){
-  state.slide = pageIdx;
-  const viewport = document.querySelector(".car-viewport");
-  const track = document.getElementById("car-track");
-  const per = state.perPage || 3;
-  const target = track.children[pageIdx * per];
-  if (target && viewport){
-    const pad = parseFloat(getComputedStyle(viewport).paddingLeft)||0;
-  const left = (pageIdx===0 ? 0 : Math.max(0, target.offsetLeft - pad));
-  viewport.scrollTo({ left, behavior: "smooth" });
+function scrollToSlide(pageIdx) {
+  const { viewport, track, dots, perPage } = state;
+  const cards = Array.from(track.querySelectorAll('.car-card'));
+  if (!cards.length) return;
+
+  // Índice del primer card de la página
+  const idx = Math.min(pageIdx * perPage, cards.length - 1);
+  const target = cards[idx];
+
+  // Padding real del viewport
+  const pad = parseFloat(getComputedStyle(viewport).paddingLeft) || 0;
+  // Usar SIEMPRE el primer card como base
+  const base = cards[0] ? cards[0].offsetLeft : 0;
+
+  // Offset deseado para alinear el card al borde interno del viewport
+  let left = (pageIdx === 0) ? 0 : (target.offsetLeft - base - pad);
+
+  // Topes de seguridad
+  const maxLeft = track.scrollWidth - viewport.clientWidth;
+  left = Math.max(0, Math.min(left, maxLeft));
+
+  viewport.scrollTo({ left: Math.round(left), behavior: "smooth" });
+
+  // Actualizar puntos
+  if (typeof updateDots === "function") updateDots(pageIdx);
+});
   }
   state.dots.forEach((d,idx)=> d.classList.toggle("active", idx===pageIdx));
 }

@@ -49,7 +49,7 @@ body{
   background:rgba(0,0,0,.28); border:1px solid rgba(255,255,255,.06); padding:12px;
 }
 .car-viewport{overflow:hidden}
-.car-track{display:grid; grid-auto-flow:column; grid-auto-columns: calc((100% - 28px)/3); gap:14px; scroll-behavior:smooth}
+.car-track{display:grid; grid-auto-flow:column; grid-auto-columns: 32%; gap:14px; scroll-behavior:smooth}
 .car-card{
   background:var(--panel); border:1px solid var(--stroke); border-radius:8px; overflow:hidden; position:relative;
   box-shadow:0 6px 16px var(--shadow);
