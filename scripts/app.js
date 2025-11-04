@@ -123,32 +123,19 @@ function scrollStep(dir){
   state.slide = Math.max(0, Math.min(maxIndex, state.slide + dir));
   scrollToSlide(state.slide);
 }
-function scrollToSlide(pageIdx) {
-  const { viewport, track, dots, perPage } = state;
-  const cards = Array.from(track.querySelectorAll('.car-card'));
-  if (!cards.length) return;
-
-  // Índice del primer card de la página
-  const idx = Math.min(pageIdx * perPage, cards.length - 1);
-  const target = cards[idx];
-
-  // Padding real del viewport
-  const pad = parseFloat(getComputedStyle(viewport).paddingLeft) || 0;
-  // Usar SIEMPRE el primer card como base
-  const base = cards[0] ? cards[0].offsetLeft : 0;
-
-  // Offset deseado para alinear el card al borde interno del viewport
-  let left = (pageIdx === 0) ? 0 : (target.offsetLeft - base - pad);
-
-  // Topes de seguridad
-  const maxLeft = track.scrollWidth - viewport.clientWidth;
-  left = Math.max(0, Math.min(left, maxLeft));
-
-  viewport.scrollTo({ left: Math.round(left), behavior: "smooth" });
-
-  // Actualizar puntos
-  if (typeof updateDots === "function") updateDots(pageIdx);
-});
+function scrollToSlide(pageIdx){
+  state.slide = pageIdx;
+  const viewport = document.querySelector(".car-viewport");
+  const track = document.getElementById("car-track");
+  const per = state.perPage || 3;
+  const target = track.children[pageIdx * per];
+  if (target && viewport){
+    const pad = parseFloat(getComputedStyle(viewport).paddingLeft) || 0;
+const first = track.children[0] ? track.children[0].offsetLeft : 0;
+let left = target.offsetLeft - first - pad;
+const maxLeft = track.scrollWidth - viewport.clientWidth;
+left = Math.max(0, Math.min(left, maxLeft));
+viewport.scrollTo({ left: Math.round(left), behavior: "smooth" });
   }
   state.dots.forEach((d,idx)=> d.classList.toggle("active", idx===pageIdx));
 }
