@@ -37,3 +37,20 @@
 /* ensure no sneak peek of next slide */
 .hero{ overflow: hidden; }
 .hero-track{ will-change: transform; }
+
+
+/* --- HERO v3 refinements --- */
+.hero-wrap{ max-width: 1000px; }
+.hero{ padding: 16px 18px; border-radius: 18px; }
+.hero-track{ display:flex; width:100%; }
+.hero-slide{ min-width: 100%; }
+.hero-img{ height: 180px; }
+.hero-prev{ left: -22px; } .hero-next{ right: -22px; }
+@media (max-width: 900px){
+  .hero-img{ height: 150px; }
+  .hero-prev{ left: -10px; } .hero-next{ right: -10px; }
+}
+/* media panel like card */
+.hero-media{ display:grid; place-items:center; }
+.hero-media .icon-card{ background: rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.12); border-radius:14px; padding:24px; }
+.hero-media svg{ width:160px; height:160px; display:block; }
