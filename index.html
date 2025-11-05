@@ -39,6 +39,33 @@
     })();
   </script>
   <!-- NEON RAIN ADD-ON (END) -->
+
+  <!-- NEON DUST (GamesFull-like) BEGIN -->
+  <link rel="stylesheet" href="effects/neon-dust.css">
+  <script>
+    // Neon DUST config + toggle via localStorage key 'neon_dust' (off = disabled)
+    (function(){
+      var off = (localStorage.getItem('neon_dust') === 'off');
+      window.NEON_DUST = off ? { enabled:false } : {
+        enabled: true,
+        palette: ["#00ffa3","#00ffc8","#00e6b3","#00ffd0"],
+        density: 0.000035,
+        sizeMin: 1.0, sizeMax: 2.6,
+        speedY: [4,12], speedX: [-3,3],
+        twinkle: 0.25, blur: 6.0,
+        layers: 3
+      };
+      // Hotkey: Ctrl+Alt+M toggles and pide recargar
+      document.addEventListener('keydown', function(e){
+        if(e.ctrlKey && e.altKey && (e.key==='m' || e.key==='M')){
+          var cur = localStorage.getItem('neon_dust');
+          if(cur === 'off'){ localStorage.removeItem('neon_dust'); alert('Neon dust ON (recarga la página)'); }
+          else { localStorage.setItem('neon_dust','off'); alert('Neon dust OFF (recarga la página)'); }
+        }
+      });
+    })();
+  </script>
+  <!-- NEON DUST (GamesFull-like) END -->
 </head>
 <body>
   <main class="container">
@@ -118,5 +145,8 @@
 
   <!-- NEON RAIN ADD-ON -->
   <script src="effects/neon-rain.js" defer></script>
+
+  <!-- NEON DUST (GamesFull-like) -->
+  <script src="effects/neon-dust.js" defer></script>
 </body>
 </html>
