@@ -229,6 +229,11 @@ function bindUI(){
   });
 }
 function applyFilters(){
+  // A→Z global sort by nombre (injected by ChatGPT)
+  if (Array.isArray(state.filtered)) {
+    state.filtered.sort((a, b) => ((a?.nombre||'').localeCompare(b?.nombre||'', 'es', {sensitivity:'base'})));
+  }
+
   const q = (document.getElementById("search").value||"").toLowerCase().trim();
   state.filtered = state.all.filter(it=>{
     const inText = (safe(it.nombre,"")+" "+arr(it.tags).join(" ")+" "+safe(it.version,"")).toLowerCase().includes(q);
