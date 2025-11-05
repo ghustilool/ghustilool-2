@@ -16,7 +16,7 @@
       return;
     }
     // Fallback: marcar activo y filtrar por data-tags en las filas renderizadas
-    document.querySelectorAll('.filters-inline .tag-btn').forEach(b=>b.classList.toggle('active', b.dataset.tag===tag));
+    document.querySelectorAll('.filters-inline .tag-btn').forEach(b=>b.classList.toggle('active', b.dataset.filter===tag));
     const rows = document.querySelectorAll('#pub-list .row, #pub-list .pub, #pub-list .item, #pub-list article');
     rows.forEach(row=>{
       const tags = (row.getAttribute('data-tags')||'').split(',').map(t=>normalize(t));
@@ -24,17 +24,6 @@
       row.style.display = tags.includes(normalize(tag)) ? '' : 'none';
     });
   }
-
-  // Click handlers
-  document.addEventListener('click', (ev)=>{
-    const btn = ev.target.closest('.filters-inline .tag-btn');
-    if(!btn) return;
-    ev.preventDefault();
-    const tag = btn.dataset.tag || '';
-    // toggle behavior: if already active, clear filter
-    const isActive = btn.classList.contains('active');
-    applyFilter(isActive ? '' : tag);
-  });
 
   // Exponer por si se requiere desde otros lados
   window.inlineFilterApply = applyFilter;

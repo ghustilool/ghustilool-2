@@ -238,6 +238,8 @@ function applyFilters(){
     const matchTag = state.filterTag ? arr(it.tags).includes(state.filterTag) : true;
     return inText && matchTag;
   });
+  state.page = 1;
+  try{ const ul=document.getElementById('pub-list'); ul && (ul.classList.add('list-anim'), setTimeout(()=>ul.classList.remove('list-anim'), 320)); }catch(e){}
   renderList();
 }
 
