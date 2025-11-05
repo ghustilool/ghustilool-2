@@ -1,0 +1,15 @@
+/* Neon Rain Add-on (standalone) */
+:root {
+  --neon-rain-z: -1;           /* behind content by default; set higher if you want it in front */
+  --neon-rain-opacity: 0.35;   /* global opacity for the canvas layer */
+}
+
+#neon-rain-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;        /* don't block clicks */
+  z-index: var(--neon-rain-z);
+  opacity: var(--neon-rain-opacity);
+}
