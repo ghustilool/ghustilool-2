@@ -156,7 +156,8 @@ const __maxPage = Math.max(1, Math.ceil(__base.length/__per));
 state.page = Math.min(Math.max(1, state.page||1), __maxPage);
 const __start = (state.page-1)*__per;
 const __end = __start + __per;
-const items = [...__base.slice(__start, __end)].sort((a,b)=> (safe(a.nombre,"")||"").localeCompare(safe(b.nombre,"")||"", 'es', {sensitivity:'base'}));
+const __sorted = [...__base].sort((a,b)=> (safe(a.nombre,"")||"").localeCompare(safe(b.nombre,"")||"", 'es', {sensitivity:'base'}));
+const items = __sorted.slice(__start, __end);
   items.forEach(item=>{
     const li = document.createElement("li");
     li.className = "pub-item";
