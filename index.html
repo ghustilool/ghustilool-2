@@ -13,28 +13,7 @@
 
   
   <link rel="stylesheet" href="">
-  <script>
-    // Toggle via localStorage: setItem('neon_dust','off') para desactivar
-    (function(){
-      var off = (localStorage.getItem('neon_dust') === 'off');
-      window.neon_dust = off ? { enabled:false } : {
-        enabled: true,
-        palette: ["#00eaff", "#00ff80", "#ff00ff", "#ffd000"],
-        density: 0.00007,
-        speedMin: 300, speedMax: 1200,
-        lengthMin: 24, lengthMax: 110,
-        lineWidth: 1.2,
-        bloom: 0.45,
-        angleDeg: 12,
-        composite: "lighter"
-      };
-      // Atajos:  toggle (persistente)
-      
-          else { localStorage.setItem('neon_dust','off'); alert('Neon rain OFF (recarga la página)'); }
-        }
-      });
-    })();
-  </script>
+  
   
 
   <!-- NEON DUST (GamesFull-like) BEGIN -->
