@@ -54,3 +54,5 @@ track.innerHTML = slides.map(s => `
 
   /* fade mode: no width calc */
 })();
+
+setActive(0);
