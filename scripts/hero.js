@@ -26,7 +26,7 @@
         </a>
       </div>
       <div class="hero-media">
-        <img class="hero-img" loading="lazy" alt="${s.id}" src="${s.img}"/>
+        <img class="hero-img" onerror="this.style.display=\'none\';" loading="lazy" alt="${s.id}" src="${s.img}"/>
       </div>
     </article>
   `).join("");
@@ -37,7 +37,8 @@
   const pages = slides.length;
 
   function update(){
-    const w = track.getBoundingClientRect().width;
+    const hero = document.getElementById('hero');
+    const w = hero ? hero.getBoundingClientRect().width : track.getBoundingClientRect().width;
     track.style.transform = `translate3d(${-page*w}px,0,0)`;
     dots.querySelectorAll('.hero-dot').forEach((d,i)=> d.classList.toggle('active', i===page));
   }
