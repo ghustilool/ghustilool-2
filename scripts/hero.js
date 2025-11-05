@@ -1,6 +1,6 @@
 
-(function(){
-  const slides = [
+// Slides definition (local assets)
+const slides = [
   { id:"discord",   title:"Únete a la comunidad de Discord", desc:"Dejá tu reseña y pedí juegos. Enterate de novedades y charlá con la banda.", cta:"Entrar al Discord", url:"https://discord.com/invite/c7NpNyD5q4", img:"assets/social/discord.png" },
   { id:"youtube",   title:"Suscribite al canal de YouTube",   desc:"Gameplays, pruebas y contenido para la comunidad. ¡Sumate!", cta:"Ir a YouTube", url:"https://www.youtube.com/@6aZ71_", img:"assets/social/youtube.webp" },
   { id:"kick",      title:"Seguime en Kick",                  desc:"Streams chill, charlas y juegos con la comunidad.", cta:"Ir a Kick", url:"https://kick.com/gaz71", img:"assets/social/kick.png" },
@@ -10,49 +10,42 @@
   { id:"steam",     title:"Agregame en Steam",                desc:"Sumate y compartamos partidas. ¡Agregame para jugar juntos!", cta:"Abrir Steam", url:"https://steamcommunity.com/id/GAZ71", img:"assets/social/steam.png" }
 ];
 
+(function(){
   const track = document.getElementById('hero-track');
-  const dots = document.getElementById('hero-dots');
-  const prev = document.getElementById('hero-prev');
-  const next = document.getElementById('hero-next');
+  const dots  = document.getElementById('hero-dots');
   if(!track || !dots) return;
 
-  
-track.innerHTML = slides.map(s => `
-  <article class="hero-slide">
-    <div class="hero-copy">
-      <h2 class="hero-title">${s.title}</h2>
-      <p class="hero-desc">${s.desc}</p>
-      <a class="hero-cta" href="${s.url}" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3 12c0-4.97 4.03-9 9-9s9 4.03 9 9-4.03 9-9 9-9-4.03-9-9Zm9-7.5A7.5 7.5 0 1 0 19.5 12 7.51 7.51 0 0 0 12 4.5Zm-.75 3h1.5v4.19l3.56 2.13-.75 1.23-4.31-2.56Z"/></svg>
-        ${s.cta}
-      </a>
-    </div>
-    <div class="hero-media"><img class="hero-img" alt="${s.id}" src="${s.img}"/></div>
-  </article>
-`).join("");
+  // Build slides
+  track.innerHTML = slides.map(s => `
+    <article class="hero-slide">
+      <div class="hero-copy">
+        <h2 class="hero-title">${s.title}</h2>
+        <p class="hero-desc">${s.desc}</p>
+        <a class="hero-cta" href="${s.url}" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M3 12c0-4.97 4.03-9 9-9s9 4.03 9 9-4.03 9-9 9-9-4.03-9-9Zm9-7.5A7.5 7.5 0 1 0 19.5 12 7.51 7.51 0 0 0 12 4.5Zm-.75 3h1.5v4.19l3.56 2.13-.75 1.23-4.31-2.56Z"/></svg>
+          ${s.cta}
+        </a>
+      </div>
+      <div class="hero-media"><img class="hero-img" alt="${s.id}" src="${s.img}"/></div>
+    </article>
+  `).join("");
 
+  let current = 0;
+  const slidesEls = Array.from(track.querySelectorAll('.hero-slide'));
 
-  dots.innerHTML = slides.map((_,i)=>`<div class="hero-dot${i===0?' active':''}"></div>`).join("");
-
-  let page = 0;
-  const pages = slides.length;
-
-  function update(){
-    const w = track.getBoundingClientRect().width;
-    track.style.transform = `translate3d(${-page*w}px,0,0)`;
-    dots.querySelectorAll('.hero-dot').forEach((d,i)=> d.classList.toggle('active', i===page));
+  // Build dots
+  dots.innerHTML = slidesEls.map((_,i)=>`<div class="hero-dot${i===0?' active':''}"></div>`).join("");
+  function setActive(i){ 
+    slidesEls.forEach((el,idx)=> el.classList.toggle('active', idx===i)); 
+    dots.querySelectorAll('.hero-dot').forEach((d,idx)=> d.classList.toggle('active', idx===i));
   }
-  function go(n){ page = (n+pages)%pages; update(); }
+  setActive(0);
 
-  prev?.addEventListener('click', ()=> go(page-1));
-  next?.addEventListener('click', ()=> go(page+1));
-  dots.querySelectorAll('.hero-dot').forEach((d,i)=> d.addEventListener('click', ()=> go(i)));
+  // dots click
+  dots.querySelectorAll('.hero-dot').forEach((d,i)=> d.addEventListener('click', ()=>{ current=i; setActive(current); }));
 
-  let timer = setInterval(()=> go(page+1), 5000);
-  document.getElementById('hero')?.addEventListener('mouseenter', ()=>{ clearInterval(timer); });
-  document.getElementById('hero')?.addEventListener('mouseleave', ()=>{ timer = setInterval(()=> go(page+1), 5000); });
-
-  /* fade mode: no width calc */
+  // auto rotate
+  let timer = setInterval(()=>{ current = (current+1)%slidesEls.length; setActive(current); }, 5000);
+  document.getElementById('hero')?.addEventListener('mouseenter', ()=> clearInterval(timer));
+  document.getElementById('hero')?.addEventListener('mouseleave', ()=> timer = setInterval(()=>{ current = (current+1)%slidesEls.length; setActive(current); }, 5000));
 })();
-
-setActive(0);
